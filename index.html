@@ -2531,7 +2531,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
         <div class="ob-world-ds">8-bit retro pixel</div>
       </div>
     </div>
-    <button class="btn btn-g btn-lg btn-full" id="obwBtn" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:8px;border:none;box-shadow:0 0 24px rgba(57,255,20,.5)" ontouchstart="if(!window._obwBusy){window._obwBusy=true;this.style.opacity='.7';obNext(0);}" onclick="obNext(0)">VÄLJ VÄRLD →</button>
+    <button type="button" class="btn btn-g btn-lg btn-full" id="obwBtn" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:8px;border:none;box-shadow:0 0 24px rgba(57,255,20,.5)" onclick="obNext(0)">VÄLJ VÄRLD →</button>
   </div>
 
   <!-- STEP 0: Name -->
@@ -2544,7 +2544,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
       <div class="ob-p2">Välj ett smeknamn — det är din KARMA-identitet i appen.</div>
       <label class="lbl">DITT NAMN</label>
       <input class="inp" id="obName" placeholder="Ex: ella_runs / axelsthlm" maxlength="18" style="font-size:16px;margin-bottom:16px;border-radius:6px;border:3px solid rgba(57,255,20,.4);background:#0d0d0d;color:#fff;font-family:var(--mono)">
-      <button class="btn btn-g btn-lg btn-full" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:8px;border:none;box-shadow:0 0 24px rgba(57,255,20,.5)" ontouchstart="obNext(1)" onclick="obNext(1)">NÄSTA →</button>
+      <button type="button" class="btn btn-g btn-lg btn-full" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:8px;border:none;box-shadow:0 0 24px rgba(57,255,20,.5)" onclick="obNext(1)">NÄSTA →</button>
     </div>
   </div>
 
@@ -2557,7 +2557,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
       <div class="ob-pet-big" id="obPetGrid"></div>
       <label class="lbl">PET-NAMN</label>
       <input class="inp" id="obPetName" placeholder="Ex: Eldrake / Luna / Shadow" style="font-size:16px;margin-bottom:16px">
-      <button class="btn btn-g btn-lg btn-full" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:8px;border:none;box-shadow:0 0 24px rgba(57,255,20,.5)" ontouchstart="obNext(2)" onclick="obNext(2)">NÄSTA →</button>
+      <button type="button" class="btn btn-g btn-lg btn-full" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:8px;border:none;box-shadow:0 0 24px rgba(57,255,20,.5)" onclick="obNext(2)">NÄSTA →</button>
     </div>
   </div>
 
@@ -10464,7 +10464,7 @@ function applyWorldTheme(world,container){
   }
 }
 function obNext(step){
-  window._obwBusy=false; // reset world-btn lock so back navigation works
+  window._obwBusy=false;
   if(step===0){G.world=obWorld;applyWorldTheme(obWorld,$('obBg'));}
   if(step===1){const n=$('obName').value.trim();if(!n){showT('❌ Skriv ditt namn','r');return;}G.name=n;}
   if(step===2){
@@ -10474,10 +10474,15 @@ function obNext(step){
     const pw=$('obPetWelcome');if(pw)pw.textContent='Välkommen, '+pn+'!';
     _obFed=false;
   }
-  // Step 3 = age step, step 4 = mode step (already handled by setObAge/setObMode)
-  document.querySelectorAll('.ob-step').forEach(s=>s.style.display='none');
+  document.querySelectorAll('.ob-step').forEach(s=>{s.style.display='none';});
   const targetEl=$('obs'+step);
-  if(targetEl)targetEl.style.display='flex';
+  if(targetEl){
+    // Set all styles inline — no reliance on CSS cascade
+    targetEl.style.cssText='display:flex;flex-direction:column;min-height:100svh;width:100%;max-width:400px;padding:16px 20px max(env(safe-area-inset-bottom,16px),16px);justify-content:center;box-sizing:border-box;';
+    // Scroll #ob to top so step is always visible
+    const ob=$('ob');if(ob){ob.scrollTop=0;}
+    requestAnimationFrame(()=>targetEl.scrollIntoView({behavior:'instant',block:'start'}));
+  }
   vibe(20);
 }
 // ── LANGUAGE ──
