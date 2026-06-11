@@ -945,6 +945,39 @@ button:active{opacity:.85;}
 .screen-fx{position:fixed;inset:0;pointer-events:none;z-index:8777;animation:screenFlash .4s ease-out forwards;}
 .care-float-txt{position:fixed;left:50%;z-index:9997;pointer-events:none;font-family:var(--mono);font-weight:900;white-space:nowrap;animation:careFloat 1.4s cubic-bezier(.22,1,.36,1) forwards;}
 .care-burst-em{position:fixed;pointer-events:none;z-index:9998;animation:careBurstEmoji .9s ease-out forwards;}
+/* ═══ ULTRA CARE EFFECTS — zoom-IN from edges ═══ */
+@keyframes careZoomCrash{0%{opacity:0;transform:translate(-50%,-50%) scale(9) rotate(-8deg);}35%{opacity:1;transform:translate(-50%,-50%) scale(1.25) rotate(3deg);}65%{transform:translate(-50%,-50%) scale(.95);}100%{opacity:0;transform:translate(-50%,-50%) scale(.55);}}
+@keyframes careConverge{0%{opacity:1;transform:translate(var(--sx),var(--sy)) scale(2.2) rotate(var(--sr));}60%{opacity:1;transform:translate(calc(var(--sx)*.04),calc(var(--sy)*.04)) scale(1.15);}100%{opacity:0;transform:translate(0,0) scale(0);}}
+@keyframes shockRing{0%{transform:translate(-50%,-50%) scale(0);opacity:1;border-width:7px;}100%{transform:translate(-50%,-50%) scale(4.5);opacity:0;border-width:0px;}}
+@keyframes shockRing2{0%{transform:translate(-50%,-50%) scale(0);opacity:.6;border-width:4px;}100%{transform:translate(-50%,-50%) scale(6);opacity:0;border-width:0px;}}
+@keyframes rgbFlash{0%{background:rgba(255,0,80,.18);opacity:1;}25%{background:rgba(0,255,120,.12);}50%{background:rgba(0,120,255,.18);}75%{background:rgba(255,0,255,.12);}100%{opacity:0;background:transparent;}}
+.care-zoom-crash{position:fixed;left:50%;top:45%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);line-height:1;animation:careZoomCrash .72s cubic-bezier(.22,1,.36,1) forwards;}
+.care-converge-em{position:fixed;pointer-events:none;z-index:9998;line-height:1;animation:careConverge .62s cubic-bezier(.22,1,.36,1) forwards;}
+.shock-ring{position:fixed;left:50%;top:45%;width:90px;height:90px;border-radius:50%;pointer-events:none;z-index:9996;animation:shockRing .55s ease-out forwards;}
+.shock-ring2{position:fixed;left:50%;top:45%;width:60px;height:60px;border-radius:50%;pointer-events:none;z-index:9995;animation:shockRing2 .75s ease-out .08s forwards;}
+.rgb-flash{position:fixed;inset:0;pointer-events:none;z-index:8776;animation:rgbFlash .38s ease-out forwards;}
+/* ═══ EPIC STREAK ═══ */
+@keyframes streakFireNum{0%,100%{transform:scale(1);text-shadow:0 0 20px #FF6B00,0 0 45px #FF3300,0 0 80px rgba(255,80,0,.4);}50%{transform:scale(1.07);text-shadow:0 0 35px #FFD700,0 0 70px #FF6B00,0 0 140px #FF3300;}}
+@keyframes streakFireBg{0%,100%{background:radial-gradient(ellipse at 50% 100%,rgba(255,100,0,.35) 0%,rgba(255,50,0,.15) 40%,transparent 70%);}50%{background:radial-gradient(ellipse at 50% 100%,rgba(255,200,0,.5) 0%,rgba(255,80,0,.25) 45%,transparent 70%);}}
+@keyframes dotFlame{0%,100%{transform:scale(1) translateY(0);filter:drop-shadow(0 0 4px currentColor);}50%{transform:scale(1.3) translateY(-3px);filter:drop-shadow(0 0 10px currentColor);}}
+@keyframes streakRingRot{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.streak-n-epic{animation:streakFireNum 1.9s ease-in-out infinite;font-weight:900;font-family:var(--mono);color:#FF6B00;display:block;line-height:1;}
+.streak-dot-on{animation:dotFlame .75s ease-in-out infinite;}
+.streak-hero-epic{position:relative;overflow:hidden;animation:streakFireBg 2s ease-in-out infinite;}
+/* ═══ ARCADE SECTION ═══ */
+@keyframes arcadeScanMove{0%{transform:translateY(-100%)}100%{transform:translateY(1200%)}}
+@keyframes featuredGlowPulse{0%,100%{box-shadow:0 0 20px rgba(255,159,10,.3),0 4px 24px rgba(0,0,0,.6),inset 0 0 20px rgba(255,159,10,.04);}50%{box-shadow:0 0 50px rgba(255,159,10,.55),0 4px 35px rgba(0,0,0,.7),inset 0 0 40px rgba(255,159,10,.08);}}
+@keyframes liveBlip{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
+@keyframes hdrFlicker{0%,92%,100%{opacity:1}93%,98%{opacity:.7}}
+.arcade-scan{position:absolute;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);pointer-events:none;animation:arcadeScanMove 5s linear infinite;z-index:2;}
+.featured-gcard{animation:featuredGlowPulse 2.8s ease-in-out infinite;}
+.live-blip{width:7px;height:7px;border-radius:50%;background:#FF3B30;display:inline-block;animation:liveBlip .9s ease-in-out infinite;}
+.arcade-hdr-txt{animation:hdrFlicker 8s ease-in-out infinite;}
+/* ═══ EPIC PET CARE BUTTONS ═══ */
+@keyframes chbGlow{0%,100%{box-shadow:0 0 0 0 transparent;}50%{box-shadow:0 0 18px var(--chb-col,rgba(255,159,10,.5)),0 0 40px var(--chb-col,rgba(255,159,10,.2));}}
+.chb:active{animation:none!important;}
+.chb::after{content:'';position:absolute;inset:0;border-radius:inherit;opacity:0;background:radial-gradient(circle at 50% 50%,var(--chb-col,rgba(255,255,255,.3)) 0%,transparent 70%);transition:opacity .15s;pointer-events:none;}
+.chb:active::after{opacity:1;}
 .pet-edit-btn{position:absolute;bottom:4px;right:4px;background:rgba(12,12,22,.88);border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:10px;font-weight:800;cursor:pointer;color:var(--t2);z-index:5;border:none;-webkit-tap-highlight-color:transparent;}
 .pc-swatch{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .12s;flex-shrink:0;}
 .pc-swatch.sel{border-color:white;box-shadow:0 0 0 3px rgba(255,255,255,.35);}
@@ -2498,7 +2531,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
         <div class="ob-world-ds">8-bit retro pixel</div>
       </div>
     </div>
-    <button class="btn btn-g btn-lg btn-full" id="obwBtn" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:8px;border:none;box-shadow:0 0 24px rgba(57,255,20,.5)" ontouchstart="if(!window._obwBusy){window._obwBusy=true;this.style.opacity='.7';obNext(0);}" onclick="obNext(0)">VÄLJ VÄRLD →</button>
+    <button type="button" class="btn btn-g btn-lg btn-full" id="obwBtn" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:8px;border:none;box-shadow:0 0 24px rgba(57,255,20,.5)" onclick="obNext(0)">VÄLJ VÄRLD →</button>
   </div>
 
   <!-- STEP 0: Name -->
@@ -2511,7 +2544,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
       <div class="ob-p2">Välj ett smeknamn — det är din KARMA-identitet i appen.</div>
       <label class="lbl">DITT NAMN</label>
       <input class="inp" id="obName" placeholder="Ex: ella_runs / axelsthlm" maxlength="18" style="font-size:16px;margin-bottom:16px;border-radius:6px;border:3px solid rgba(57,255,20,.4);background:#0d0d0d;color:#fff;font-family:var(--mono)">
-      <button class="btn btn-g btn-lg btn-full" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:8px;border:none;box-shadow:0 0 24px rgba(57,255,20,.5)" ontouchstart="obNext(1)" onclick="obNext(1)">NÄSTA →</button>
+      <button type="button" class="btn btn-g btn-lg btn-full" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:8px;border:none;box-shadow:0 0 24px rgba(57,255,20,.5)" onclick="obNext(1)">NÄSTA →</button>
     </div>
   </div>
 
@@ -2524,7 +2557,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
       <div class="ob-pet-big" id="obPetGrid"></div>
       <label class="lbl">PET-NAMN</label>
       <input class="inp" id="obPetName" placeholder="Ex: Eldrake / Luna / Shadow" style="font-size:16px;margin-bottom:16px">
-      <button class="btn btn-g btn-lg btn-full" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:8px;border:none;box-shadow:0 0 24px rgba(57,255,20,.5)" ontouchstart="obNext(2)" onclick="obNext(2)">NÄSTA →</button>
+      <button type="button" class="btn btn-g btn-lg btn-full" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:8px;border:none;box-shadow:0 0 24px rgba(57,255,20,.5)" onclick="obNext(2)">NÄSTA →</button>
     </div>
   </div>
 
@@ -2688,36 +2721,36 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
           <div style="font-size:9px;color:var(--t3);font-family:var(--mono);margin-bottom:6px;text-align:center">
             <span id="petSpecies">–</span> · <span id="petEvol" style="color:var(--y)">NEXT EVOL: LV5</span>
           </div>
-          <!-- XP bar full width -->
-          <div style="width:100%;max-width:280px;margin-bottom:8px">
-            <div style="display:flex;justify-content:space-between;margin-bottom:2px">
-              <span id="xpBarLabel" style="font-size:8px;font-weight:900;color:var(--g);font-family:var(--mono)">LV1 XP</span>
+          <!-- XP bar full width — epic neon -->
+          <div style="width:100%;max-width:284px;margin-bottom:9px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+              <span id="xpBarLabel" style="font-size:8px;font-weight:900;color:var(--g);font-family:var(--mono);text-shadow:0 0 8px rgba(57,255,20,.5)">LV1 XP</span>
               <span id="xpBarNums" style="font-size:8px;color:var(--t3);font-family:var(--mono)">0 / 150</span>
             </div>
-            <div style="width:100%;height:7px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden">
-              <div id="xpBarFill" style="height:100%;width:0%;background:linear-gradient(90deg,var(--g),#00D9FF);border-radius:100px;transition:width .7s cubic-bezier(.34,1.56,.64,1)"></div>
+            <div style="width:100%;height:8px;background:rgba(255,255,255,.06);border-radius:100px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(57,255,20,.15)">
+              <div id="xpBarFill" style="height:100%;width:0%;background:linear-gradient(90deg,var(--g),#00D9FF);border-radius:100px;transition:width .7s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 8px rgba(57,255,20,.6),0 0 20px rgba(57,255,20,.3)"></div>
             </div>
           </div>
-          <!-- 4 stat bars in 2x2 grid -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;width:100%;max-width:280px">
-            <div style="display:flex;align-items:center;gap:5px;background:rgba(255,159,10,.07);border:1px solid rgba(255,159,10,.2);border-radius:8px;padding:4px 6px">
+          <!-- 4 stat bars — EPIC neon 2x2 grid -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;max-width:284px">
+            <div style="display:flex;align-items:center;gap:5px;background:rgba(255,159,10,.08);border:1.5px solid rgba(255,159,10,.3);border-radius:8px;padding:5px 7px;box-shadow:0 0 10px rgba(255,159,10,.08)">
               <span style="font-size:13px">🍖</span>
-              <div style="flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden"><div id="vH" style="height:100%;width:80%;background:var(--o);border-radius:3px;transition:width .5s"></div></div>
+              <div style="flex:1;height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden"><div id="vH" style="height:100%;width:80%;background:linear-gradient(90deg,#ff9a0a,#ffbb00);border-radius:3px;transition:width .5s;box-shadow:0 0 6px rgba(255,159,10,.7)"></div></div>
               <span id="vHv" style="font-size:9px;font-weight:900;color:var(--o);font-family:var(--mono);min-width:20px;text-align:right">80</span>
             </div>
-            <div style="display:flex;align-items:center;gap:5px;background:rgba(0,217,255,.07);border:1px solid rgba(0,217,255,.2);border-radius:8px;padding:4px 6px">
+            <div style="display:flex;align-items:center;gap:5px;background:rgba(0,217,255,.08);border:1.5px solid rgba(0,217,255,.3);border-radius:8px;padding:5px 7px;box-shadow:0 0 10px rgba(0,217,255,.08)">
               <span style="font-size:13px">⚡</span>
-              <div style="flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden"><div id="vE" style="height:100%;width:100%;background:var(--b);border-radius:3px;transition:width .5s"></div></div>
+              <div style="flex:1;height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden"><div id="vE" style="height:100%;width:100%;background:linear-gradient(90deg,#00a8ff,#00d9ff);border-radius:3px;transition:width .5s;box-shadow:0 0 6px rgba(0,217,255,.7)"></div></div>
               <span id="vEv" style="font-size:9px;font-weight:900;color:var(--b);font-family:var(--mono);min-width:20px;text-align:right">100</span>
             </div>
-            <div style="display:flex;align-items:center;gap:5px;background:rgba(191,95,255,.07);border:1px solid rgba(191,95,255,.2);border-radius:8px;padding:4px 6px">
+            <div style="display:flex;align-items:center;gap:5px;background:rgba(191,95,255,.08);border:1.5px solid rgba(191,95,255,.3);border-radius:8px;padding:5px 7px;box-shadow:0 0 10px rgba(191,95,255,.08)">
               <span style="font-size:13px">💖</span>
-              <div style="flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden"><div id="vM" style="height:100%;width:90%;background:var(--p);border-radius:3px;transition:width .5s"></div></div>
+              <div style="flex:1;height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden"><div id="vM" style="height:100%;width:90%;background:linear-gradient(90deg,#9f3fff,#bf5fff);border-radius:3px;transition:width .5s;box-shadow:0 0 6px rgba(191,95,255,.7)"></div></div>
               <span id="vMv" style="font-size:9px;font-weight:900;color:var(--p);font-family:var(--mono);min-width:20px;text-align:right">90</span>
             </div>
-            <div style="display:flex;align-items:center;gap:5px;background:rgba(57,255,20,.07);border:1px solid rgba(57,255,20,.2);border-radius:8px;padding:4px 6px">
+            <div style="display:flex;align-items:center;gap:5px;background:rgba(57,255,20,.08);border:1.5px solid rgba(57,255,20,.3);border-radius:8px;padding:5px 7px;box-shadow:0 0 10px rgba(57,255,20,.08)">
               <span style="font-size:13px">🌟</span>
-              <div style="flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden"><div id="vK" style="height:100%;width:42%;background:var(--g);border-radius:3px;transition:width .5s"></div></div>
+              <div style="flex:1;height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden"><div id="vK" style="height:100%;width:42%;background:linear-gradient(90deg,#14ff00,#39ff14);border-radius:3px;transition:width .5s;box-shadow:0 0 6px rgba(57,255,20,.7)"></div></div>
               <span id="vKv" style="font-size:9px;font-weight:900;color:var(--g);font-family:var(--mono);min-width:20px;text-align:right">42</span>
             </div>
           </div>
@@ -2761,12 +2794,12 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
         <button id="expedBtn" onclick="openExpedition()" style="background:rgba(0,217,255,.08);border:1.5px solid rgba(0,217,255,.35);border-radius:10px;padding:4px 10px;color:var(--b);font-size:10px;font-weight:900;cursor:pointer;font-family:var(--mono)">🗺️ EXPEDITION</button>
       </div>
       <div class="care-hero">
-        <div class="chb chb-feed" onclick="pcFeed()"><span class="chb-ico">🍖</span><span class="chb-lbl">MATA</span><span class="chb-val">+HUN</span></div>
-        <div class="chb chb-train" onclick="pcTrain()"><span class="chb-ico">🏋️</span><span class="chb-lbl">TRÄNA</span><span class="chb-val">+XP</span></div>
-        <div class="chb chb-sleep" onclick="pcSleep()"><span class="chb-ico">😴</span><span class="chb-lbl">SOVA</span><span class="chb-val">+ENE</span></div>
-        <div class="chb chb-play" onclick="pcPlay()"><span class="chb-ico">🎮</span><span class="chb-lbl">LEK</span><span class="chb-val">+MOO</span></div>
-        <div class="chb chb-bath" onclick="pcBath()"><span class="chb-ico">🛁</span><span class="chb-lbl">BADA</span><span class="chb-val">+KRM</span></div>
-        <div class="chb chb-talk" onclick="pcTalk()"><span class="chb-ico">💬</span><span class="chb-lbl">PRATA</span><span class="chb-val">+BND</span></div>
+        <div class="chb chb-feed" onclick="pcFeed()" style="--chb-col:rgba(255,159,10,.45);position:relative"><span class="chb-ico">🍖</span><span class="chb-lbl">MATA</span><span class="chb-val">+HUN</span></div>
+        <div class="chb chb-train" onclick="pcTrain()" style="--chb-col:rgba(57,255,20,.45);position:relative"><span class="chb-ico">🏋️</span><span class="chb-lbl">TRÄNA</span><span class="chb-val">+XP</span></div>
+        <div class="chb chb-sleep" onclick="pcSleep()" style="--chb-col:rgba(0,217,255,.45);position:relative"><span class="chb-ico">😴</span><span class="chb-lbl">SOVA</span><span class="chb-val">+ENE</span></div>
+        <div class="chb chb-play" onclick="pcPlay()" style="--chb-col:rgba(255,0,127,.45);position:relative"><span class="chb-ico">🎮</span><span class="chb-lbl">LEK</span><span class="chb-val">+MOO</span></div>
+        <div class="chb chb-bath" onclick="pcBath()" style="--chb-col:rgba(191,95,255,.45);position:relative"><span class="chb-ico">🛁</span><span class="chb-lbl">BADA</span><span class="chb-val">+KRM</span></div>
+        <div class="chb chb-talk" onclick="pcTalk()" style="--chb-col:rgba(255,230,0,.45);position:relative"><span class="chb-ico">💬</span><span class="chb-lbl">PRATA</span><span class="chb-val">+BND</span></div>
       </div>
       <!-- DAILY BOND — social actions feed your pet -->
       <div class="bond-section">
@@ -2808,20 +2841,29 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
       <!-- CARE NOTIFICATIONS -->
       <div class="care-notif-section" id="careNotifSection"></div>
 
-      <!-- Streak hero -->
-      <div class="streak-hero">
-        <div class="streak-ring-big" id="streakRingBig">
-          <div class="streak-inner-big">
-            <div class="streak-n" id="streakN">0</div>
-            <div class="streak-lbl-sm">STREAK</div>
+      <!-- Streak hero EPIC -->
+      <div class="streak-hero streak-hero-epic" style="position:relative;padding:14px 14px 12px;background:#0a0500;border-radius:16px;margin:0 12px 10px;border:2px solid rgba(255,107,0,.35);overflow:hidden;display:flex;align-items:center;gap:12px">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 110%,rgba(255,80,0,.25) 0%,rgba(255,40,0,.08) 45%,transparent 70%);pointer-events:none"></div>
+        <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,150,0,.6),transparent)"></div>
+        <!-- Fire ring -->
+        <div style="position:relative;flex-shrink:0;width:66px;height:66px;display:flex;align-items:center;justify-content:center">
+          <svg style="position:absolute;inset:0;width:100%;height:100%;animation:streakRingRot 6s linear infinite" viewBox="0 0 66 66" fill="none">
+            <circle cx="33" cy="33" r="30" stroke="rgba(255,100,0,.15)" stroke-width="3"/>
+            <circle cx="33" cy="33" r="30" stroke="url(#sfg)" stroke-width="3" stroke-dasharray="140 50" stroke-linecap="round"/>
+            <defs><linearGradient id="sfg" x1="0" y1="0" x2="66" y2="66" gradientUnits="userSpaceOnUse"><stop stop-color="#FFD700"/><stop offset=".5" stop-color="#FF6B00"/><stop offset="1" stop-color="#FF0000"/></linearGradient></defs>
+          </svg>
+          <div style="text-align:center">
+            <span class="streak-n-epic" id="streakN" style="font-size:26px">0</span>
+            <div style="font-size:7px;font-weight:900;font-family:var(--mono);color:rgba(255,107,0,.7);letter-spacing:2px;margin-top:-1px">STREAK</div>
           </div>
         </div>
-        <div style="flex:1">
-          <div style="font-size:14px;font-weight:800;margin-bottom:2px">🔥 Flash Streak</div>
-          <div style="font-size:12px;color:var(--t2)" id="streakMsg">Posta din första Flash!</div>
-          <div style="margin-top:6px;display:flex;gap:5px" id="streakWeekDots"></div>
+        <!-- Info -->
+        <div style="flex:1;position:relative">
+          <div style="font-size:13px;font-weight:900;color:#FF8C00;font-family:var(--mono);letter-spacing:.5px;text-shadow:0 0 12px rgba(255,107,0,.5)">🔥 FLASH STREAK</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.55);margin-top:2px" id="streakMsg">Posta din första Flash!</div>
+          <div style="margin-top:7px;display:flex;gap:6px;align-items:center" id="streakWeekDots"></div>
         </div>
-        <button class="btn btn-pk btn-sm" onclick="openModal('flashModal')">⚡ POST</button>
+        <button class="btn btn-pk btn-sm" onclick="openModal('flashModal')" style="flex-shrink:0;background:rgba(255,45,85,.15);border-color:var(--pk);box-shadow:0 0 14px rgba(255,45,85,.3);font-weight:900">⚡ POST</button>
       </div>
 
       <!-- WORLD TEASER -->
@@ -2907,14 +2949,18 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
     <div class="view" id="view-flash" style="padding:0">
       <!-- Full-screen TikTok-style feed -->
       <div class="flash-feed" id="flashFeed"></div>
-      <!-- Overlay: title + POST button -->
+      <!-- Overlay: title + POST button — EPIC -->
       <div class="flash-top" style="pointer-events:none">
-        <div class="flash-title-row" style="pointer-events:auto">
-          <div style="display:flex;align-items:center;gap:8px">
-            <div class="flash-title">⚡ Flash</div>
-            <div class="streak-circles" id="streakCircles" style="display:flex;overflow-x:auto;scrollbar-width:none;max-width:160px;gap:6px;padding:0"></div>
+        <div class="flash-title-row" style="pointer-events:auto;background:linear-gradient(180deg,rgba(4,4,10,.96) 0%,rgba(4,4,10,.7) 100%);border-bottom:1px solid rgba(255,45,85,.2);padding:10px 14px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="flash-title" style="font-size:20px;font-weight:900;font-family:var(--mono);background:linear-gradient(135deg,#fff,rgba(255,150,200,.8));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:1px">⚡ FLASH</div>
+            <div style="display:flex;align-items:center;gap:4px;background:rgba(255,45,85,.12);border:1px solid rgba(255,45,85,.3);border-radius:10px;padding:3px 8px">
+              <div class="live-blip" style="width:6px;height:6px"></div>
+              <span style="font-size:8px;font-weight:900;font-family:var(--mono);color:rgba(255,59,48,.9);letter-spacing:1px">LIVE</span>
+            </div>
+            <div class="streak-circles" id="streakCircles" style="display:flex;overflow-x:auto;scrollbar-width:none;max-width:120px;gap:5px;padding:0"></div>
           </div>
-          <button class="btn btn-pk" onclick="openModal('flashModal')" style="padding:5px 14px;font-size:12px;border-radius:20px;border-width:2px;box-shadow:0 0 14px rgba(255,0,127,.4)">+ POST</button>
+          <button class="btn btn-pk" onclick="openModal('flashModal')" style="padding:6px 16px;font-size:12px;font-weight:900;border-radius:20px;border-width:2px;box-shadow:0 0 16px rgba(255,0,127,.45);font-family:var(--mono);letter-spacing:1px">+ POST</button>
         </div>
       </div>
       <!-- Stories bar overlaid at top with pull-reveal -->
@@ -3475,49 +3521,52 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
 
     <!-- SPELA VIEW -->
     <div class="view" id="view-play" style="padding:0;background:#000;">
-      <!-- KARMA ARCADE header — sticky -->
-      <div style="padding:14px 14px 12px;background:linear-gradient(180deg,#0a0018,#040010);border-bottom:2px solid rgba(191,95,255,.4);position:sticky;top:0;z-index:10;overflow:hidden">
-        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(191,95,255,.12) 0%,transparent 60%);pointer-events:none"></div>
+      <!-- KARMA ARCADE header — sticky, CRT style -->
+      <div style="padding:14px 14px 10px;background:linear-gradient(180deg,#08001a,#040010);border-bottom:2px solid rgba(191,95,255,.5);position:sticky;top:0;z-index:10;overflow:hidden">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 120%,rgba(191,95,255,.18) 0%,transparent 60%);pointer-events:none"></div>
+        <div class="arcade-scan"></div>
         <div style="display:flex;align-items:center;justify-content:space-between;position:relative">
           <div>
-            <div style="font-size:21px;font-weight:900;font-family:var(--mono);background:linear-gradient(135deg,var(--p),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;text-transform:uppercase;filter:drop-shadow(0 0 10px rgba(191,95,255,.4))">🎮 KARMA ARCADE</div>
-            <div style="font-size:9px;color:rgba(255,255,255,.4);font-family:var(--mono);letter-spacing:2px;margin-top:3px">VÄLJ SPEL · SAMLA XP · BLI LEGEND</div>
+            <div class="arcade-hdr-txt" style="font-size:22px;font-weight:900;font-family:var(--mono);background:linear-gradient(135deg,#e070ff,#ff00bf,#7700ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;text-transform:uppercase;filter:drop-shadow(0 0 14px rgba(191,95,255,.6))">🎮 KARMA ARCADE</div>
+            <div style="font-size:9px;color:rgba(191,95,255,.5);font-family:var(--mono);letter-spacing:2.5px;margin-top:3px">INSERT COIN · LEVEL UP · BLI LEGEND</div>
           </div>
-          <div style="text-align:right">
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
             <div style="font-size:11px;font-weight:900;color:var(--o);font-family:var(--mono);text-shadow:0 0 10px rgba(255,159,10,.5)" id="playStreakLabel"></div>
+            <div style="display:flex;gap:4px;align-items:center">
+              <div class="live-blip"></div>
+              <span style="font-size:8px;font-weight:900;font-family:var(--mono);color:rgba(255,59,48,.8);letter-spacing:1px">LIVE</span>
+            </div>
           </div>
+        </div>
+      </div>
+      <!-- FEATURED game banner -->
+      <div style="margin:12px 14px 8px;position:relative;cursor:pointer;border-radius:14px;overflow:hidden;border:2px solid rgba(255,159,10,.5)" class="featured-gcard" onclick="openGacha()" ontouchstart="this.style.transform='scale(.98)'" ontouchend="this.style.transform=''">
+        <div style="background:linear-gradient(135deg,#1a0800,#2a1000,#1a0500);padding:16px;display:flex;align-items:center;gap:14px;min-height:90px;position:relative;overflow:hidden">
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(255,159,10,.15) 0%,transparent 55%);pointer-events:none"></div>
+          <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,200,0,.6),transparent)"></div>
+          <div class="arcade-scan" style="animation-duration:3.5s"></div>
+          <div style="font-size:52px;filter:drop-shadow(0 0 20px rgba(255,159,10,.9));animation:gpSpin 3s ease-in-out infinite;flex-shrink:0">🎰</div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+              <span style="font-size:8px;font-weight:900;font-family:var(--mono);background:rgba(255,45,85,.25);border:1px solid rgba(255,45,85,.5);color:#FF3B30;border-radius:4px;padding:2px 7px;letter-spacing:1px" class="live-tag">● FEATURED</span>
+              <span style="font-size:8px;font-weight:900;font-family:var(--mono);background:rgba(255,200,0,.15);border:1px solid rgba(255,200,0,.35);color:var(--y);border-radius:4px;padding:2px 7px">🎁 GRATIS</span>
+            </div>
+            <div style="font-size:18px;font-weight:900;font-family:var(--mono);color:var(--o);text-shadow:0 0 20px rgba(255,159,10,.7);letter-spacing:1px">DAGLIGT SPIN</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.55);margin-top:2px" id="spinPlayLabel">Gratis spin tillgängligt — vinn coins, XP, gear!</div>
+          </div>
+          <div style="font-size:24px;color:var(--o);filter:drop-shadow(0 0 10px var(--o));animation:gpFire 1.5s ease-in-out infinite">▶</div>
         </div>
       </div>
       <!-- GAME PORTAL GRID -->
-      <div style="padding:12px 14px 6px;font-size:9px;font-weight:900;font-family:var(--mono);color:rgba(191,95,255,.5);letter-spacing:2px">VÄLJ SPEL</div>
-      <!-- SPIN portal -->
-      <div onclick="openGacha()" ontouchstart="this.classList.add('gcard-pressed')" ontouchend="this.classList.remove('gcard-pressed')" style="margin:0 14px 10px;background:linear-gradient(135deg,#1a0800,#0d0400,#1a0800);border:3px solid var(--o);border-radius:10px;box-shadow:0 0 0 1px rgba(255,159,10,.15),5px 5px 0px var(--o);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;position:relative">
-        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(255,159,10,.1) 0%,transparent 60%);pointer-events:none"></div>
-        <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:repeating-linear-gradient(90deg,rgba(255,159,10,.6) 0px,rgba(255,159,10,.6) 6px,transparent 6px,transparent 12px)"></div>
-        <div style="display:flex;align-items:center;gap:0;padding:0">
-          <div style="width:88px;height:88px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(255,159,10,.1);border-right:2px solid rgba(255,159,10,.25);position:relative;overflow:hidden">
-            <div style="position:absolute;inset:0;background:radial-gradient(circle,rgba(255,159,10,.2) 0%,transparent 65%)"></div>
-            <div style="font-size:44px;filter:drop-shadow(0 0 16px rgba(255,159,10,.9));animation:gpSpin 3s ease-in-out infinite;position:relative;z-index:1">🎰</div>
-          </div>
-          <div style="flex:1;min-width:0;padding:14px 12px">
-            <div style="font-size:15px;font-weight:900;color:var(--o);font-family:var(--mono);text-shadow:0 0 12px rgba(255,159,10,.6)">DAGLIGT SPIN</div>
-            <div style="font-size:10px;color:rgba(255,255,255,.5);margin-top:3px" id="spinPlayLabel">Gratis spin tillgängligt!</div>
-            <div style="margin-top:8px;display:flex;gap:5px;align-items:center">
-              <span style="background:rgba(255,159,10,.15);border:1.5px solid var(--o);border-radius:4px;padding:2px 7px;font-size:9px;font-weight:900;font-family:var(--mono);color:var(--o)">💰 COINS</span>
-              <span style="background:rgba(191,95,255,.1);border:1.5px solid rgba(191,95,255,.4);border-radius:4px;padding:2px 7px;font-size:9px;font-weight:900;font-family:var(--mono);color:var(--p)">💎 TP</span>
-              <span style="background:rgba(255,230,0,.1);border:1.5px solid rgba(255,230,0,.3);border-radius:4px;padding:2px 7px;font-size:9px;font-weight:900;font-family:var(--mono);color:var(--y)">🎁 FREE</span>
-            </div>
-          </div>
-          <div style="padding-right:14px;font-size:20px;color:var(--o);filter:drop-shadow(0 0 8px var(--o))">▶</div>
-        </div>
-      </div>
+      <div style="padding:4px 14px 6px;font-size:9px;font-weight:900;font-family:var(--mono);color:rgba(191,95,255,.5);letter-spacing:2px">ALLA SPEL</div>
       <!-- DNA BREAKER card -->
-      <div onclick="openPetBlocks()" class="gcard" ontouchstart="this.classList.add('gcard-pressed')" ontouchend="this.classList.remove('gcard-pressed')" style="margin:0 14px 10px;background:linear-gradient(135deg,#001800,#002800,#001800);border:3px solid var(--g);border-radius:10px;box-shadow:0 0 0 1px rgba(57,255,20,.15),5px 5px 0px var(--g);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;position:relative">
+      <div onclick="openPetBlocks()" class="gcard" ontouchstart="this.classList.add('gcard-pressed')" ontouchend="this.classList.remove('gcard-pressed')" style="margin:0 14px 10px;background:linear-gradient(135deg,#001800,#002800,#001800);border:2px solid rgba(57,255,20,.6);border-radius:12px;box-shadow:0 0 18px rgba(57,255,20,.12),4px 4px 0px rgba(57,255,20,.5);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;position:relative">
         <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 18px,rgba(57,255,20,.04) 18px,rgba(57,255,20,.04) 19px),repeating-linear-gradient(90deg,transparent,transparent 18px,rgba(57,255,20,.04) 18px,rgba(57,255,20,.04) 19px);pointer-events:none"></div>
+        <div class="arcade-scan" style="animation-duration:4.5s;opacity:.6"></div>
         <div style="display:flex;align-items:center;gap:0;padding:0">
           <div style="width:88px;height:88px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(57,255,20,.08);border-right:2px solid rgba(57,255,20,.2);position:relative;overflow:hidden">
-            <div style="position:absolute;inset:0;background:radial-gradient(circle,rgba(57,255,20,.15) 0%,transparent 70%)"></div>
-            <div style="font-size:44px;filter:drop-shadow(0 0 14px rgba(57,255,20,.8));animation:gpFire 2s ease-in-out infinite;position:relative;z-index:1">🧬</div>
+            <div style="position:absolute;inset:0;background:radial-gradient(circle,rgba(57,255,20,.2) 0%,transparent 65%)"></div>
+            <div style="font-size:44px;filter:drop-shadow(0 0 18px rgba(57,255,20,.9));animation:gpFire 2s ease-in-out infinite;position:relative;z-index:1">🧬</div>
           </div>
           <div style="flex:1;min-width:0;padding:14px 12px">
             <div style="font-size:15px;font-weight:900;color:var(--g);font-family:var(--mono);text-shadow:0 0 12px rgba(57,255,20,.5)">DNA BREAKER</div>
@@ -3531,13 +3580,13 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
         </div>
       </div>
       <!-- PET RUNNER card -->
-      <div onclick="openPetRunner()" ontouchstart="this.classList.add('gcard-pressed')" ontouchend="this.classList.remove('gcard-pressed')" style="margin:0 14px 10px;background:linear-gradient(135deg,#000420,#010830,#000420);border:3px solid var(--b);border-radius:10px;box-shadow:0 0 0 1px rgba(0,217,255,.15),5px 5px 0px var(--b);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;position:relative">
-        <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,217,255,.3),transparent);transform:translateY(-50%);pointer-events:none"></div>
+      <div onclick="openPetRunner()" ontouchstart="this.classList.add('gcard-pressed')" ontouchend="this.classList.remove('gcard-pressed')" style="margin:0 14px 10px;background:linear-gradient(135deg,#000420,#010830,#000420);border:2px solid rgba(0,217,255,.6);border-radius:12px;box-shadow:0 0 18px rgba(0,217,255,.12),4px 4px 0px rgba(0,217,255,.5);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;position:relative">
         <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(0,217,255,.02) 10px,rgba(0,217,255,.02) 11px);pointer-events:none"></div>
+        <div class="arcade-scan" style="animation-duration:5.5s;opacity:.6"></div>
         <div style="display:flex;align-items:center;gap:0;padding:0">
           <div style="width:88px;height:88px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(0,217,255,.08);border-right:2px solid rgba(0,217,255,.2);position:relative;overflow:hidden">
-            <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,transparent 0%,rgba(0,217,255,.6) 40%,rgba(0,217,255,.6) 60%,transparent 100%);animation:gpWave 1.4s ease-in-out infinite"></div>
-            <div style="font-size:44px;animation:gpRun 1s ease-in-out infinite alternate;filter:drop-shadow(0 0 14px rgba(0,217,255,.7));position:relative;z-index:1" id="gpRunnerPet">🐉</div>
+            <div style="position:absolute;bottom:0;left:0;right:0;height:5px;background:linear-gradient(90deg,transparent 0%,rgba(0,217,255,.8) 40%,rgba(0,217,255,.8) 60%,transparent 100%);animation:gpWave 1.4s ease-in-out infinite"></div>
+            <div style="font-size:44px;animation:gpRun 1s ease-in-out infinite alternate;filter:drop-shadow(0 0 18px rgba(0,217,255,.8));position:relative;z-index:1" id="gpRunnerPet">🐉</div>
           </div>
           <div style="flex:1;min-width:0;padding:14px 12px">
             <div style="font-size:15px;font-weight:900;color:var(--b);font-family:var(--mono);text-shadow:0 0 12px rgba(0,217,255,.5)">PET RUNNER</div>
@@ -3552,12 +3601,13 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
         </div>
       </div>
       <!-- BATTLE ARENA card -->
-      <div onclick="openBattle()" ontouchstart="this.classList.add('gcard-pressed')" ontouchend="this.classList.remove('gcard-pressed')" style="margin:0 14px 10px;background:linear-gradient(135deg,#1a0012,#2a0020,#1a0012);border:3px solid var(--pk);border-radius:10px;box-shadow:0 0 0 1px rgba(255,0,127,.15),5px 5px 0px var(--pk);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;position:relative">
-        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(255,0,127,.08) 0%,transparent 60%);pointer-events:none"></div>
+      <div onclick="openBattle()" ontouchstart="this.classList.add('gcard-pressed')" ontouchend="this.classList.remove('gcard-pressed')" style="margin:0 14px 10px;background:linear-gradient(135deg,#1a0012,#2a0020,#1a0012);border:2px solid rgba(255,0,127,.65);border-radius:12px;box-shadow:0 0 22px rgba(255,0,127,.15),4px 4px 0px rgba(255,0,127,.55);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;position:relative">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(255,0,127,.1) 0%,transparent 55%);pointer-events:none"></div>
+        <div class="arcade-scan" style="animation-duration:3.8s;opacity:.5"></div>
         <div style="display:flex;align-items:center;gap:0;padding:0">
-          <div style="width:88px;height:88px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(255,0,127,.1);border-right:2px solid rgba(255,0,127,.25);position:relative;overflow:hidden">
-            <div style="position:absolute;inset:0;background:radial-gradient(circle,rgba(255,0,127,.2) 0%,transparent 65%)"></div>
-            <div style="font-size:44px;animation:gpFire 1.5s ease-in-out infinite;filter:drop-shadow(0 0 16px rgba(255,0,127,.9));position:relative;z-index:1">⚔️</div>
+          <div style="width:88px;height:88px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(255,0,127,.1);border-right:2px solid rgba(255,0,127,.3);position:relative;overflow:hidden">
+            <div style="position:absolute;inset:0;background:radial-gradient(circle,rgba(255,0,127,.25) 0%,transparent 60%)"></div>
+            <div style="font-size:44px;animation:gpFire 1.5s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(255,0,127,.95));position:relative;z-index:1">⚔️</div>
           </div>
           <div style="flex:1;min-width:0;padding:14px 12px">
             <div style="font-size:15px;font-weight:900;color:var(--pk);font-family:var(--mono);text-shadow:0 0 12px rgba(255,0,127,.6)">BATTLE ARENA</div>
@@ -3572,12 +3622,13 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
         </div>
       </div>
       <!-- DNA MIXER card -->
-      <div onclick="openDNAMixer()" ontouchstart="this.classList.add('gcard-pressed')" ontouchend="this.classList.remove('gcard-pressed')" style="margin:0 14px 10px;background:linear-gradient(135deg,#0a0022,#130035,#0a0022);border:3px solid var(--p);border-radius:10px;box-shadow:0 0 0 1px rgba(191,95,255,.15),5px 5px 0px var(--p);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;position:relative">
-        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(191,95,255,.08) 0%,transparent 55%);pointer-events:none"></div>
+      <div onclick="openDNAMixer()" ontouchstart="this.classList.add('gcard-pressed')" ontouchend="this.classList.remove('gcard-pressed')" style="margin:0 14px 10px;background:linear-gradient(135deg,#0a0022,#130035,#0a0022);border:2px solid rgba(191,95,255,.6);border-radius:12px;box-shadow:0 0 18px rgba(191,95,255,.12),4px 4px 0px rgba(191,95,255,.5);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;position:relative">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(191,95,255,.1) 0%,transparent 52%);pointer-events:none"></div>
+        <div class="arcade-scan" style="animation-duration:6s;opacity:.5"></div>
         <div style="display:flex;align-items:center;gap:0;padding:0">
-          <div style="width:88px;height:88px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(191,95,255,.1);border-right:2px solid rgba(191,95,255,.25);position:relative;overflow:hidden">
-            <div style="position:absolute;inset:0;background:radial-gradient(circle,rgba(191,95,255,.2) 0%,transparent 60%)"></div>
-            <div style="font-size:44px;animation:gpSpin 4s linear infinite;filter:drop-shadow(0 0 14px rgba(191,95,255,.8));position:relative;z-index:1">🧪</div>
+          <div style="width:88px;height:88px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(191,95,255,.1);border-right:2px solid rgba(191,95,255,.28);position:relative;overflow:hidden">
+            <div style="position:absolute;inset:0;background:radial-gradient(circle,rgba(191,95,255,.25) 0%,transparent 58%)"></div>
+            <div style="font-size:44px;animation:gpSpin 4s linear infinite;filter:drop-shadow(0 0 18px rgba(191,95,255,.9));position:relative;z-index:1">🧪</div>
           </div>
           <div style="flex:1;min-width:0;padding:14px 12px">
             <div style="font-size:15px;font-weight:900;color:var(--p);font-family:var(--mono);text-shadow:0 0 12px rgba(191,95,255,.5)">DNA MIXER</div>
@@ -3592,12 +3643,13 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
         </div>
       </div>
       <!-- FISHING card -->
-      <div onclick="openFishingGame()" ontouchstart="this.classList.add('gcard-pressed')" ontouchend="this.classList.remove('gcard-pressed')" style="margin:0 14px 10px;background:linear-gradient(135deg,#001020,#001830,#001020);border:3px solid var(--b);border-radius:10px;box-shadow:0 0 0 1px rgba(0,217,255,.15),5px 5px 0px var(--b);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;position:relative">
-        <div style="position:absolute;bottom:0;left:0;right:0;height:30px;background:linear-gradient(0deg,rgba(0,217,255,.12),transparent);pointer-events:none"></div>
+      <div onclick="openFishingGame()" ontouchstart="this.classList.add('gcard-pressed')" ontouchend="this.classList.remove('gcard-pressed')" style="margin:0 14px 10px;background:linear-gradient(135deg,#001020,#001830,#001020);border:2px solid rgba(0,180,255,.55);border-radius:12px;box-shadow:0 0 18px rgba(0,180,255,.1),4px 4px 0px rgba(0,180,255,.45);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;position:relative">
+        <div style="position:absolute;bottom:0;left:0;right:0;height:30px;background:linear-gradient(0deg,rgba(0,217,255,.14),transparent);pointer-events:none"></div>
+        <div class="arcade-scan" style="animation-duration:7s;opacity:.5"></div>
         <div style="display:flex;align-items:center;gap:0;padding:0">
-          <div style="width:88px;height:88px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(0,217,255,.08);border-right:2px solid rgba(0,217,255,.2);position:relative;overflow:hidden">
-            <div style="position:absolute;bottom:0;left:0;right:0;height:6px;background:rgba(0,217,255,.3);animation:gpWave 1.2s ease-in-out infinite"></div>
-            <div style="font-size:44px;animation:gpFire 2.2s ease-in-out infinite;filter:drop-shadow(0 0 14px rgba(0,217,255,.7));position:relative;z-index:1">🎣</div>
+          <div style="width:88px;height:88px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(0,217,255,.08);border-right:2px solid rgba(0,217,255,.22);position:relative;overflow:hidden">
+            <div style="position:absolute;bottom:0;left:0;right:0;height:7px;background:linear-gradient(90deg,transparent,rgba(0,217,255,.5),transparent);animation:gpWave 1.2s ease-in-out infinite"></div>
+            <div style="font-size:44px;animation:gpFire 2.2s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(0,217,255,.8));position:relative;z-index:1">🎣</div>
           </div>
           <div style="flex:1;min-width:0;padding:14px 12px">
             <div style="font-size:15px;font-weight:900;color:var(--b);font-family:var(--mono);text-shadow:0 0 12px rgba(0,217,255,.5)">FISKESPELET</div>
@@ -6246,25 +6298,35 @@ function screenFlash(col){
   setTimeout(()=>d.remove(),450);
 }
 function careAnim(emoji,col,label){
-  screenFlash(col.startsWith('#')?col+'22':col.replace('rgb(','rgba(').replace(')',',0.13)'));
-  const cx=window.innerWidth/2;const cy=window.innerHeight*.52;
-  for(let i=0;i<8;i++){
-    const el=document.createElement('div');
-    el.className='care-burst-em';
-    const ang=i/8*Math.PI*2;const r=60+Math.random()*80;
-    const dx=(Math.cos(ang)*r).toFixed(1);const dy=(Math.sin(ang)*r-60).toFixed(1);
-    el.style.cssText=`left:${cx}px;top:${cy}px;font-size:${18+Math.random()*16}px;--dx:${dx}px;--dy:${dy}px;animation-delay:${i*.03}s`;
-    el.textContent=emoji;
-    document.body.appendChild(el);
-    setTimeout(()=>el.remove(),1000);
-  }
-  const big=document.createElement('div');
-  big.className='care-float-txt';
-  big.style.cssText=`top:${window.innerHeight*.38}px;font-size:52px;color:${col};text-shadow:0 0 30px ${col},0 0 60px ${col}`;
-  big.textContent=emoji+' '+label;
-  document.body.appendChild(big);
-  setTimeout(()=>big.remove(),1450);
-  spawnParticles(cx,cy,'stars');
+  const cx=window.innerWidth/2, cy=window.innerHeight*.45;
+  // RGB flash
+  const rf=document.createElement('div');rf.className='rgb-flash';document.body.appendChild(rf);setTimeout(()=>rf.remove(),420);
+  // Screen flash
+  screenFlash(col.startsWith('#')?col+'1a':col.replace('rgb(','rgba(').replace(')',',0.12)'));
+  // Shockwave rings
+  const r1=document.createElement('div');r1.className='shock-ring';r1.style.cssText=`border-color:${col};margin-left:-45px;margin-top:-45px;`;document.body.appendChild(r1);setTimeout(()=>r1.remove(),620);
+  const r2=document.createElement('div');r2.className='shock-ring2';r2.style.cssText=`border-color:${col};margin-left:-30px;margin-top:-30px;opacity:.5`;document.body.appendChild(r2);setTimeout(()=>r2.remove(),850);
+  // Emojis converging FROM edges TOWARD center (flying at the screen)
+  const spawns=[
+    [-cx*.95,-cy*.9],[cx*.95,-cy*.9],[-cx*.95,cy*.9],[cx*.95,cy*.9],
+    [0,-cy*1.1],[0,cy*1.1],[-cx*1.1,0],[cx*1.1,0],
+    [-cx*.6,-cy*.7],[cx*.6,-cy*.7],[-cx*.7,cy*.6],[cx*.7,cy*.6],
+  ];
+  spawns.forEach((pt,i)=>{
+    const el=document.createElement('div');el.className='care-converge-em';
+    const sz=22+Math.random()*22;
+    el.style.cssText=`left:${cx}px;top:${cy}px;font-size:${sz}px;--sx:${pt[0].toFixed(0)}px;--sy:${pt[1].toFixed(0)}px;--sr:${((Math.random()-.5)*50).toFixed(0)}deg;animation-delay:${(i*.018).toFixed(3)}s;filter:drop-shadow(0 0 8px ${col})`;
+    el.textContent=emoji;document.body.appendChild(el);setTimeout(()=>el.remove(),750);
+  });
+  // MEGA emoji that zooms IN from tiny → giant → vanishes
+  const big=document.createElement('div');big.className='care-zoom-crash';
+  big.style.cssText=`font-size:130px;filter:drop-shadow(0 0 40px ${col}) drop-shadow(0 0 80px ${col});`;
+  big.textContent=emoji;document.body.appendChild(big);setTimeout(()=>big.remove(),780);
+  // Label float up
+  const lbl=document.createElement('div');lbl.className='care-float-txt';
+  lbl.style.cssText=`top:${window.innerHeight*.58}px;font-size:40px;color:${col};text-shadow:0 0 25px ${col},0 0 55px ${col};letter-spacing:2px`;
+  lbl.textContent=label;document.body.appendChild(lbl);setTimeout(()=>lbl.remove(),1450);
+  spawnParticles(cx,cy,'stars');vibe(45);
 }
 function pcReact(m){
   const b=$('pcBody');
@@ -6304,12 +6366,13 @@ function updateHUD(){
   $('tr4').style.width=Math.min(100,G.totalSEK/20)+'%';$('tv4').textContent=G.totalSEK;
   // Streak ring
   $('streakN').textContent=G.streak;
-  $('streakN').className='streak-n'+(G.streak>0?' on':'');
-  $('streakRingBig').className='streak-ring-big'+(G.streak>0?' on':'');
-  $('streakMsg').textContent=G.streak===0?'Posta din första Flash!':G.streak<7?`${7-G.streak} dagar kvar till 7d bonus!`:'🔥 '+G.streak+' dagar — sjukt bra!';
+  const srb=$('streakRingBig');if(srb)srb.className='streak-ring-big'+(G.streak>0?' on':'');
+  $('streakMsg').textContent=G.streak===0?'Posta din första Flash!':G.streak<7?`${7-G.streak} dagar kvar till 7d bonus!`:G.streak>=30?'🔥 LEGEND — '+G.streak+' dagars streak!':'🔥 '+G.streak+' dagar — du är på 🔥!';
   // Week dots
+  // Upgrade streak number element to epic class
+  const sn=$('streakN');if(sn){sn.className=G.streak>0?'streak-n-epic':'streak-n';if(G.streak>0)sn.style.color=G.streak>=7?'#FFD700':G.streak>=3?'#FF8C00':'#FF6B00';}
   const wd=$('streakWeekDots');
-  if(wd){const days=['M','T','O','T','F','L','S'];wd.innerHTML=days.map((d,i)=>`<div style="width:20px;height:20px;border-radius:5px;background:${G.streakWeek[i]?'var(--g)':'var(--c3)'};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:${G.streakWeek[i]?'var(--bg)':'var(--t3)'}">${d}</div>`).join('');}
+  if(wd){const days=['M','T','O','T','F','L','S'];wd.innerHTML=days.map((d,i)=>{const on=G.streakWeek[i];return on?`<div class="streak-dot-on" style="width:22px;height:22px;border-radius:6px;background:rgba(255,130,0,.2);border:2px solid rgba(255,130,0,.6);display:flex;align-items:center;justify-content:center;font-size:13px;color:#FF6B00;box-shadow:0 0 8px rgba(255,100,0,.4)">🔥</div>`:`<div style="width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:800;color:rgba(255,255,255,.25)">${d}</div>`}).join('');}
   save();
 }
 const EVOL_STAGES=[
@@ -10401,7 +10464,7 @@ function applyWorldTheme(world,container){
   }
 }
 function obNext(step){
-  window._obwBusy=false; // reset world-btn lock so back navigation works
+  window._obwBusy=false;
   if(step===0){G.world=obWorld;applyWorldTheme(obWorld,$('obBg'));}
   if(step===1){const n=$('obName').value.trim();if(!n){showT('❌ Skriv ditt namn','r');return;}G.name=n;}
   if(step===2){
@@ -10411,10 +10474,15 @@ function obNext(step){
     const pw=$('obPetWelcome');if(pw)pw.textContent='Välkommen, '+pn+'!';
     _obFed=false;
   }
-  // Step 3 = age step, step 4 = mode step (already handled by setObAge/setObMode)
-  document.querySelectorAll('.ob-step').forEach(s=>s.style.display='none');
+  document.querySelectorAll('.ob-step').forEach(s=>{s.style.display='none';});
   const targetEl=$('obs'+step);
-  if(targetEl)targetEl.style.display='flex';
+  if(targetEl){
+    // Set all styles inline — no reliance on CSS cascade
+    targetEl.style.cssText='display:flex;flex-direction:column;min-height:100svh;width:100%;max-width:400px;padding:16px 20px max(env(safe-area-inset-bottom,16px),16px);justify-content:center;box-sizing:border-box;';
+    // Scroll #ob to top so step is always visible
+    const ob=$('ob');if(ob){ob.scrollTop=0;}
+    requestAnimationFrame(()=>targetEl.scrollIntoView({behavior:'instant',block:'start'}));
+  }
   vibe(20);
 }
 // ── LANGUAGE ──
