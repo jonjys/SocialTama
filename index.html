@@ -1219,7 +1219,7 @@ button:active{opacity:.85;}
 @keyframes obStar{0%,100%{opacity:.1;}50%{opacity:.85;}}
 .ob-float-em{position:absolute;animation:obFloatUp var(--dur) linear infinite var(--del);font-size:var(--sz);pointer-events:none;}
 @keyframes obFloatUp{0%{transform:translateY(100vh) scale(0);opacity:0;}10%{opacity:.7;}90%{opacity:.5;}100%{transform:translateY(-20vh) scale(1);opacity:0;}}
-.ob-step{width:100%;max-width:400px;flex-shrink:0;}
+.ob-step{width:100%;max-width:400px;flex-shrink:0;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:16px 20px max(env(safe-area-inset-bottom,16px),16px);}
 .ob-content{position:relative;z-index:2;padding:16px 20px 24px;flex:1;display:flex;flex-direction:column;justify-content:center;scrollbar-width:none;}
 .ob-content::-webkit-scrollbar{display:none;}
 .ob-logo-hero{font-size:64px;font-weight:900;font-family:var(--mono);text-align:center;letter-spacing:-2px;margin-bottom:4px;animation:obLogoIn .6s cubic-bezier(.34,1.56,.64,1);}
@@ -2470,7 +2470,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
   <button id="langToggle" onclick="toggleLang()" style="position:absolute;top:14px;right:14px;z-index:100;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:12px;padding:6px 12px;font-size:15px;cursor:pointer;backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent;color:#fff;font-weight:900;letter-spacing:.5px">🇸🇪 SV</button>
 
   <!-- WORLD SELECTION — shown first -->
-  <div class="ob-step" id="obsw" style="min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:16px 20px max(env(safe-area-inset-bottom,16px),16px)">
+  <div class="ob-step" id="obsw">
     <div class="ob-logo-hero" style="font-size:40px;margin-bottom:0"><span class="ok">K</span>ARMA</div>
     <div style="text-align:center;margin-bottom:10px"><span class="ob-tag2" style="font-size:9px;padding:3px 10px;margin-bottom:0">REAL LIFE · GAME ENGINE ⚡</span></div>
     <div class="ob-prog2" style="margin-bottom:10px"><div class="ob-d2 on"></div><div class="ob-d2"></div><div class="ob-d2"></div><div class="ob-d2"></div></div>
@@ -10414,7 +10414,7 @@ function obNext(step){
   // Step 3 = age step, step 4 = mode step (already handled by setObAge/setObMode)
   document.querySelectorAll('.ob-step').forEach(s=>s.style.display='none');
   const targetEl=$('obs'+step);
-  if(targetEl)targetEl.style.display='block';
+  if(targetEl)targetEl.style.display='flex';
   vibe(20);
 }
 // ── LANGUAGE ──
