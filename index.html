@@ -1293,8 +1293,8 @@ button:active{opacity:.85;}
 @keyframes obStar{0%,100%{opacity:.1;}50%{opacity:.85;}}
 .ob-float-em{position:absolute;animation:obFloatUp var(--dur) linear infinite var(--del);font-size:var(--sz);pointer-events:none;}
 @keyframes obFloatUp{0%{transform:translateY(100vh) scale(0);opacity:0;}10%{opacity:.7;}90%{opacity:.5;}100%{transform:translateY(-20vh) scale(1);opacity:0;}}
-.ob-step{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 20px max(env(safe-area-inset-bottom,16px),16px);box-sizing:border-box;}
-.ob-step.ob-active{display:flex;}
+.ob-step{position:absolute;inset:0;display:none!important;flex-direction:column;align-items:center;justify-content:center;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 20px max(env(safe-area-inset-bottom,16px),16px);box-sizing:border-box;}
+.ob-step.ob-active{display:flex!important;}
 .ob-content{position:relative;z-index:2;padding:16px 20px 24px;flex:1;display:flex;flex-direction:column;justify-content:center;scrollbar-width:none;}
 .ob-content::-webkit-scrollbar{display:none;}
 .ob-logo-hero{font-size:64px;font-weight:900;font-family:var(--mono);text-align:center;letter-spacing:-2px;margin-bottom:4px;animation:obLogoIn .6s cubic-bezier(.34,1.56,.64,1);}
@@ -10611,20 +10611,20 @@ function applyWorldTheme(world,container){
   }
 }
 function obNext(step){
-  if(step===0){G.world=obWorld;applyWorldTheme(obWorld,$('obBg'));}
-  if(step===1){const n=$('obName').value.trim();if(!n){showT('❌ Skriv ditt namn','r');return;}G.name=n;}
-  if(step===2){
-    const pn=$('obPetName').value.trim();if(!pn){showT('❌ Ge din pet ett namn','r');return;}
-    G.petName=pn;G.petEmoji=obPet;
-    const bp=$('obBigPet');if(bp)bp.textContent=obPet;
-    const pw=$('obPetWelcome');if(pw)pw.textContent='Välkommen, '+pn+'!';
-    _obFed=false;
-  }
-  document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('ob-active'));
-  const t=$('obs'+step);
-  if(t){t.classList.add('ob-active');t.scrollTop=0;}
-  vibe(20);
+  try{if(step===0){G.world=obWorld||'cosmic';try{applyWorldTheme(G.world,$('obBg'));}catch(e){}}
+  if(step===1){const n=($('obName')||{}).value||'';if(!n.trim()){showT('❌ Skriv ditt namn','r');return;}G.name=n.trim();}
+  if(step===2){const pn=($('obPetName')||{}).value||'';if(!pn.trim()){showT('❌ Ge din pet ett namn','r');return;}G.petName=pn.trim();G.petEmoji=obPet;const bp=$('obBigPet');if(bp)bp.textContent=obPet;const pw=$('obPetWelcome');if(pw)pw.textContent='Välkommen, '+pn.trim()+'!';_obFed=false;}}catch(e){}
+  // Hide all steps via both class and inline style
+  document.querySelectorAll('.ob-step').forEach(s=>{s.classList.remove('ob-active');s.style.display='none';});
+  const t=document.getElementById('obs'+step);
+  if(t){t.classList.add('ob-active');t.style.display='flex';t.style.position='absolute';t.style.inset='0';t.scrollTop=0;}
+  try{vibe(20);}catch(e){}
 }
+// Bind onboarding buttons via addEventListener as backup to onclick attrs
+document.addEventListener('DOMContentLoaded',function(){
+  var wb=document.getElementById('obwBtn');
+  if(wb){wb.addEventListener('click',function(){obNext(0);},true);wb.addEventListener('touchend',function(e){e.preventDefault();obNext(0);},true);}
+});
 // ── LANGUAGE ──
 const STRINGS={
   sv:{
