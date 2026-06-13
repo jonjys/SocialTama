@@ -15459,4 +15459,8 @@ function renderSettings(){
     <div class="settings-section-title">${sl?'Settings':'Inställningar'}</div>
     <div class="settings-group">
       ${row('🌐',sl?'Language':'Språk',sl?'Switch interface language':'Byt gränssnittsspråk',_curLang==='sv'?'🇸🇪 SV':'🇬🇧 EN',`toggleLang();renderSettings()`)}
-      ${toggleRow('🔊',sl?'Sound':'Ljud',sl?'Game sounds & ef
+      ${toggleRow('🔊',sl?'Sound':'Ljud',sl?'Game sounds & effects':'Spelljud & effekter',typeof _soundOn!=='undefined'?_soundOn:true,'toggleSound()')}
+      ${row('🗑️',sl?'Reset data':'Återställ data',sl?'Delete all progress':'Radera all progress','',`if(confirm('${sl?'Reset all data?':'Återställ all data?'}')){localStorage.clear();location.reload();}`)}
+    </div>
+  `;
+}
