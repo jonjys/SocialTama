@@ -1287,13 +1287,14 @@ button:active{opacity:.85;}
 /* ═══════════════════════════════════
    CINEMATIC ONBOARDING
 ═══════════════════════════════════ */
-.ob{position:fixed;inset:0;background:#000;z-index:9999;display:flex;flex-direction:column;align-items:center;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom,16px);}
+.ob{position:fixed;inset:0;background:#000;z-index:9999;overflow:hidden;}
 .ob-bg{position:absolute;inset:0;pointer-events:none;}
 .ob-bg-star{position:absolute;border-radius:50%;background:#fff;animation:obStar var(--dur) ease-in-out infinite var(--del);}
 @keyframes obStar{0%,100%{opacity:.1;}50%{opacity:.85;}}
 .ob-float-em{position:absolute;animation:obFloatUp var(--dur) linear infinite var(--del);font-size:var(--sz);pointer-events:none;}
 @keyframes obFloatUp{0%{transform:translateY(100vh) scale(0);opacity:0;}10%{opacity:.7;}90%{opacity:.5;}100%{transform:translateY(-20vh) scale(1);opacity:0;}}
-.ob-step{width:100%;max-width:400px;flex-shrink:0;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:16px 20px max(env(safe-area-inset-bottom,16px),16px);}
+.ob-step{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 20px max(env(safe-area-inset-bottom,16px),16px);box-sizing:border-box;}
+.ob-step.ob-active{display:flex;}
 .ob-content{position:relative;z-index:2;padding:16px 20px 24px;flex:1;display:flex;flex-direction:column;justify-content:center;scrollbar-width:none;}
 .ob-content::-webkit-scrollbar{display:none;}
 .ob-logo-hero{font-size:64px;font-weight:900;font-family:var(--mono);text-align:center;letter-spacing:-2px;margin-bottom:4px;animation:obLogoIn .6s cubic-bezier(.34,1.56,.64,1);}
@@ -1306,7 +1307,7 @@ button:active{opacity:.85;}
 .ob-h2{font-size:24px;font-weight:900;line-height:1.1;margin-bottom:4px;font-family:var(--mono);}
 .ob-p2{font-size:11px;color:rgba(255,255,255,.5);line-height:1.5;margin-bottom:12px;font-family:var(--mono);}
 /* Step animations */
-.ob-step{animation:stepIn .35s cubic-bezier(.4,0,.2,1);}
+.ob-step.ob-active{animation:stepIn .35s cubic-bezier(.4,0,.2,1);}
 @keyframes stepIn{from{opacity:0;transform:translateX(24px);}to{opacity:1;transform:none;}}
 /* World selection — neo-brutalism */
 .ob-worlds{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
@@ -2544,7 +2545,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
   <button id="langToggle" onclick="toggleLang()" style="position:absolute;top:14px;right:14px;z-index:100;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:12px;padding:6px 12px;font-size:15px;cursor:pointer;backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent;color:#fff;font-weight:900;letter-spacing:.5px">🇸🇪 SV</button>
 
   <!-- WORLD SELECTION — shown first -->
-  <div class="ob-step" id="obsw">
+  <div class="ob-step ob-active" id="obsw">
     <div class="ob-logo-hero" style="font-size:40px;margin-bottom:0"><span class="ok">K</span>ARMA</div>
     <div style="text-align:center;margin-bottom:10px"><span class="ob-tag2" style="font-size:9px;padding:3px 10px;margin-bottom:0">REAL LIFE · GAME ENGINE ⚡</span></div>
     <div class="ob-prog2" style="margin-bottom:10px"><div class="ob-d2 on"></div><div class="ob-d2"></div><div class="ob-d2"></div><div class="ob-d2"></div></div>
@@ -2576,7 +2577,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
   </div>
 
   <!-- STEP 0: Name -->
-  <div class="ob-step" id="obs0" style="display:none">
+  <div class="ob-step" id="obs0">
     <div class="ob-content">
       <div class="ob-logo-hero"><span class="ok">K</span>ARMA</div>
       <div style="text-align:center;margin-bottom:20px"><span class="ob-tag2">REAL LIFE · GAME ENGINE ⚡</span></div>
@@ -2590,7 +2591,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
   </div>
 
   <!-- STEP 1: Pet selection -->
-  <div class="ob-step" id="obs1" style="display:none">
+  <div class="ob-step" id="obs1">
     <div class="ob-content">
       <div class="ob-prog2"><div class="ob-d2 on"></div><div class="ob-d2 on"></div><div class="ob-d2 on"></div><div class="ob-d2"></div></div>
       <div class="ob-h2">Välj din pet.</div>
@@ -2603,7 +2604,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
   </div>
 
   <!-- STEP 2: Tutorial + launch -->
-  <div class="ob-step" id="obs2" style="display:none">
+  <div class="ob-step" id="obs2">
     <div class="ob-content">
       <div class="ob-prog2"><div class="ob-d2 on"></div><div class="ob-d2 on"></div><div class="ob-d2 on"></div><div class="ob-d2 on"></div></div>
       <span id="obBigPet" class="ob-pet-preview">🐉</span>
@@ -2622,7 +2623,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
   </div>
 
   <!-- Age step -->
-  <div class="ob-step" id="obs3" style="display:none">
+  <div class="ob-step" id="obs3">
     <div class="ob-content">
       <div class="ob-prog2"><div class="ob-d2 on"></div><div class="ob-d2 on"></div><div class="ob-d2 on"></div><div class="ob-d2 on"></div></div>
       <div class="ob-h2" id="obAgeTitle">Hur gammal är du? 🎂</div>
@@ -2643,7 +2644,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
   </div>
 
   <!-- Mode step -->
-  <div class="ob-step" id="obs4" style="display:none">
+  <div class="ob-step" id="obs4">
     <div class="ob-content">
       <div class="ob-prog2"><div class="ob-d2 on"></div><div class="ob-d2 on"></div><div class="ob-d2 on"></div><div class="ob-d2 on"></div></div>
       <div class="ob-h2">Vad lockar dig mest? ✨</div>
@@ -10610,7 +10611,6 @@ function applyWorldTheme(world,container){
   }
 }
 function obNext(step){
-  window._obwBusy=false;
   if(step===0){G.world=obWorld;applyWorldTheme(obWorld,$('obBg'));}
   if(step===1){const n=$('obName').value.trim();if(!n){showT('❌ Skriv ditt namn','r');return;}G.name=n;}
   if(step===2){
@@ -10620,15 +10620,9 @@ function obNext(step){
     const pw=$('obPetWelcome');if(pw)pw.textContent='Välkommen, '+pn+'!';
     _obFed=false;
   }
-  document.querySelectorAll('.ob-step').forEach(s=>{s.style.display='none';});
-  const targetEl=$('obs'+step);
-  if(targetEl){
-    // Set all styles inline — no reliance on CSS cascade
-    targetEl.style.cssText='display:flex;flex-direction:column;min-height:100svh;width:100%;max-width:400px;padding:16px 20px max(env(safe-area-inset-bottom,16px),16px);justify-content:center;box-sizing:border-box;';
-    // Scroll #ob to top so step is always visible
-    const ob=$('ob');if(ob){ob.scrollTop=0;}
-    requestAnimationFrame(()=>targetEl.scrollIntoView({behavior:'instant',block:'start'}));
-  }
+  document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('ob-active'));
+  const t=$('obs'+step);
+  if(t){t.classList.add('ob-active');t.scrollTop=0;}
   vibe(20);
 }
 // ── LANGUAGE ──
