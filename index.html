@@ -9,6 +9,30 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* BOOTSTRAP — runs before main script, guarantees onboarding navigation */
+(function(){
+  function _obGo(step){
+    document.querySelectorAll('.ob-step').forEach(function(s){
+      s.style.cssText='display:none';s.classList.remove('ob-active');
+    });
+    var t=document.getElementById('obs'+step);
+    if(t){t.style.cssText='display:flex!important;position:absolute;top:0;left:0;right:0;bottom:0;flex-direction:column;align-items:center;justify-content:center;overflow-y:auto;padding:16px 20px 24px;box-sizing:border-box;';}
+  }
+  window.addEventListener('DOMContentLoaded',function(){
+    var wb=document.getElementById('obwBtn');
+    if(wb){
+      wb.addEventListener('click',function(e){_obGo(0);},true);
+      wb.addEventListener('touchend',function(e){e.preventDefault();_obGo(0);},true);
+    }
+    /* bind all other ob-step next buttons too */
+    [[1,'obs0'],[2,'obs1'],[3,'obs2'],[4,'obs3']].forEach(function(pair){
+      var el=document.querySelector('#'+pair[1]+' button[onclick^="obNext"]');
+      if(el){var s=pair[0];el.addEventListener('click',function(){if(typeof obNext==='function')obNext(s);else _obGo(s);},true);}
+    });
+  });
+})();
+</script>
 <style>
 :root{
   --bg:#000000;--c1:#0d0d0d;--c2:#141414;--c3:#1c1c1c;--c4:#242424;
