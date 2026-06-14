@@ -1029,6 +1029,82 @@ button:active{opacity:.85;}
 .streak-n-epic{animation:streakFireNum 1.9s ease-in-out infinite;font-weight:900;font-family:var(--mono);color:#FF6B00;display:block;line-height:1;}
 .streak-dot-on{animation:dotFlame .75s ease-in-out infinite;}
 .streak-hero-epic{position:relative;overflow:hidden;animation:streakFireBg 2s ease-in-out infinite;}
+/* ═══ MEGA UPGRADE v2 — DAILY REWARDS + SOCIAL STREAK + TAP FX ═══ */
+@keyframes dlrSlideUp{0%{transform:translateY(100%) scale(.92);opacity:0;}100%{transform:translateY(0) scale(1);opacity:1;}}
+@keyframes dlrPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,215,0,.5),0 0 30px rgba(255,215,0,.3);}70%{box-shadow:0 0 0 18px rgba(255,215,0,0),0 0 30px rgba(255,215,0,.3);}}
+@keyframes dlrShine{0%{left:-100%}100%{left:200%}}
+@keyframes dlrDayIn{0%{transform:scale(0) rotate(-12deg);opacity:0;}100%{transform:scale(1) rotate(0);opacity:1;}}
+.dlr-overlay{position:fixed;inset:0;z-index:9800;background:rgba(0,0,0,.88);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .35s;}
+.dlr-overlay.open{opacity:1;pointer-events:all;}
+.dlr-sheet{background:linear-gradient(180deg,#0e1020 0%,#080a14 100%);border-radius:30px 30px 0 0;padding:28px 18px max(env(safe-area-inset-bottom,36px),36px);width:100%;max-width:440px;animation:dlrSlideUp .45s cubic-bezier(.34,1.56,.64,1) forwards;border-top:2.5px solid rgba(255,215,0,.4);box-shadow:0 -20px 80px rgba(255,150,0,.15);}
+.dlr-title{text-align:center;font-size:24px;font-weight:900;font-family:var(--mono);background:linear-gradient(135deg,#FFD700,#FF9500,#FF6B00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;letter-spacing:1px;}
+.dlr-sub{text-align:center;font-size:11px;color:rgba(255,255,255,.5);margin-bottom:20px;letter-spacing:.4px;}
+.dlr-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:22px;}
+.dlr-day{border-radius:14px;padding:8px 3px;text-align:center;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);position:relative;transition:transform .2s;}
+.dlr-day.past{border-color:rgba(57,255,20,.4);background:rgba(57,255,20,.08);}
+.dlr-day.today{border-color:#FFD700;background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(255,149,0,.12));animation:dlrPulse 1.8s ease-in-out infinite;transform:scale(1.1);z-index:2;}
+.dlr-day.future{opacity:.38;}
+.dlr-day-num{font-size:7px;font-weight:700;color:rgba(255,255,255,.45);font-family:var(--mono);margin-bottom:3px;}
+.dlr-day-em{font-size:20px;display:block;line-height:1;}
+.dlr-day-val{font-size:7px;font-weight:900;font-family:var(--mono);color:var(--y);margin-top:2px;white-space:nowrap;}
+.dlr-day.past::after{content:'✓';position:absolute;top:3px;right:5px;font-size:8px;color:var(--g);font-family:var(--mono);}
+.dlr-claim-btn{width:100%;padding:18px;background:linear-gradient(135deg,#FFD700,#FF9500);border:none;border-radius:18px;font-size:17px;font-weight:900;color:#000;cursor:pointer;font-family:var(--ff);position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent;transition:transform .1s;letter-spacing:.3px;}
+.dlr-claim-btn:active{transform:scale(.96);}
+.dlr-claim-btn::after{content:'';position:absolute;top:0;left:-100%;width:55%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);animation:dlrShine 2.2s ease-in-out 1s infinite;}
+.dlr-claim-btn:disabled{background:rgba(255,255,255,.1);color:rgba(255,255,255,.35);cursor:default;animation:none;}
+.dlr-claim-btn:disabled::after{display:none;}
+.dlr-streak-note{text-align:center;font-size:10px;color:rgba(255,255,255,.3);margin-top:12px;}
+/* Tap FX */
+@keyframes tapRipple{0%{transform:translate(-50%,-50%) scale(0);opacity:.7;}100%{transform:translate(-50%,-50%) scale(5);opacity:0;}}
+@keyframes tapBurstOut{0%{transform:translate(-50%,-50%) scale(0);opacity:1;}100%{transform:translate(-50%,-50%) scale(3);opacity:0;}}
+@keyframes tapFloatUp{0%{transform:translateY(0) scale(1);opacity:1;}100%{transform:translateY(-80px) scale(.7);opacity:0;}}
+@keyframes tapStarPop{0%{transform:translate(-50%,-50%) scale(0) rotate(0deg);opacity:1;}100%{transform:translate(-50%,-50%) scale(2.5) rotate(360deg);opacity:0;}}
+.tap-ripple{position:fixed;width:64px;height:64px;border-radius:50%;pointer-events:none;z-index:9910;border:2px solid rgba(255,255,255,.55);animation:tapRipple .55s ease-out forwards;}
+.tap-ripple-col{position:fixed;width:44px;height:44px;border-radius:50%;pointer-events:none;z-index:9911;border:2px solid var(--tap-col,rgba(57,255,20,.7));animation:tapRipple .7s ease-out .05s forwards;}
+.tap-float{position:fixed;pointer-events:none;z-index:9912;font-size:15px;font-weight:900;font-family:var(--mono);animation:tapFloatUp 1s ease-out forwards;text-shadow:0 0 8px currentColor;}
+.tap-star{position:fixed;pointer-events:none;z-index:9912;font-size:18px;animation:tapStarPop .6s ease-out forwards;}
+/* Enhanced Gacha Spinner */
+.gacha-wheel-wrap{position:relative;width:300px;height:300px;margin:0 auto 18px;}
+.gacha-wheel{width:300px;height:300px;border-radius:50%!important;position:relative;border:5px solid rgba(255,215,0,.6);box-shadow:0 0 0 2px rgba(0,0,0,.9),0 0 50px rgba(255,215,0,.4),0 0 100px rgba(255,100,0,.2),inset 0 0 0 1px rgba(255,255,255,.1);}
+@keyframes spinGlowPulse{0%,100%{box-shadow:0 0 0 2px rgba(0,0,0,.9),0 0 50px rgba(255,215,0,.4),0 0 100px rgba(255,100,0,.2);}50%{box-shadow:0 0 0 2px rgba(0,0,0,.9),0 0 80px rgba(255,215,0,.65),0 0 160px rgba(255,100,0,.35);}}
+.gacha-wheel-wrap .gacha-wheel{animation:spinGlowPulse 2.5s ease-in-out infinite;}
+.gacha-wheel.spinning{animation:none!important;}
+.gacha-pointer{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:30px;z-index:10;filter:drop-shadow(0 2px 8px rgba(0,0,0,.9)) drop-shadow(0 0 14px #FFD700);}
+.gacha-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:66px;height:66px;border-radius:50%;background:radial-gradient(circle,#1a1a30,#0a0a18);border:4px solid rgba(255,215,0,.55);display:flex;align-items:center;justify-content:center;font-size:28px;z-index:5;box-shadow:0 0 24px rgba(255,215,0,.5),inset 0 0 24px rgba(0,0,0,.6);}
+@keyframes orbitRing{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.gacha-orbit{position:absolute;inset:-20px;border-radius:50%;border:1.5px dashed rgba(255,215,0,.22);pointer-events:none;animation:orbitRing 14s linear infinite;}
+.gacha-orbit2{position:absolute;inset:-34px;border-radius:50%;border:1px dashed rgba(191,95,255,.15);pointer-events:none;animation:orbitRing 22s linear infinite reverse;}
+/* Bounty Verify Modal */
+.bounty-verify-modal{position:fixed;inset:0;z-index:8500;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+.bounty-verify-modal.open{opacity:1;pointer-events:all;}
+.bounty-verify-card{background:#0d0f1a;border:2px solid rgba(255,159,10,.4);border-radius:24px;padding:26px 20px;width:100%;max-width:340px;text-align:center;box-shadow:0 0 60px rgba(255,100,0,.15);}
+/* Friend Streak / Social */
+@keyframes streakBestie{0%,100%{transform:scale(1);filter:drop-shadow(0 0 6px rgba(255,45,85,.6));}50%{transform:scale(1.1);filter:drop-shadow(0 0 16px rgba(255,45,85,.9));}}
+.bestie-streak-card{background:linear-gradient(135deg,rgba(255,45,85,.1),rgba(255,80,0,.06));border:1.5px solid rgba(255,45,85,.3);border-radius:18px;padding:16px;margin-bottom:10px;position:relative;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.bestie-streak-card:active{transform:scale(.98);}
+.bestie-streak-card::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,45,85,.07),transparent);animation:dlrShine 3s ease-in-out 2s infinite;}
+.bestie-streak-num{font-size:34px;font-weight:900;font-family:var(--mono);color:#FF2D55;animation:streakBestie 1.6s ease-in-out infinite;}
+.bestie-tag{display:inline-block;background:rgba(255,45,85,.2);border:1px solid rgba(255,45,85,.45);border-radius:20px;padding:3px 10px;font-size:8px;font-weight:900;color:#FF2D55;font-family:var(--mono);margin-top:4px;}
+/* Real-world task cards */
+.rw-task-card{background:rgba(0,217,255,.05);border:1.5px solid rgba(0,217,255,.22);border-radius:16px;padding:14px;margin-bottom:10px;position:relative;overflow:hidden;}
+.rw-task-badge{position:absolute;top:10px;right:10px;background:rgba(0,217,255,.15);border:1px solid rgba(0,217,255,.35);border-radius:10px;padding:3px 8px;font-size:8px;font-weight:900;color:#00D9FF;font-family:var(--mono);}
+.rw-progress-bar{height:6px;background:rgba(255,255,255,.08);border-radius:3px;margin-top:8px;overflow:hidden;}
+.rw-progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#00D9FF,#39FF14);transition:width .6s cubic-bezier(.34,1.56,.64,1);}
+/* Enhanced Fish game */
+@keyframes fishBobCast{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.fish-hud-badge{background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:5px 10px;font-size:11px;font-weight:900;font-family:var(--mono);display:inline-flex;align-items:center;gap:6px;}
+.fish-rarity-ultra{color:#FFD700;text-shadow:0 0 12px rgba(255,215,0,.8);}
+.fish-rarity-legendary{color:#BF5FFF;text-shadow:0 0 10px rgba(191,95,255,.7);}
+.fish-rarity-epic{color:#FF2D55;text-shadow:0 0 8px rgba(255,45,85,.6);}
+.fish-rarity-rare{color:#00D9FF;}
+.fish-catch-pop{position:absolute;pointer-events:none;animation:fishSplashPop .8s ease-out forwards;font-size:28px;}
+@keyframes fishSplashPop{0%{transform:translate(-50%,-50%) scale(0);opacity:1;}70%{transform:translate(-50%,-60%) scale(1.3);opacity:1;}100%{transform:translate(-50%,-80%) scale(.8);opacity:0;}}
+/* Enhanced pet page youth style */
+.pet-youth-card{background:linear-gradient(135deg,rgba(191,95,255,.1),rgba(255,45,85,.06));border:1.5px solid rgba(191,95,255,.3);border-radius:20px;padding:16px;margin-bottom:10px;}
+.pet-friend-activity{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.pfa-av{font-size:26px;background:rgba(255,255,255,.05);border-radius:12px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pfa-streak{font-size:9px;font-weight:900;color:#FF2D55;font-family:var(--mono);}
+/* ═══ END MEGA UPGRADE v2 ═══ */
 /* ═══ ARCADE SECTION ═══ */
 @keyframes arcadeScanMove{0%{transform:translateY(-100%)}100%{transform:translateY(1200%)}}
 @keyframes featuredGlowPulse{0%,100%{box-shadow:0 0 20px rgba(255,159,10,.3),0 4px 24px rgba(0,0,0,.6),inset 0 0 20px rgba(255,159,10,.04);}50%{box-shadow:0 0 50px rgba(255,159,10,.55),0 4px 35px rgba(0,0,0,.7),inset 0 0 40px rgba(255,159,10,.08);}}
@@ -3807,6 +3883,36 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
           <div style="font-size:11px;font-weight:700;color:var(--b);cursor:pointer" onclick="openRoomShop()">SHOP →</div>
         </div>
         <div id="meRumGearList" style="display:flex;gap:8px;overflow-x:auto;padding:0 14px 14px;scrollbar-width:none"></div>
+        <!-- Friends playing now — youth social section -->
+        <div style="padding:8px 14px 4px;font-size:10px;font-weight:900;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.9px">👥 VÄNNER SPELAR NU</div>
+        <div id="meRumFriendActivity" style="padding:0 14px 16px"></div>
+        <!-- Real-world tasks -->
+        <div style="padding:8px 14px 4px;display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:10px;font-weight:900;color:rgba(0,217,255,.7);text-transform:uppercase;letter-spacing:.9px">⚡ VERKLIGHETS-UPPDRAG</div>
+          <div style="font-size:9px;color:rgba(0,217,255,.45);font-family:var(--mono)">IRL MODE</div>
+        </div>
+        <div style="padding:0 14px 16px">
+          <div class="rw-task-card">
+            <div class="rw-task-badge">HÄLSA</div>
+            <div style="font-size:14px;font-weight:900;margin-bottom:4px">🚶 Gå 10 000 steg</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.4">Koppla Hälsa-appen och slutför idag för <span style="color:#00D9FF;font-weight:900">+500⚡ + 50 XP</span>!</div>
+            <div class="rw-progress-bar"><div class="rw-progress-fill" id="rwStepFill" style="width:0%"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px">
+              <div style="font-size:9px;color:rgba(255,255,255,.35);font-family:var(--mono)" id="rwStepCount">0 / 10 000 steg</div>
+              <button onclick="rwSimulateSteps()" style="font-size:9px;background:rgba(0,217,255,.15);border:1px solid rgba(0,217,255,.3);border-radius:8px;padding:3px 10px;color:#00D9FF;font-weight:900;cursor:pointer;font-family:var(--mono)">🔗 SYNC</button>
+            </div>
+          </div>
+          <div class="rw-task-card">
+            <div class="rw-task-badge" style="background:rgba(57,255,20,.12);border-color:rgba(57,255,20,.3);color:var(--g)">SPARA</div>
+            <div style="font-size:14px;font-weight:900;margin-bottom:4px">💰 Spara 50 kr på Avanza</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.4">Anslut Avanza och spara minst 50 kr idag för <span style="color:var(--g);font-weight:900">+800⚡ + 100 XP</span>!</div>
+            <div class="rw-progress-bar"><div class="rw-progress-fill" id="rwSaveFill" style="width:0%;background:linear-gradient(90deg,var(--g),#00D9FF)"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px">
+              <div style="font-size:9px;color:rgba(255,255,255,.35);font-family:var(--mono)" id="rwSaveCount">0 / 50 kr</div>
+              <button onclick="rwSimulateSave()" style="font-size:9px;background:rgba(57,255,20,.1);border:1px solid rgba(57,255,20,.25);border-radius:8px;padding:3px 10px;color:var(--g);font-weight:900;cursor:pointer;font-family:var(--mono)">🔗 SYNC</button>
+            </div>
+          </div>
+        </div>
       </div>
       <!-- PROFIL panel -->
       <div class="me-spanel" id="me-panel-profil">
@@ -4243,15 +4349,44 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
     <div style="font-size:20px;font-weight:900;font-family:var(--mono);margin-bottom:6px;text-align:center">🎰 DAGLIGT SPIN</div>
     <div style="font-size:11px;color:var(--t3);margin-bottom:20px;text-align:center" id="gachaSubtitle">Gratis spin varje dag!</div>
     <div class="gacha-wheel-wrap">
+      <div class="gacha-orbit"></div>
+      <div class="gacha-orbit2"></div>
       <div class="gacha-pointer">▼</div>
       <div class="gacha-wheel" id="gachaWheel">
-        <canvas id="gachaCanvas" width="260" height="260"></canvas>
+        <canvas id="gachaCanvas" width="300" height="300"></canvas>
       </div>
       <div class="gacha-center">🎲</div>
     </div>
     <div class="gacha-result" id="gachaResult"></div>
     <button class="btn btn-y btn-lg gacha-spin-btn" id="gachaSpinBtn" onclick="spinGacha()">🎰 SPIN — GRATIS!</button>
     <button id="gachaInventoryBtn" onclick="closeGacha();showT('🎒 Check din profil för dina items!','g')" style="display:none;margin-top:10px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);border-radius:14px;padding:10px 24px;color:#fff;font-size:13px;font-weight:900;cursor:pointer;font-family:var(--ff)">🎒 KOLLA INVENTORYT</button>
+  </div>
+</div>
+<!-- DAILY LOGIN REWARD MODAL -->
+<div class="dlr-overlay" id="dlrOverlay">
+  <div class="dlr-sheet">
+    <div style="text-align:center;font-size:40px;margin-bottom:6px;animation:petBob 1.2s ease-in-out infinite">🎁</div>
+    <div class="dlr-title">DAGLIG BELÖNING</div>
+    <div class="dlr-sub">Du är inne DAG <span id="dlrDayNum" style="color:#FFD700;font-weight:900">1</span> av 7!</div>
+    <div class="dlr-grid" id="dlrGrid"></div>
+    <button class="dlr-claim-btn" id="dlrClaimBtn" onclick="claimDailyReward()">🎁 HÄMTA! +<span id="dlrBtnReward">100</span>⚡</button>
+    <div class="dlr-streak-note" id="dlrStreakNote">Håll din streak — missa inte imorgon! 🔥</div>
+  </div>
+</div>
+<!-- BOUNTY COMPLETION VERIFY -->
+<div class="bounty-verify-modal" id="bountyVerifyModal">
+  <div class="bounty-verify-card">
+    <div style="font-size:44px;margin-bottom:10px" id="bvIcon">⚔️</div>
+    <div style="font-size:16px;font-weight:900;font-family:var(--mono);color:var(--o);margin-bottom:6px" id="bvTitle">BOUNTY KLAR?</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.55);margin-bottom:20px;line-height:1.5" id="bvDesc">Bekräfta att du verkligen slutfört uppdraget.</div>
+    <div style="background:rgba(255,159,10,.07);border:1.5px solid rgba(255,159,10,.25);border-radius:14px;padding:14px;margin-bottom:16px;text-align:left">
+      <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.6px;margin-bottom:6px">DITT BEVIS (valfritt):</div>
+      <textarea id="bvProof" placeholder="Berätta kort vad du gjorde... 📝" style="width:100%;background:transparent;border:none;color:#fff;font-size:12px;font-family:var(--ff);resize:none;outline:none;height:56px;box-sizing:border-box;line-height:1.5"></textarea>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:10px">
+      <button onclick="document.getElementById('bountyVerifyModal').classList.remove('open')" style="padding:14px;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.15);border-radius:14px;color:rgba(255,255,255,.6);font-size:13px;font-weight:900;cursor:pointer;font-family:var(--ff)">✕ Avbryt</button>
+      <button onclick="confirmBountyDone()" style="padding:14px;background:linear-gradient(135deg,rgba(200,80,0,.5),rgba(255,120,0,.35));border:2px solid rgba(255,159,10,.5);border-radius:14px;color:var(--o);font-size:13px;font-weight:900;cursor:pointer;font-family:var(--mono);-webkit-tap-highlight-color:transparent">✅ JA — SLUTFÖRT!</button>
+    </div>
   </div>
 </div>
 <!-- FRIEND GIFTING -->
@@ -5067,28 +5202,36 @@ function renderKmbBounties(){
   const el=$('kmbBountyList');if(!el)return;
   const seed=Math.floor(Date.now()/86400000);
   const seededRng=(n)=>((seed*9301+49297*n)%233280)/233280;
+  window._KMB_BOUNTY_POOL_REF=KMB_BOUNTY_POOL;
+  const doneBounties=JSON.parse(localStorage.getItem('kv8_bounties_done')||'[]');
   const bounties=Array.from({length:5},(_,i)=>{
     const bi=Math.floor(seededRng(i)*KMB_BOUNTY_POOL.length);
     const ni=Math.floor(seededRng(i+10)*KMB_BOUNTY_NAMES.length);
     const timeLeft=Math.floor(2+seededRng(i+20)*22);
     const accepted=_kmbBountyAccepted.includes(i+'_'+seed);
-    return{...KMB_BOUNTY_POOL[bi],poster:KMB_BOUNTY_NAMES[ni],timeLeft,idx:i,accepted,seed};
+    const done=doneBounties.includes('done_'+i+'_'+seed);
+    return{...KMB_BOUNTY_POOL[bi],poster:KMB_BOUNTY_NAMES[ni],timeLeft,idx:i,accepted,done,seed};
   });
-  el.innerHTML=bounties.map(b=>`<div class="kmb-card bounty" style="border-color:rgba(255,159,10,.4);">
+  el.innerHTML=bounties.map(b=>`<div class="kmb-card bounty" style="border-color:${b.done?'rgba(57,255,20,.4)':'rgba(255,159,10,.4)'};${b.done?'background:rgba(57,255,20,.04);':''}">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-      <div class="kmb-hex" style="background:rgba(200,80,0,.4);font-size:20px">${b.ico}</div>
+      <div class="kmb-hex" style="background:${b.done?'rgba(0,120,0,.4)':'rgba(200,80,0,.4)'};font-size:20px">${b.ico}</div>
       <div style="flex:1;min-width:0">
-        <div style="font-size:12px;font-weight:900;color:var(--o)">${b.txt}</div>
-        <div style="font-size:9px;color:rgba(255,255,255,.35);font-family:var(--mono);margin-top:2px">POSTER: @${b.poster} · ⏳ ${b.timeLeft}h KVAR</div>
+        <div style="font-size:12px;font-weight:900;color:${b.done?'var(--g)':'var(--o)'}${b.done?';text-decoration:line-through;opacity:.7':''}">${b.txt}</div>
+        <div style="font-size:9px;color:rgba(255,255,255,.35);font-family:var(--mono);margin-top:2px">📌 @${b.poster} · ⏳ ${b.timeLeft}h KVAR</div>
       </div>
       <div style="text-align:right;flex-shrink:0">
         <div style="font-size:12px;font-weight:900;color:var(--y);font-family:var(--mono)">+${b.reward.xp}XP</div>
         <div style="font-size:10px;color:var(--o);font-family:var(--mono)">+${b.reward.coins}⚡</div>
       </div>
     </div>
-    ${b.accepted
-      ?`<div style="text-align:center;font-size:10px;font-weight:900;color:var(--g);font-family:var(--mono);padding:6px;background:rgba(57,255,20,.08);border-radius:8px;border:1px solid rgba(57,255,20,.2)">✅ ACCEPTERAT — I PROGRESS</div>`
-      :`<button onclick="kmbAcceptBounty(${b.idx},${b.seed})" style="width:100%;padding:8px;background:linear-gradient(135deg,rgba(200,80,0,.3),rgba(150,40,0,.4));border:1.5px solid rgba(255,159,10,.4);border-radius:10px;color:var(--o);font-size:11px;font-weight:900;cursor:pointer;font-family:var(--mono);-webkit-tap-highlight-color:transparent">⚔ ACCEPT &amp; BÖRJA</button>`
+    ${b.done
+      ?`<div style="text-align:center;font-size:11px;font-weight:900;color:var(--g);font-family:var(--mono);padding:8px;background:rgba(57,255,20,.1);border-radius:10px;border:1px solid rgba(57,255,20,.3)">✅ SLUTFÖRT — BELÖNING HÄMTAD!</div>`
+      :b.accepted
+        ?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div style="text-align:center;font-size:10px;font-weight:900;color:var(--g);font-family:var(--mono);padding:7px;background:rgba(57,255,20,.08);border-radius:8px;border:1px solid rgba(57,255,20,.2)">⚔ I PROGRESS...</div>
+            <button onclick="openBountyVerify(${b.idx},${b.seed},'${b.ico}',\`${b.txt.replace(/`/g,"'")}\`)" style="padding:7px;background:linear-gradient(135deg,rgba(57,255,20,.25),rgba(0,180,0,.2));border:1.5px solid rgba(57,255,20,.45);border-radius:8px;color:var(--g);font-size:10px;font-weight:900;cursor:pointer;font-family:var(--mono);-webkit-tap-highlight-color:transparent">✅ MARKERA KLAR</button>
+          </div>`
+        :`<button onclick="kmbAcceptBounty(${b.idx},${b.seed})" style="width:100%;padding:9px;background:linear-gradient(135deg,rgba(200,80,0,.3),rgba(150,40,0,.4));border:1.5px solid rgba(255,159,10,.4);border-radius:10px;color:var(--o);font-size:11px;font-weight:900;cursor:pointer;font-family:var(--mono);-webkit-tap-highlight-color:transparent">⚔ ACCEPT &amp; BÖRJA</button>`
     }
   </div>`).join('');
 }
@@ -6260,6 +6403,116 @@ function _startLiveCounts(){
       el.textContent=(v>=1000?(v/1000).toFixed(1)+'k':v)+' live';
     });
   },4000);
+}
+// ── DAILY REWARD MODAL ──
+const DLR_DAYS=[
+  {em:'⚡',val:'75 coins',coins:75,xp:0},
+  {em:'💎',val:'150 coins',coins:150,xp:10},
+  {em:'🔥',val:'200 coins',coins:200,xp:15},
+  {em:'🌟',val:'300 coins',coins:300,xp:20},
+  {em:'👑',val:'500 coins',coins:500,xp:30},
+  {em:'🏆',val:'750 coins',coins:750,xp:50},
+  {em:'🎰',val:'1000+SPIN',coins:1000,xp:75,spin:true},
+];
+let _dlrClaimed=false;
+function openDailyRewardModal(isReturn){
+  const ov=$('dlrOverlay');if(!ov)return;
+  const today=new Date().toDateString();
+  const alreadyClaimed=localStorage.getItem('kv8_dlrClaimed')===today;
+  _dlrClaimed=alreadyClaimed;
+  // Get or compute current 7-day streak day (1-7)
+  const loginStreak=G.streak||1;
+  const dayIdx=Math.min((loginStreak-1)%7,6);
+  const todayPrize=DLR_DAYS[dayIdx];
+  const grid=$('dlrGrid');
+  if(grid){
+    grid.innerHTML=DLR_DAYS.map((d,i)=>{
+      let cls='dlr-day';
+      if(i<dayIdx)cls+=' past';
+      else if(i===dayIdx)cls+=' today';
+      else cls+=' future';
+      return`<div class="${cls}" style="animation-delay:${i*60}ms"><div class="dlr-day-num">DAG ${i+1}</div><div class="dlr-day-em">${d.em}</div><div class="dlr-day-val">${d.val}</div></div>`;
+    }).join('');
+  }
+  const dayNum=$('dlrDayNum');if(dayNum)dayNum.textContent=dayIdx+1;
+  const btnReward=$('dlrBtnReward');if(btnReward)btnReward.textContent=todayPrize.coins+(todayPrize.spin?' + SPIN':'');
+  const btn=$('dlrClaimBtn');
+  if(btn){btn.disabled=alreadyClaimed;btn.textContent=alreadyClaimed?'✅ Redan hämtad idag!':`🎁 HÄMTA! +${todayPrize.coins}${todayPrize.spin?' + SPIN':''}⚡`;}
+  const note=$('dlrStreakNote');
+  if(note)note.textContent=isReturn?(alreadyClaimed?'Kom tillbaka imorgon för dag '+(dayIdx+2)+'! 🔥':'Välkommen tillbaka! Klicka HÄMTA! 🎁'):'Välkommen! Din resa börjar nu 🚀';
+  ov.classList.add('open');
+}
+function claimDailyReward(){
+  const today=new Date().toDateString();
+  if(localStorage.getItem('kv8_dlrClaimed')===today){showT('✅ Redan hämtad idag!','y');return;}
+  localStorage.setItem('kv8_dlrClaimed',today);
+  const loginStreak=G.streak||1;
+  const dayIdx=Math.min((loginStreak-1)%7,6);
+  const prize=DLR_DAYS[dayIdx];
+  G.coins+=prize.coins;
+  if(prize.xp>0)gainXP(prize.xp,'social');
+  if(prize.spin){G.lastSpin='';save();}
+  updateHUD();save();
+  vibe([30,20,60,20,100,30,150]);
+  coinRain(Math.min(20,Math.floor(prize.coins/40)));
+  spawnParticles(window.innerWidth/2,window.innerHeight*.5,'stars');
+  const btn=$('dlrClaimBtn');if(btn){btn.disabled=true;btn.textContent='✅ Hämtad!';}
+  const note=$('dlrStreakNote');if(note)note.textContent='🎉 +'+prize.coins+' coins hämtat! Kom tillbaka imorgon!';
+  SFX.win();
+  setTimeout(()=>{
+    const ov=$('dlrOverlay');if(ov)ov.classList.remove('open');
+    showT('🎁 DAGLIG BONUS! +'+prize.coins+'⚡'+(prize.spin?' + GRATIS SPIN!':''),'g');
+  },2200);
+}
+// ── TAP EFFECTS ──
+function spawnTapEffect(x,y,em,col){
+  const r=document.createElement('div');r.className='tap-ripple';r.style.left=x+'px';r.style.top=y+'px';
+  if(col){r.className='tap-ripple-col';r.style.setProperty('--tap-col',col);}
+  document.body.appendChild(r);setTimeout(()=>r.remove(),700);
+  if(em){
+    const f=document.createElement('div');f.className='tap-float';f.textContent=em;
+    f.style.left=(x-20)+'px';f.style.top=(y-10)+'px';f.style.color=col||'#FFD700';
+    document.body.appendChild(f);setTimeout(()=>f.remove(),1100);
+  }
+  const star=document.createElement('div');star.className='tap-star';star.style.left=x+'px';star.style.top=y+'px';
+  star.textContent=['✨','⭐','💥','🌟'][Math.floor(Math.random()*4)];
+  document.body.appendChild(star);setTimeout(()=>star.remove(),700);
+}
+// Global tap effect on ALL buttons/cards
+document.addEventListener('click',function(e){
+  const target=e.target.closest('button,.chb,.pcard,.friend-card,.kmb-card,.bounty-card,.game-card,.featured-gcard');
+  if(!target)return;
+  const rect=target.getBoundingClientRect();
+  const x=e.clientX||rect.left+rect.width/2;const y=e.clientY||rect.top+rect.height/2;
+  const colors=['rgba(255,215,0,.8)','rgba(57,255,20,.8)','rgba(0,217,255,.8)','rgba(255,45,85,.8)','rgba(191,95,255,.8)'];
+  const col=colors[Math.floor(Math.random()*colors.length)];
+  const r=document.createElement('div');r.className='tap-ripple-col';
+  r.style.left=x+'px';r.style.top=y+'px';r.style.setProperty('--tap-col',col);
+  document.body.appendChild(r);setTimeout(()=>r.remove(),800);
+},true);
+// ── BOUNTY COMPLETION ──
+let _bvCurrentIdx=-1,_bvCurrentSeed=0;
+function openBountyVerify(idx,seed,ico,title){
+  _bvCurrentIdx=idx;_bvCurrentSeed=seed;
+  const bvIcon=$('bvIcon');if(bvIcon)bvIcon.textContent=ico||'⚔️';
+  const bvTitle=$('bvTitle');if(bvTitle)bvTitle.textContent=title||'BOUNTY KLAR?';
+  const bvProof=$('bvProof');if(bvProof)bvProof.value='';
+  document.getElementById('bountyVerifyModal').classList.add('open');
+}
+function confirmBountyDone(){
+  document.getElementById('bountyVerifyModal').classList.remove('open');
+  if(_bvCurrentIdx<0)return;
+  const seed=_bvCurrentSeed;const doneKey='done_'+_bvCurrentIdx+'_'+seed;
+  const done=JSON.parse(localStorage.getItem('kv8_bounties_done')||'[]');
+  if(!done.includes(doneKey)){done.push(doneKey);localStorage.setItem('kv8_bounties_done',JSON.stringify(done));}
+  const pool=window._KMB_BOUNTY_POOL_REF||[];
+  const bi=Math.floor(((seed*9301+49297*_bvCurrentIdx)%233280)/233280*pool.length);
+  const b=pool[bi]||{reward:{xp:80,coins:120}};
+  gainCoins(b.reward?.coins||120);gainXP(b.reward?.xp||80,'social');
+  vibe([20,10,40,10,60,20,100]);SFX.win();coinRain(8);
+  spawnParticles(window.innerWidth/2,window.innerHeight*.4,'stars');
+  showT('✅ BOUNTY KLAR! +'+( b.reward?.xp||80)+'XP +'+( b.reward?.coins||120)+'⚡','g');
+  renderKmbBounties();
 }
 // ── GAME ──
 function gainCoins(n,stat){
@@ -7663,13 +7916,46 @@ function renderActivity(){
 function renderFriends(){
   const c=$('socialContent');if(!c)return;
   const online=FRIENDS_DATA.filter(f=>f.status==='online').length;
-  c.innerHTML=`<div style="padding:10px 14px 6px;font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.8px">${online} ONLINE · ${FRIENDS_DATA.length} VÄNNER</div>`+FRIENDS_DATA.map(f=>`
-    <div class="friend-card" onclick="openDM('${f.id}')">
+  // Best friend streak
+  const bestie=FRIENDS_DATA.reduce((a,b)=>b.streak>a.streak?b:a,FRIENDS_DATA[0]);
+  const myStreak=G.streak||0;
+  const sharedStreak=Math.min(myStreak,bestie?.streak||0);
+  const bestiePart=bestie&&sharedStreak>0?`<div class="bestie-streak-card" onclick="openDM('${bestie.id}')">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="font-size:36px">${bestie.pet}</div>
+      <div style="flex:1">
+        <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.6px;margin-bottom:4px">⚡ GEMENSAM STREAK MED</div>
+        <div style="font-size:16px;font-weight:900;color:#fff">@${bestie.user}</div>
+        <div class="bestie-tag">BÄSTA VÄN</div>
+      </div>
+      <div style="text-align:center">
+        <div class="bestie-streak-num">${sharedStreak}</div>
+        <div style="font-size:9px;color:rgba(255,45,85,.7);font-family:var(--mono)">DAGAR</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;background:rgba(255,255,255,.05);border-radius:10px;padding:8px 12px;font-size:11px;color:rgba(255,255,255,.6)">
+      🔥 Ni håller streaken tillsammans! Logga in imorgon för att hålla den vid liv.
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button onclick="event.stopPropagation();quickShoutout('${bestie.user}')" style="flex:1;padding:8px;background:rgba(255,45,85,.15);border:1px solid rgba(255,45,85,.3);border-radius:10px;color:#FF2D55;font-size:11px;font-weight:900;cursor:pointer;font-family:var(--mono);-webkit-tap-highlight-color:transparent">📣 HYPA</button>
+      <button onclick="event.stopPropagation();openDM('${bestie.id}')" style="flex:1;padding:8px;background:rgba(0,217,255,.12);border:1px solid rgba(0,217,255,.3);border-radius:10px;color:#00D9FF;font-size:11px;font-weight:900;cursor:pointer;font-family:var(--mono);-webkit-tap-highlight-color:transparent">💬 CHATTA</button>
+    </div>
+  </div>`:'';
+  c.innerHTML=`<div style="padding:10px 14px 6px;font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.8px">🟢 ${online} ONLINE · ${FRIENDS_DATA.length} VÄNNER</div>`+bestiePart+FRIENDS_DATA.map(f=>{
+    const shS=Math.min(G.streak||0,f.streak||0);
+    return`<div class="friend-card" onclick="openDM('${f.id}')">
       <div class="f-av">${f.pet}<div class="f-dot ${f.status==='online'?'on':'off'}"></div></div>
-      <div style="flex:1;min-width:0"><div class="f-name">${f.user}</div><div class="f-sub">${f.bio||'LV'+f.lvl+' · Trust '+f.trust}</div></div>
-      <div class="f-right">${f.streak>0?`<div style="font-size:11px;font-weight:800;color:var(--r);font-family:var(--mono)">🔥 ${f.streak}d</div>`:`<div style="font-size:11px;color:var(--t3)">--</div>`}<div style="font-size:10px;color:var(--t3)">LV${f.lvl}</div></div>
-      <button style="background:none;border:1px solid var(--line);border-radius:20px;padding:5px 10px;font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;margin-left:8px;flex-shrink:0" onclick="event.stopPropagation();quickShoutout('${f.user}')">📣</button>
-    </div>`).join('');
+      <div style="flex:1;min-width:0">
+        <div class="f-name">${f.user} ${shS>=3?'<span style="font-size:9px;background:rgba(255,45,85,.2);border:1px solid rgba(255,45,85,.4);border-radius:10px;padding:1px 6px;color:#FF2D55;font-family:var(--mono)">🔥 '+shS+'d STREAK</span>':''}</div>
+        <div class="f-sub">${f.bio||'LV'+f.lvl+' · Trust '+f.trust}</div>
+      </div>
+      <div class="f-right">
+        ${f.streak>0?`<div style="font-size:11px;font-weight:800;color:#FF6B00;font-family:var(--mono)">🔥${f.streak}d</div>`:`<div style="font-size:11px;color:var(--t3)">--</div>`}
+        <div style="font-size:10px;color:var(--t3)">LV${f.lvl}</div>
+      </div>
+      <button style="background:none;border:1px solid var(--line);border-radius:20px;padding:5px 10px;font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;margin-left:8px;flex-shrink:0;-webkit-tap-highlight-color:transparent" onclick="event.stopPropagation();quickShoutout('${f.user}')">📣</button>
+    </div>`;
+  }).join('');
 }
 function renderDMList(){
   const c=$('socialContent');if(!c)return;
@@ -10267,7 +10553,41 @@ function renderMeRum(){
       :`<div style="color:var(--t3);font-size:12px;padding:10px 0;display:flex;align-items:center;gap:8px;cursor:pointer" onclick="nav('shop');switchShop('gear')">Inget gear ännu <span style="color:var(--y)">→ Gå till Shop</span></div>`;
   }
 }
-function renderMeRoom(){renderMeRum();}
+function renderMeRoom(){renderMeRum();renderRwTasks();renderFriendRoomActivity();}
+function renderFriendRoomActivity(){
+  const el=$('meRumFriendActivity');if(!el)return;
+  const acts=FRIENDS_DATA.filter(f=>f.status==='online').slice(0,3);
+  if(!acts.length){el.innerHTML='<div style="font-size:11px;color:rgba(255,255,255,.25);padding:6px 0">Inga vänner online just nu...</div>';return;}
+  const games=['fiskar 🎣','spelar Karma Runner 🏃','snurrar hjulet 🎰','tränar sin pet 💪','är i Karma World 🌍'];
+  el.innerHTML=acts.map(f=>`<div class="pet-friend-activity">
+    <div class="pfa-av">${f.pet}</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:13px;font-weight:900">@${f.user}</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:1px">${games[Math.floor(Math.random()*games.length)]}</div>
+      ${f.streak>=3?`<div class="pfa-streak">🔥 ${f.streak}d streak</div>`:''}
+    </div>
+    <button onclick="openDM('${f.id}')" style="background:rgba(191,95,255,.15);border:1px solid rgba(191,95,255,.3);border-radius:10px;padding:6px 12px;color:var(--p);font-size:10px;font-weight:900;cursor:pointer;font-family:var(--mono);-webkit-tap-highlight-color:transparent">💬</button>
+  </div>`).join('');
+}
+let _rwSteps=0,_rwSaved=0;
+function renderRwTasks(){
+  const sf=$('rwStepFill');const sc=$('rwStepCount');if(sf)sf.style.width=Math.min(100,(_rwSteps/10000)*100)+'%';if(sc)sc.textContent=_rwSteps.toLocaleString('sv')+' / 10 000 steg';
+  const savF=$('rwSaveFill');const savC=$('rwSaveCount');if(savF)savF.style.width=Math.min(100,(_rwSaved/50)*100)+'%';if(savC)savC.textContent=_rwSaved+' / 50 kr';
+}
+function rwSimulateSteps(){
+  if(_rwSteps>=10000){showT('✅ Redan klart idag!','g');return;}
+  const add=1000+Math.floor(Math.random()*2000);_rwSteps=Math.min(10000,_rwSteps+add);
+  renderRwTasks();vibe([15,10,30]);
+  if(_rwSteps>=10000){gainCoins(500);gainXP(50,'action');coinRain(12);showT('🚶 10 000 STEG! +500⚡ +50 XP','g');vibe([50,20,100,20,150]);}
+  else showT('🚶 '+_rwSteps.toLocaleString('sv')+' steg synkade!','b');
+}
+function rwSimulateSave(){
+  if(_rwSaved>=50){showT('✅ Sparmål nått idag!','g');return;}
+  const add=10+Math.floor(Math.random()*20);_rwSaved=Math.min(50,_rwSaved+add);
+  renderRwTasks();vibe([15,10,30]);
+  if(_rwSaved>=50){gainCoins(800);gainXP(100,'action');coinRain(15);showT('💰 50 KR SPARAT! +800⚡ +100 XP','g');vibe([50,20,100,20,200]);}
+  else showT('💰 '+_rwSaved+' kr synkade!','g');
+}
 
 function renderMeProfil(){
   const el=$('meProfilInner');if(!el)return;
@@ -13095,9 +13415,9 @@ function _loadFromLocalStorage(){
     try{const pm=localStorage.getItem('kv8_pmem');if(pm)G.petMemory=JSON.parse(pm);}catch(e){}
     try{const ex=localStorage.getItem('kv8_expd');if(ex)G.expedition=JSON.parse(ex);}catch(e){}
     const _today=new Date().toDateString();const _last=localStorage.getItem('kv8_lastLogin');
-    if(_last!==_today){localStorage.setItem('kv8_lastLogin',_today);if(_last){const _b=G.premium?300:75;G.coins+=_b;// S4b Hype Builder: +20 XP on daily login
+    if(_last!==_today){localStorage.setItem('kv8_lastLogin',_today);if(_last){const _b=G.premium?300:75;G.coins+=_b;
       if(G._talentS4b)setTimeout(()=>{gainXP(20,'social');showT('🤝 HYPE BUILDER! +20 XP login bonus','pk');},3200);
-      setTimeout(()=>{showT('🎁 DAILY LOGIN BONUS! +'+_b+' COINS','g');vibe([30,20,60,20,80]);},2500);}}
+      setTimeout(()=>openDailyRewardModal(true),1800);}else{setTimeout(()=>openDailyRewardModal(false),2200);}}
     $('ob').style.display='none';$('app').style.display='flex';updateHUD();nav('home');
     initDailyChallenges();
     setTimeout(startKarmaPulse,1200);setTimeout(renderJackpot,800);
@@ -14389,14 +14709,38 @@ function closeGacha(){
 }
 function drawGachaWheel(){
   const canvas=$('gachaCanvas');if(!canvas)return;
+  const SIZE=300;canvas.width=SIZE;canvas.height=SIZE;
   const ctx=canvas.getContext('2d');const n=GACHA_PRIZES.length;const arc=2*Math.PI/n;
-  const cx=130,cy=130,r=126;ctx.clearRect(0,0,260,260);
+  const cx=SIZE/2,cy=SIZE/2,r=SIZE/2-3;ctx.clearRect(0,0,SIZE,SIZE);
+  // Outer glow ring
+  const grd=ctx.createRadialGradient(cx,cy,r-8,cx,cy,r+2);
+  grd.addColorStop(0,'rgba(255,215,0,.0)');grd.addColorStop(1,'rgba(255,215,0,.12)');
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fillStyle=grd;ctx.fill();
   GACHA_PRIZES.forEach((p,i)=>{
-    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,arc*i-Math.PI/2,arc*(i+1)-Math.PI/2);ctx.closePath();
-    ctx.fillStyle=p.col+'cc';ctx.fill();ctx.strokeStyle='rgba(0,0,0,.3)';ctx.lineWidth=1.5;ctx.stroke();
-    ctx.save();ctx.translate(cx,cy);ctx.rotate(arc*i+arc/2-Math.PI/2);ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.font='18px serif';ctx.fillText(p.em,r*.6,0);ctx.restore();
+    const startA=arc*i-Math.PI/2;const endA=arc*(i+1)-Math.PI/2;
+    // Gradient per slice
+    const gSlice=ctx.createLinearGradient(cx,cy-r,cx,cy+r);
+    gSlice.addColorStop(0,p.col+'ff');gSlice.addColorStop(1,p.col+'88');
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,startA,endA);ctx.closePath();
+    ctx.fillStyle=gSlice;ctx.fill();
+    // Slice border
+    ctx.strokeStyle='rgba(0,0,0,.5)';ctx.lineWidth=2;ctx.stroke();
+    // Neon edge highlight
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,startA,endA);ctx.closePath();
+    ctx.strokeStyle=p.col+'66';ctx.lineWidth=3;ctx.stroke();
+    // Emoji
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(arc*i+arc/2-Math.PI/2);
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.font=`${SIZE<280?16:20}px serif`;ctx.fillText(p.em,r*.62,0);
+    // Label
+    if(p.nm){ctx.font=`bold ${SIZE<280?7:8}px sans-serif`;ctx.fillStyle='rgba(255,255,255,.85)';ctx.fillText(p.nm.slice(0,8),r*.35,0);}
+    ctx.restore();
   });
+  // Center circle
+  const cGrd=ctx.createRadialGradient(cx,cy,0,cx,cy,32);
+  cGrd.addColorStop(0,'#2a2a50');cGrd.addColorStop(1,'#0d0d1a');
+  ctx.beginPath();ctx.arc(cx,cy,32,0,Math.PI*2);ctx.fillStyle=cGrd;ctx.fill();
+  ctx.strokeStyle='rgba(255,215,0,.5)';ctx.lineWidth=3;ctx.stroke();
 }
 function spinGacha(){
   const today=new Date().toDateString();
@@ -14414,13 +14758,15 @@ function spinGacha(){
   else{prize=normalPool[Math.floor(Math.random()*normalPool.length)];}
   prizeIdx=GACHA_PRIZES.indexOf(prize);
   const sliceDeg=360/GACHA_PRIZES.length;const targetDeg=360-prizeIdx*sliceDeg-sliceDeg/2;
-  _gachaAngle=Math.ceil((_gachaAngle||0)/360)*360+1800+targetDeg;
-  wheel.style.transition='transform 3s cubic-bezier(.17,.67,.12,.99)';wheel.style.transform=`rotate(${_gachaAngle}deg)`;
+  _gachaAngle=Math.ceil((_gachaAngle||0)/360)*360+2520+targetDeg;
+  wheel.classList.add('spinning');
+  wheel.style.transition='transform 4.5s cubic-bezier(.12,.8,.08,1)';wheel.style.transform=`rotate(${_gachaAngle}deg)`;
   SFX.click();vibe([20,10,30,10,40]);
   setTimeout(()=>{
-    _gachaSpinning=false;
-    const ultraStyle=prize.ultra?`background:linear-gradient(135deg,rgba(255,215,0,.25),rgba(191,95,255,.2));border:2px solid gold;border-radius:18px;padding:12px;animation:gachaUltra 1s ease-in-out infinite alternate;`:'';
-    const _rhtml=`<div style="${ultraStyle}"><div style="font-size:${prize.ultra?64:48}px;margin-bottom:8px;animation:spop .4s cubic-bezier(.34,1.56,.64,1)">${prize.em}</div>${prize.ultra?`<div style="font-size:10px;font-weight:900;color:#FFD700;letter-spacing:2px;margin-bottom:4px;font-family:var(--mono)">◆ ULTRA RARE ◆</div>`:''}  <div style="font-size:${prize.ultra?20:18}px;font-weight:900;color:${prize.ultra?'#FFD700':'var(--y)'};margin-bottom:4px">${prize.nm}!</div><div style="font-size:11px;color:var(--t3)">Kom tillbaka imorgon ✅</div></div>`;
+    _gachaSpinning=false;wheel.classList.remove('spinning');
+    const ultraStyle=prize.ultra?`background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(191,95,255,.15));border:2.5px solid #FFD700;border-radius:20px;padding:16px;box-shadow:0 0 40px rgba(255,215,0,.3);`:'';
+    const rareBadge=prize.ultra?'<div style="font-size:9px;font-weight:900;color:#FFD700;letter-spacing:2px;margin-bottom:6px;font-family:var(--mono);text-shadow:0 0 12px rgba(255,215,0,.8)">◆ ULTRA RARE ◆</div>':'';
+    const _rhtml=`<div style="${ultraStyle};text-align:center"><div style="font-size:${prize.ultra?68:52}px;margin-bottom:6px;animation:spop .5s cubic-bezier(.34,1.56,.64,1)">${prize.em}</div>${rareBadge}<div style="font-size:${prize.ultra?20:17}px;font-weight:900;color:${prize.ultra?'#FFD700':'var(--y)'};margin-bottom:4px;font-family:var(--mono)">${prize.nm}!</div><div style="font-size:11px;color:var(--t3)">Kom tillbaka imorgon för nästa spin ✅</div></div>`;
     _lastSpinResultHTML=_rhtml;
     const res=$('gachaResult');if(res)res.innerHTML=_rhtml;
     const invBtn=$('gachaInventoryBtn');if(invBtn)invBtn.style.display='block';
@@ -14436,7 +14782,7 @@ function spinGacha(){
         closeGacha();
       }
     }, 4500);
-  },3100);
+  },4700);
 }
 
 // ══════════════════════════════════════════
