@@ -273,9 +273,6 @@ textarea.inp{resize:none;min-height:68px;}
 .streak-lbl-sm{font-size:7px;font-weight:900;color:rgba(255,159,10,.6);letter-spacing:1px;}
 
 /* Flash feed enhancements */
-.fv{height:100%;position:relative;flex-shrink:0;}
-.fv-media{position:absolute;inset:0;}
-.fv-right{position:absolute;right:8px;display:flex;flex-direction:column;align-items:center;gap:18px;z-index:5;}
 .fv-action{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:transform .15s;}
 .fv-action:active{transform:scale(.85);}
 .fv-action.liked{filter:drop-shadow(0 0 8px rgba(255,45,85,.8));}
@@ -1105,6 +1102,40 @@ button:active{opacity:.85;}
 .pfa-av{font-size:26px;background:rgba(255,255,255,.05);border-radius:12px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .pfa-streak{font-size:9px;font-weight:900;color:#FF2D55;font-family:var(--mono);}
 /* ═══ END MEGA UPGRADE v2 ═══ */
+/* ═══ DNA LAB ═══ */
+@keyframes dnaRotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes dnaSplice{0%{transform:scale(1)}30%{transform:scale(1.15) rotate(5deg)}60%{transform:scale(.9) rotate(-3deg)}100%{transform:scale(1)}}
+@keyframes dnaSuccess{0%{transform:scale(0);opacity:0}60%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:1}}
+.dna-lab-modal{position:fixed;inset:0;z-index:8800;background:#000;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .3s;}
+.dna-lab-modal.open{opacity:1;pointer-events:all;}
+.dna-lab-hdr{background:#000;border-bottom:3px solid #39FF14;padding:14px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.dna-slot{border:3px solid rgba(255,255,255,.2);background:rgba(255,255,255,.04);border-radius:8px;padding:16px;text-align:center;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+.dna-slot:active{transform:scale(.95);}
+.dna-slot.filled{border-color:#39FF14;background:rgba(57,255,20,.08);box-shadow:4px 4px 0px #39FF14;}
+.dna-slot.filled2{border-color:#FF007F;background:rgba(255,0,127,.08);box-shadow:4px 4px 0px #FF007F;}
+.dna-splice-btn{width:100%;padding:18px;background:#39FF14;color:#000;border:4px solid #000;border-radius:6px;font-size:17px;font-weight:900;cursor:pointer;font-family:var(--mono);box-shadow:6px 6px 0px #000;letter-spacing:1px;-webkit-tap-highlight-color:transparent;transition:transform .1s,box-shadow .1s;}
+.dna-splice-btn:active{transform:translate(6px,6px);box-shadow:0 0 0 #000;}
+.dna-splice-btn:disabled{background:rgba(255,255,255,.1);color:rgba(255,255,255,.3);box-shadow:3px 3px 0 rgba(255,255,255,.1);cursor:default;}
+.dna-hybrid-reveal{text-align:center;padding:20px;animation:dnaSuccess .5s cubic-bezier(.34,1.56,.64,1) forwards;}
+.dna-trait-pill{display:inline-block;border:2px solid;border-radius:4px;padding:3px 10px;font-size:9px;font-weight:900;font-family:var(--mono);margin:3px;letter-spacing:.5px;}
+.dna-genome-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0;}
+.dna-gene-card{border:2px solid rgba(255,255,255,.2);border-radius:6px;padding:8px 4px;text-align:center;background:rgba(255,255,255,.03);}
+.dna-gene-card.selected{border-color:#FFE600;background:rgba(255,230,0,.08);box-shadow:3px 3px 0 #FFE600;}
+/* ═══ EXPLORE FEED ═══ */
+.explore-feed{position:absolute;inset:0;overflow-y:scroll;scroll-snap-type:y mandatory;scrollbar-width:none;}
+.explore-feed::-webkit-scrollbar{display:none;}
+.explore-card{scroll-snap-align:start;height:100%;background:#000;position:relative;overflow:hidden;display:flex;flex-direction:column;}
+.explore-video-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.explore-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(0,0,0,.65) 65%,rgba(0,0,0,.88) 100%);pointer-events:none;}
+.explore-bottom{position:absolute;bottom:0;left:0;right:60px;padding:14px;z-index:5;}
+.explore-right{position:absolute;right:8px;bottom:80px;display:flex;flex-direction:column;align-items:center;gap:14px;z-index:5;}
+.explore-tab-bar{background:#000;border-bottom:3px solid #000;display:flex;gap:0;flex-shrink:0;}
+.explore-tab{flex:1;padding:10px 4px;text-align:center;font-size:10px;font-weight:900;font-family:var(--mono);color:rgba(255,255,255,.35);cursor:pointer;border-bottom:3px solid transparent;-webkit-tap-highlight-color:transparent;}
+.explore-tab.on{color:#39FF14;border-bottom-color:#39FF14;}
+/* ═══ NEO BRUTALISM CARDS ═══ */
+.kmb-card,.bounty-card,.friend-card,.featured-gcard{border-width:3px!important;}
+button.btn{border-width:3px!important;}
+.btn:active{transform:translate(4px,4px)!important;box-shadow:0 0!important;}
 /* ═══ ARCADE SECTION ═══ */
 @keyframes arcadeScanMove{0%{transform:translateY(-100%)}100%{transform:translateY(1200%)}}
 @keyframes featuredGlowPulse{0%,100%{box-shadow:0 0 20px rgba(255,159,10,.3),0 4px 24px rgba(0,0,0,.6),inset 0 0 20px rgba(255,159,10,.04);}50%{box-shadow:0 0 50px rgba(255,159,10,.55),0 4px 35px rgba(0,0,0,.7),inset 0 0 40px rgba(255,159,10,.08);}}
@@ -3103,6 +3134,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
             <div class="streak-circles" id="streakCircles" style="display:flex;overflow-x:auto;scrollbar-width:none;max-width:120px;gap:5px;padding:0"></div>
           </div>
           <button class="btn btn-pk" onclick="openModal('flashModal')" style="padding:6px 16px;font-size:12px;font-weight:900;border-radius:20px;border-width:2px;box-shadow:0 0 16px rgba(255,0,127,.45);font-family:var(--mono);letter-spacing:1px">+ POST</button>
+          <button onclick="openExplore()" style="padding:6px 14px;background:#000;border:3px solid #FF007F;border-radius:4px;box-shadow:3px 3px 0 #FF007F;font-size:11px;font-weight:900;font-family:var(--mono);color:#FF007F;cursor:pointer;-webkit-tap-highlight-color:transparent">🔍 UTFORSKA</button>
         </div>
       </div>
       <!-- Stories bar overlaid at top with pull-reveal -->
@@ -3998,6 +4030,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
       <div class="ld-item" onclick="nav('social');closeLDrawer()"><div class="ld-ico ld-ico-b">💬</div><div class="ld-lbl">Vänner & Chat</div></div>
       <div class="ld-item" onclick="nav('market');closeLDrawer()"><div class="ld-ico ld-ico-o">🛍️</div><div class="ld-lbl">Marketplace</div></div>
       <div class="ld-item" onclick="openTalentTree();closeLDrawer()"><div class="ld-ico" style="background:rgba(57,255,20,.14)">🌳</div><div class="ld-lbl">Talent Träd</div></div>
+      <div class="ld-item" onclick="openDnaLab();closeLDrawer()"><div class="ld-ico" style="background:rgba(57,255,20,.18)">🧬</div><div style="flex:1"><div class="ld-lbl" style="color:var(--g)">DNA LAB</div><div style="font-size:9px;color:var(--t3);margin-top:1px">Mixa pets · Splice DNA · Gen-bank</div></div></div>
       <div class="ld-item" onclick="nav('lb');closeLDrawer()"><div class="ld-ico ld-ico-y">🏆</div><div class="ld-lbl">Leaderboard</div></div>
       <div class="ld-sep"></div>
       <div class="ld-item" style="background:linear-gradient(135deg,rgba(255,230,0,.06),rgba(255,159,10,.04));border:1px solid rgba(255,230,0,.12)" onclick="openModal('premiumModal');closeLDrawer()"><div class="ld-ico" style="background:rgba(255,230,0,.18)">👑</div><div class="ld-lbl" style="color:var(--y)">KARMA PRO</div></div>
@@ -4388,6 +4421,60 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
       <button onclick="confirmBountyDone()" style="padding:14px;background:linear-gradient(135deg,rgba(200,80,0,.5),rgba(255,120,0,.35));border:2px solid rgba(255,159,10,.5);border-radius:14px;color:var(--o);font-size:13px;font-weight:900;cursor:pointer;font-family:var(--mono);-webkit-tap-highlight-color:transparent">✅ JA — SLUTFÖRT!</button>
     </div>
   </div>
+</div>
+<!-- DNA LAB MODAL -->
+<div class="dna-lab-modal" id="dnaLabModal">
+  <div class="dna-lab-hdr">
+    <button onclick="closeDnaLab()" style="background:#111;border:2px solid rgba(255,255,255,.2);border-radius:4px;color:#fff;font-size:20px;cursor:pointer;padding:4px 10px;font-family:var(--mono)">←</button>
+    <div style="font-size:16px;font-weight:900;font-family:var(--mono);color:#39FF14;letter-spacing:2px;flex:1">🧬 DNA LAB</div>
+    <div style="background:#0d0d0d;border:3px solid #39FF14;border-radius:4px;padding:4px 12px;box-shadow:3px 3px 0 #39FF14">
+      <span style="font-size:11px;font-weight:900;color:#39FF14;font-family:var(--mono)" id="dnaLabEnergy">⚡ 5/5 SPLICE</span>
+    </div>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:16px;scrollbar-width:none">
+    <!-- Parents section -->
+    <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:1px;margin-bottom:10px">VÄLJ TVÅ FÖRÄLDRAR ATT MIXA</div>
+    <div style="display:grid;grid-template-columns:1fr 48px 1fr;gap:12px;align-items:center;margin-bottom:20px">
+      <div class="dna-slot" id="dnaSlot1" onclick="dnaSelectParent(1)">
+        <div style="font-size:40px;margin-bottom:6px" id="dnaSlot1Em">?</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.4);font-family:var(--mono)" id="dnaSlot1Name">VÄLJ PET 1</div>
+      </div>
+      <div style="text-align:center;font-size:28px;color:rgba(255,255,255,.3)">🧬</div>
+      <div class="dna-slot" id="dnaSlot2" onclick="dnaSelectParent(2)">
+        <div style="font-size:40px;margin-bottom:6px" id="dnaSlot2Em">?</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.4);font-family:var(--mono)" id="dnaSlot2Name">VÄLJ PET 2</div>
+      </div>
+    </div>
+    <!-- Genome preview -->
+    <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:1px;margin-bottom:8px">EGENSKAPER ATT MIXA</div>
+    <div class="dna-genome-row" id="dnaGenomeRow"></div>
+    <!-- Mutation risk -->
+    <div style="border:3px solid rgba(255,230,0,.3);border-radius:6px;padding:12px;margin-bottom:16px;box-shadow:3px 3px 0 rgba(255,230,0,.2)">
+      <div style="font-size:10px;font-weight:900;color:#FFE600;font-family:var(--mono);margin-bottom:6px">⚠️ MUTATIONS-RISK</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.6);line-height:1.4">90% chans: Super-hybrid med mixit utseende<br>10% chans: Glitch Monster — kräver sällsynt item att hela</div>
+    </div>
+    <!-- Result area -->
+    <div id="dnaResult" style="min-height:20px"></div>
+    <!-- Splice button -->
+    <button class="dna-splice-btn" id="dnaSpliceBtn" onclick="performDnaSplice()" disabled>🧬 SPLICE! (kostar 50⚡)</button>
+    <div style="text-align:center;font-size:10px;color:rgba(255,255,255,.3);margin-top:10px;font-family:var(--mono)">Splice-energi återfylls med 1/timme</div>
+    <!-- DNA Collection -->
+    <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:1px;margin-top:20px;margin-bottom:10px">🗂️ DINA DNA-STRÄNGAR (från fiske &amp; bounties)</div>
+    <div id="dnaInventoryGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding-bottom:20px"></div>
+  </div>
+</div>
+<!-- EXPLORE FEED MODAL -->
+<div style="position:fixed;inset:0;z-index:8600;background:#000;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .3s;" id="exploreModal">
+  <div style="background:#000;border-bottom:3px solid #FF007F;padding:12px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0">
+    <button onclick="closeExplore()" style="background:#111;border:2px solid rgba(255,255,255,.2);border-radius:4px;color:#fff;font-size:20px;cursor:pointer;padding:4px 10px;font-family:var(--mono)">←</button>
+    <div style="font-size:16px;font-weight:900;font-family:var(--mono);color:#FF007F;letter-spacing:2px;flex:1">🔥 UTFORSKA</div>
+    <div style="display:flex;gap:6px">
+      <button onclick="switchExplore('all',this)" class="explore-tab on" style="padding:5px 10px;border-radius:4px;border:2px solid #FF007F;background:rgba(255,0,127,.15);color:#FF007F;font-size:10px;font-weight:900;cursor:pointer;font-family:var(--mono)">ALLA</button>
+      <button onclick="switchExplore('trending',this)" class="explore-tab" style="padding:5px 10px;border-radius:4px;border:2px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.5);font-size:10px;font-weight:900;cursor:pointer;font-family:var(--mono)">🔥 TREND</button>
+      <button onclick="switchExplore('nearby',this)" class="explore-tab" style="padding:5px 10px;border-radius:4px;border:2px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.5);font-size:10px;font-weight:900;cursor:pointer;font-family:var(--mono)">📍 NÄRA</button>
+    </div>
+  </div>
+  <div class="explore-feed" id="exploreFeed"></div>
 </div>
 <!-- FRIEND GIFTING -->
 <div class="gift-modal" id="giftModal">
@@ -6393,6 +6480,219 @@ function initAmbientSparkles(){
     el.textContent=emojis[~~(Math.random()*emojis.length)];
     pw.appendChild(el);setTimeout(()=>el.remove(),3200);
   },650);
+}
+// ── DNA LAB SYSTEM ──
+const DNA_LAB_TRAITS=['💪 Styrka','⚡ Snabbhet','🧠 Intelligens','🛡️ Försvar','🔥 Eld-aura','💧 Vatten-känsla','🌿 Natur-band','✨ Glans','👻 Stealth','🎯 Precision'];
+const DNA_LAB_PETS=[
+  {em:'🐉',nm:'Eldraken',traits:['🔥','💪','⚡'],rarity:'legendary',color:'#FF6B00'},
+  {em:'🦊',nm:'Räven',traits:['🎯','👻','⚡'],rarity:'rare',color:'#FF9F0A'},
+  {em:'🐺',nm:'Vargen',traits:['💪','🛡️','🧠'],rarity:'epic',color:'#BF5FFF'},
+  {em:'🦋',nm:'Fjärilen',traits:['✨','🌿','💧'],rarity:'uncommon',color:'#00D9FF'},
+  {em:'🐸',nm:'Grodan',traits:['💧','🌿','🎯'],rarity:'common',color:'#39FF14'},
+  {em:'🦁',nm:'Lejonet',traits:['💪','🔥','🛡️'],rarity:'epic',color:'#FFE600'},
+  {em:'🐠',nm:'Tropikfisken',traits:['💧','✨','⚡'],rarity:'rare',color:'#00D9FF'},
+  {em:'🦄',nm:'Enhörningen',traits:['✨','🌿','🧠'],rarity:'legendary',color:'#FF007F'},
+];
+let _dnaP1=null,_dnaP2=null,_dnaSpliceEnergy=5;
+function openDnaLab(){
+  const m=$('dnaLabModal');if(!m)return;
+  _dnaP1=null;_dnaP2=null;
+  _dnaSpliceEnergy=parseInt(localStorage.getItem('kv8_dnaEnergy')||'5');
+  // Restore energy over time (1/hr)
+  const lastRefill=parseInt(localStorage.getItem('kv8_dnaRefill')||'0');
+  const hoursElapsed=Math.floor((Date.now()-lastRefill)/3600000);
+  if(hoursElapsed>0){_dnaSpliceEnergy=Math.min(5,_dnaSpliceEnergy+hoursElapsed);localStorage.setItem('kv8_dnaEnergy',_dnaSpliceEnergy);localStorage.setItem('kv8_dnaRefill',Date.now());}
+  const le=$('dnaLabEnergy');if(le)le.textContent='⚡ '+_dnaSpliceEnergy+'/5 SPLICE';
+  const s1e=$('dnaSlot1Em');if(s1e)s1e.textContent='?';
+  const s1n=$('dnaSlot1Name');if(s1n)s1n.textContent='VÄLJ PET 1';
+  const s1=$('dnaSlot1');if(s1)s1.className='dna-slot';
+  const s2e=$('dnaSlot2Em');if(s2e)s2e.textContent='?';
+  const s2n=$('dnaSlot2Name');if(s2n)s2n.textContent='VÄLJ PET 2';
+  const s2=$('dnaSlot2');if(s2)s2.className='dna-slot';
+  const dr=$('dnaResult');if(dr)dr.innerHTML='';
+  const sb=$('dnaSpliceBtn');if(sb)sb.disabled=true;
+  renderDnaGenome();renderDnaInventory();
+  m.classList.add('open');
+}
+function closeDnaLab(){const m=$('dnaLabModal');if(m)m.classList.remove('open');}
+function renderDnaGenome(){
+  const gr=$('dnaGenomeRow');if(!gr)return;
+  const traits=DNA_LAB_TRAITS.slice(0,8);
+  gr.innerHTML=traits.map((t)=>{
+    const has1=_dnaP1&&_dnaP1.traits.some(tr=>t.includes(tr));
+    const has2=_dnaP2&&_dnaP2.traits.some(tr=>t.includes(tr));
+    const active=has1||has2;
+    return`<div class="dna-gene-card ${active?'selected':''}">
+      <div style="font-size:18px">${t.split(' ')[0]}</div>
+      <div style="font-size:7px;color:rgba(255,255,255,.4);font-family:var(--mono);margin-top:2px">${t.split(' ')[1]||''}</div>
+    </div>`;
+  }).join('');
+}
+function dnaSelectParent(slot){
+  const pets=DNA_LAB_PETS;
+  const modal=document.createElement('div');
+  modal.style.cssText='position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.96);display:flex;flex-direction:column;padding:20px';
+  modal.innerHTML=`<div style="font-size:14px;font-weight:900;font-family:var(--mono);color:#39FF14;margin-bottom:16px">VÄLJ PET ${slot}</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;overflow-y:auto">
+  ${pets.map((p,i)=>`<div onclick="selectDnaParentPet(${slot},${i});this.closest('[style*=inset]').remove()" style="border:3px solid rgba(255,255,255,.15);border-radius:6px;padding:12px 6px;text-align:center;cursor:pointer;background:rgba(255,255,255,.03);-webkit-tap-highlight-color:transparent">
+    <div style="font-size:36px">${p.em}</div>
+    <div style="font-size:8px;font-weight:900;font-family:var(--mono);color:${p.color};margin-top:4px">${p.nm}</div>
+    <div style="font-size:7px;color:rgba(255,255,255,.35);font-family:var(--mono)">${p.rarity.toUpperCase()}</div>
+  </div>`).join('')}
+  </div>
+  <button onclick="this.parentElement.remove()" style="margin-top:16px;padding:12px;background:#111;border:3px solid rgba(255,255,255,.2);border-radius:6px;color:rgba(255,255,255,.5);font-size:14px;font-weight:900;cursor:pointer;font-family:var(--mono)">✕ Avbryt</button>`;
+  document.body.appendChild(modal);
+}
+function selectDnaParentPet(slot,idx){
+  const p=DNA_LAB_PETS[idx];if(!p)return;
+  if(slot===1){
+    _dnaP1=p;
+    const s1e=$('dnaSlot1Em');if(s1e)s1e.textContent=p.em;
+    const s1n=$('dnaSlot1Name');if(s1n)s1n.textContent=p.nm;
+    const s1=$('dnaSlot1');if(s1)s1.className='dna-slot filled';
+  }else{
+    _dnaP2=p;
+    const s2e=$('dnaSlot2Em');if(s2e)s2e.textContent=p.em;
+    const s2n=$('dnaSlot2Name');if(s2n)s2n.textContent=p.nm;
+    const s2=$('dnaSlot2');if(s2)s2.className='dna-slot filled2';
+  }
+  const sb=$('dnaSpliceBtn');if(sb)sb.disabled=!(_dnaP1&&_dnaP2&&_dnaSpliceEnergy>0&&G.coins>=50);
+  renderDnaGenome();
+}
+function renderDnaInventory(){
+  const gr=$('dnaInventoryGrid');if(!gr)return;
+  const inv=G.dnaInventory||[];
+  if(!inv.length){gr.innerHTML='<div style="grid-column:span 4;font-size:11px;color:rgba(255,255,255,.25);text-align:center;padding:12px">Fiska och slutför bounties för DNA-strängar!</div>';return;}
+  const rarityColors={common:'#888',uncommon:'#39FF14',rare:'#00D9FF',epic:'#BF5FFF',legendary:'#FFE600'};
+  gr.innerHTML=inv.map(d=>{
+    const em=typeof d==='object'?d.em||'🧬':d;
+    const rar=typeof d==='object'?d.rarity||'common':'common';
+    return`<div style="border:2px solid ${rarityColors[rar]||'#888'};border-radius:6px;padding:8px 4px;text-align:center;background:rgba(255,255,255,.03)">
+    <div style="font-size:22px">${em}</div>
+    <div style="font-size:7px;font-family:var(--mono);color:${rarityColors[rar]||'#888'};font-weight:900;margin-top:2px">${(rar||'common').slice(0,3).toUpperCase()}</div>
+  </div>`;}).join('');
+}
+function performDnaSplice(){
+  if(!_dnaP1||!_dnaP2){showT('❌ Välj 2 pets att mixa!','r');return;}
+  if(G.coins<50){showT('❌ Behöver 50⚡!','r');return;}
+  if(_dnaSpliceEnergy<=0){showT('❌ Ingen splice-energi kvar! Vänta 1h','r');return;}
+  gainCoins(-50);_dnaSpliceEnergy--;
+  localStorage.setItem('kv8_dnaEnergy',_dnaSpliceEnergy);
+  const le=$('dnaLabEnergy');if(le)le.textContent='⚡ '+_dnaSpliceEnergy+'/5 SPLICE';
+  const sb=$('dnaSpliceBtn');if(sb)sb.disabled=true;
+  const isGlitch=Math.random()<0.10;
+  const mixedTraits=[..._dnaP1.traits.slice(0,2),..._dnaP2.traits.slice(0,2)];
+  const rarities=['common','uncommon','rare','epic','legendary'];
+  const r1=rarities.indexOf(_dnaP1.rarity);const r2=rarities.indexOf(_dnaP2.rarity);
+  const resultRarity=rarities[Math.min(4,Math.max(r1,r2)+Math.floor(Math.random()*2))];
+  const hybridEm=isGlitch?'👾':(_dnaP1.em+_dnaP2.em).slice(0,2);
+  const hybridNm=isGlitch?'GLITCH MONSTER':(_dnaP1.nm.slice(0,4)+'-'+_dnaP2.nm.slice(0,4));
+  const rarityColors={common:'#888',uncommon:'#39FF14',rare:'#00D9FF',epic:'#BF5FFF',legendary:'#FFE600'};
+  const dr=$('dnaResult');
+  if(dr){dr.innerHTML=`<div style="text-align:center;padding:16px;border:${isGlitch?'3px solid #FF007F':'3px solid #39FF14'};border-radius:8px;box-shadow:${isGlitch?'5px 5px 0 #FF007F':'5px 5px 0 #39FF14'};margin-bottom:16px;animation:dnaSuccess .5s cubic-bezier(.34,1.56,.64,1)">
+    <div style="font-size:56px;margin-bottom:8px;animation:dnaSplice .5s ease-in-out">${hybridEm}</div>
+    <div style="font-size:16px;font-weight:900;font-family:var(--mono);color:${isGlitch?'#FF007F':rarityColors[resultRarity]};margin-bottom:4px">${hybridNm}</div>
+    <div style="font-size:9px;font-family:var(--mono);color:${rarityColors[resultRarity]};letter-spacing:1px;margin-bottom:8px">${resultRarity.toUpperCase()} ${isGlitch?'⚠️ GLITCH':'✓ HYBRID'}</div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-bottom:12px">
+      ${mixedTraits.map(t=>`<span class="dna-trait-pill" style="color:var(--g);border-color:rgba(57,255,20,.4)">${t}</span>`).join('')}
+    </div>
+    ${isGlitch?'<div style="font-size:11px;color:rgba(255,0,127,.7)">⚠️ Instabil mutation! Behöver sällsynt item för att hela.</div>':'<div style="font-size:11px;color:rgba(57,255,20,.7)">✅ Splice lyckades! Ny hybrid skapad!</div>'}
+  </div>`;}
+  const mix={em:hybridEm,nm:hybridNm,rarity:resultRarity,traits:mixedTraits,glitch:isGlitch,date:new Date().toLocaleDateString('sv')};
+  G.dnaMixes=G.dnaMixes||[];G.dnaMixes.unshift(mix);save();
+  gainXP(isGlitch?10:40,'action');
+  if(!isGlitch){gainCoins(30);vibe([50,20,100,20,150]);SFX.win();}
+  else{vibe([100,30,200]);SFX.error();}
+  spawnParticles(window.innerWidth/2,window.innerHeight*.5,'stars');
+  showT(isGlitch?'⚠️ Glitch Monster! Instabil mutation!':'🧬 SPLICE LYCKADES! +40XP',isGlitch?'r':'g');
+}
+// ── EXPLORE FEED ──
+const EXPLORE_POSTS=[
+  {user:'nova_x',pet:'🐉',lvl:22,cap:'🔥 Ny DNA splice lyckades!! LEGENDARY hybrid!',likes:1247,tag:'#DNA',sound:'Epic Mix 🎵',followers:3420,bg:'linear-gradient(135deg,#1a0012,#2a0030)'},
+  {user:'pixel_queen',pet:'🦋',lvl:18,cap:'Dag 30 streak! 🔥 Tappa den INTE',likes:892,tag:'#streak',sound:'Original 🎵',followers:2100,bg:'linear-gradient(135deg,#000820,#001830)'},
+  {user:'shadow_elk',pet:'🦊',lvl:35,cap:'Runner rekord 4.2km!! 🏃 Beat this',likes:2341,tag:'#runner',sound:'8-bit Beats 🎵',followers:5800,bg:'linear-gradient(135deg,#0d0500,#1a0800)'},
+  {user:'cyber_maya',pet:'🦁',lvl:28,cap:'Fångade MYTISK HAVSORM 🎣 ultra rare!!!',likes:3102,tag:'#fishing',sound:'Lofi 🎵',followers:7200,bg:'linear-gradient(135deg,#000d1a,#001a30)'},
+  {user:'void_runner',pet:'👾',lvl:41,cap:'Battle streak 50-0 ⚔️ ingen kan stoppa mig',likes:4520,tag:'#battle',sound:'Hype Track 🎵',followers:12400,bg:'linear-gradient(135deg,#0d0020,#1a0040)'},
+  {user:'neon_ghost',pet:'🐺',lvl:15,cap:'Bounty Blitz klar på 2min! ny rekord 🎯',likes:650,tag:'#bounty',sound:'DnB Mix 🎵',followers:890,bg:'linear-gradient(135deg,#001000,#002000)'},
+];
+let _exploreTab='all',_exploreFollowing=new Set();
+function openExplore(){
+  const m=$('exploreModal');if(!m)return;
+  m.style.opacity='1';m.style.pointerEvents='all';
+  renderExploreFeed();
+}
+function closeExplore(){
+  const m=$('exploreModal');if(!m)return;
+  m.style.opacity='0';m.style.pointerEvents='none';
+}
+function switchExplore(tab,el){
+  _exploreTab=tab;
+  document.querySelectorAll('#exploreModal .explore-tab').forEach(t=>{
+    t.style.borderColor='rgba(255,255,255,.2)';t.style.background='transparent';t.style.color='rgba(255,255,255,.5)';
+  });
+  if(el){el.style.borderColor='#FF007F';el.style.background='rgba(255,0,127,.15)';el.style.color='#FF007F';}
+  renderExploreFeed();
+}
+function renderExploreFeed(){
+  const ff=$('exploreFeed');if(!ff)return;
+  let posts=[...EXPLORE_POSTS];
+  if(_exploreTab==='trending')posts.sort((a,b)=>b.likes-a.likes);
+  else if(_exploreTab==='nearby')posts.sort(()=>Math.random()-.5);
+  ff.innerHTML=posts.map((p,i)=>{
+    const following=_exploreFollowing.has(p.user);
+    return`<div class="explore-card">
+      <div class="explore-video-bg" style="background:${p.bg}">
+        <div style="font-size:120px;opacity:.12;filter:blur(2px)">${p.pet}</div>
+        <div style="position:absolute;font-size:78px;filter:drop-shadow(0 0 30px rgba(255,255,255,.2));animation:petBob 2.5s ease-in-out infinite">${p.pet}</div>
+      </div>
+      <div class="explore-overlay"></div>
+      <div style="position:absolute;top:12px;left:12px;right:12px;display:flex;align-items:center;justify-content:space-between;z-index:5">
+        <span style="background:rgba(255,0,127,.85);color:#fff;padding:2px 10px;border-radius:3px;font-size:9px;font-weight:900;font-family:var(--mono);border:2px solid #000;box-shadow:2px 2px 0 #000">${p.tag}</span>
+        <span style="background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:2px 8px;font-size:9px;color:rgba(255,255,255,.6);font-family:var(--mono)">${p.sound}</span>
+      </div>
+      <div class="explore-right">
+        <div style="position:relative">
+          <div style="font-size:36px;width:40px;height:40px;background:rgba(0,0,0,.5);border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid ${following?'#39FF14':'#fff'}">${p.pet}</div>
+          ${!following?`<div onclick="event.stopPropagation();exploreFollow('${p.user}')" style="position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:16px;height:16px;background:#FF007F;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;cursor:pointer;border:2px solid #000;color:#fff">+</div>`:''}
+        </div>
+        <div style="text-align:center;cursor:pointer" onclick="exploreLike(${i},this)">
+          <div style="font-size:28px">🤍</div>
+          <div style="font-size:10px;font-weight:900;font-family:var(--mono);color:rgba(255,255,255,.9)">${p.likes>=1000?(p.likes/1000).toFixed(1)+'k':p.likes}</div>
+        </div>
+        <div style="text-align:center;cursor:pointer">
+          <div style="font-size:26px">💬</div>
+          <div style="font-size:10px;font-weight:900;font-family:var(--mono);color:rgba(255,255,255,.9)">${Math.floor(p.likes/8)}</div>
+        </div>
+        <div style="text-align:center;cursor:pointer" onclick="showT('🔗 Länk kopierad!','g')">
+          <div style="font-size:26px">🔗</div>
+          <div style="font-size:10px;font-weight:900;font-family:var(--mono);color:rgba(255,255,255,.9)">Dela</div>
+        </div>
+      </div>
+      <div class="explore-bottom">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font-size:14px;font-weight:900;color:#fff">@${p.user}</span>
+          ${!following?`<button onclick="exploreFollow('${p.user}')" style="background:transparent;border:2px solid rgba(255,255,255,.5);border-radius:4px;color:#fff;font-size:9px;font-weight:900;padding:2px 8px;cursor:pointer;font-family:var(--mono)">FÖLJ</button>`:'<span style="background:rgba(57,255,20,.2);border:1px solid #39FF14;border-radius:4px;padding:2px 6px;font-size:9px;font-weight:900;color:#39FF14;font-family:var(--mono)">✓</span>'}
+          <span style="background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.15);border-radius:4px;padding:1px 6px;font-size:9px;color:rgba(255,255,255,.7);font-family:var(--mono)">LV${p.lvl}</span>
+        </div>
+        <div style="font-size:13px;color:rgba(255,255,255,.9);line-height:1.4;margin-bottom:6px">${p.cap}</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.5)">👥 ${p.followers.toLocaleString('sv')} följare</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function exploreFollow(user){
+  if(_exploreFollowing.has(user))return;
+  _exploreFollowing.add(user);
+  gainXP(2,'social');
+  showT('✅ Följer @'+user+'!','g');
+  renderExploreFeed();
+}
+function exploreLike(idx,el){
+  const p=EXPLORE_POSTS[idx];if(!p)return;
+  p.likes++;
+  const icon=el?el.querySelector('div:first-child'):null;if(icon)icon.textContent='❤️';
+  const cnt=el?el.querySelector('div:last-child'):null;if(cnt)cnt.textContent=p.likes>=1000?(p.likes/1000).toFixed(1)+'k':p.likes;
+  gainXP(1,'social');vibe(15);
 }
 function _startLiveCounts(){
   const counts={liveCtFisk:[220,310],liveCtBattle:[900,1500],liveCtFlash:[2800,4100],liveCtPets:[60,130],liveCtBoss:[400,650]};
@@ -14617,7 +14917,12 @@ const GACHA_PRIZES=[
 // ── KARMA JACKPOT ──
 function getJackpotPot(){
   const d=new Date();const seed=d.getFullYear()*10000+d.getMonth()*100+d.getDate();
-  return 500+((seed*7919)%1501);
+  const basePool=1500+((seed*7919)%2001);
+  // Simulated revenue: premium subs (19 kr) × active users + sponsorships
+  const premSubs=120+((seed*13)%80); // 120-200 premium users
+  const subContrib=Math.floor(premSubs*19*0.15); // 15% goes to jackpot
+  const sponsorPool=200+((seed*31)%500); // daily sponsor contribution
+  return basePool+subContrib+sponsorPool;
 }
 function getJackpotParticipants(){
   const d=new Date();const now=Date.now();
