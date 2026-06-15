@@ -789,8 +789,8 @@ button:active{opacity:.85;}
 /* Map */
 #view-map{padding:0;}
 .map-wrap{display:flex;flex-direction:column;height:100%;}
-.map-canvas-wrap{flex:1;position:relative;min-height:280px;}
-#realMap{width:100%;height:100%;}
+.map-canvas-wrap{flex:1;position:relative;min-height:min(400px,58dvh);}
+#realMap{width:100%;height:min(400px,58dvh);min-height:280px;}
 .leaflet-container{background:#080810!important;}
 .leaflet-tile-pane{filter:brightness(.95) saturate(1.1) contrast(1.05);}
 .leaflet-popup-content-wrapper{background:rgba(10,12,24,.97)!important;border:1px solid rgba(57,255,20,.3)!important;border-radius:12px!important;color:var(--t1)!important;box-shadow:0 0 20px rgba(57,255,20,.15)!important;}
@@ -2813,7 +2813,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
     <button class="tb-ham" onclick="openLDrawer()"><span></span><span></span><span></span></button>
     <div class="tb-logo-wrap"><div class="logo"><span class="logo-k">K</span>ARMA</div></div>
     <div class="tb-pills">
-      <div class="pill pill-y">⚡<b id="hCoins">500</b></div>
+      <div class="pill pill-y" style="border:2px solid rgba(255,215,0,.45);background:rgba(255,215,0,.07)" title="Karma Coins (KC)">🪙<b id="hCoins">500</b><span style="font-size:8px;opacity:.7">KC</span></div>
       <div class="pill pill-r">🔥<b id="hStreak">0</b>d</div>
       <div class="pill" id="premiumBadge" style="display:none;background:linear-gradient(135deg,#FFE600,#FF9F0A);color:#000;font-weight:900;cursor:pointer;border:none" onclick="openModal('premiumModal')">👑</div>
       <button onclick="openSettings()" style="background:var(--c2);border:1px solid var(--line);border-radius:9px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent;">⚙️</button>
@@ -3063,6 +3063,16 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
           </div>
           <span style="font-size:18px;color:var(--y)">→</span>
         </div>
+      </div>
+      <!-- KARMA COIN BALANCE CARD -->
+      <div style="margin:0 12px 10px;background:#080800;border:3px solid #FFE600;border-radius:8px;box-shadow:5px 5px 0px #FFE600;padding:12px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;-webkit-tap-highlight-color:transparent" onclick="showT('🪙 Karma Coins (KC) – tjäna genom att spela, posta & interagera!','y')">
+        <div style="font-size:36px;filter:drop-shadow(0 0 12px rgba(255,230,0,.9));animation:petBob 2s ease-in-out infinite">🪙</div>
+        <div style="flex:1">
+          <div style="font-size:9px;font-weight:900;font-family:var(--mono);color:rgba(255,215,0,.6);letter-spacing:2px;text-transform:uppercase">KARMA COIN</div>
+          <div style="font-size:22px;font-weight:900;color:#FFE600;font-family:var(--mono)" id="kcBalanceLbl">0 KC</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.4);margin-top:2px">Framtidens belöningsvaluta</div>
+        </div>
+        <div style="background:#FFE600;color:#000;border:3px solid #000;border-radius:4px;padding:4px 10px;font-size:9px;font-weight:900;font-family:var(--mono);box-shadow:2px 2px 0px #000">💎 EARN</div>
       </div>
       <!-- KARMA JACKPOT -->
       <div id="jackpotCard" style="margin:0 12px 10px"></div>
@@ -4577,7 +4587,8 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
   <div id="fishReelOverlay" style="position:absolute;inset:0;z-index:20;background:rgba(0,0,0,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;opacity:0;pointer-events:none;transition:opacity .2s">
     <div id="fishReelFishEm" style="font-size:72px;margin-bottom:6px;animation:petBob .7s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(57,255,20,.4))">🐟</div>
     <div id="fishReelFishName" style="font-size:17px;font-weight:900;font-family:var(--mono);color:#fff;margin-bottom:4px;letter-spacing:1px;text-transform:uppercase">OKÄND FISK</div>
-    <div id="fishReelRarityTag" style="font-size:9px;padding:3px 14px;border-radius:3px;margin-bottom:20px;font-family:var(--mono);font-weight:900;color:#000;background:#fff;border:2px solid #000;box-shadow:2px 2px 0px #000">VANLIG</div>
+    <div id="fishReelRarityTag" style="font-size:9px;padding:3px 14px;border-radius:3px;margin-bottom:8px;font-family:var(--mono);font-weight:900;color:#000;background:#fff;border:2px solid #000;box-shadow:2px 2px 0px #000">VANLIG</div>
+    <canvas id="fishReelCanvas" width="180" height="180" style="display:block;border-radius:50%;margin:0 auto 8px;box-shadow:0 0 24px rgba(57,255,20,.25),0 0 48px rgba(57,255,20,.08);border:2px solid rgba(57,255,20,.2)"></canvas>
     <!-- TIMING BAR -->
     <div style="position:relative;width:280px;height:28px;background:#111;border:3px solid rgba(255,255,255,.2);border-radius:4px;overflow:hidden;margin-bottom:10px">
       <div id="fishTimingZone" style="position:absolute;top:0;height:100%;background:#FFE600;border-radius:2px;opacity:1;transition:left .1s"></div>
@@ -5687,6 +5698,25 @@ function _battleRingDrawCanvas(cfg){
   // Center dot
   ctx.beginPath();ctx.arc(cx,cy,6,0,Math.PI*2);
   ctx.fillStyle='rgba(255,255,255,0.8)';ctx.fill();
+  // Combo count in center
+  const _combo=(_bt&&_bt.combo)||0;
+  if(_combo>1){
+    ctx.save();
+    const comboSize=_combo>=5?18:12;
+    ctx.font=`bold ${comboSize}px monospace`;
+    ctx.fillStyle=_combo>=5?'#FFE600':'rgba(255,255,255,.85)';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    if(_combo>=5){ctx.shadowBlur=16;ctx.shadowColor='rgba(255,230,0,.9)';}
+    ctx.fillText('x'+_combo,cx,cy+1);
+    ctx.restore();
+  }
+  // Animated outer glow ring
+  const _rT=Date.now()*.0018;
+  ctx.save();ctx.globalAlpha=0.1+0.07*Math.sin(_rT);
+  ctx.beginPath();ctx.arc(cx,cy,r+14,0,Math.PI*2);
+  const _rCol=cfg&&cfg.col?cfg.col:'#39FF14';
+  ctx.strokeStyle=_rCol;ctx.lineWidth=3;ctx.stroke();
+  ctx.restore();
 }
 
 function _battleRingTap(){
@@ -9065,8 +9095,12 @@ function openPetRunner(){
               <span style="font-size:10px;color:rgba(255,255,255,.5);font-family:var(--mono)">BÄST: </span>
               <span id="prBestDisp" style="color:var(--y);font-weight:900;font-family:var(--mono);font-size:16px">0m</span>
             </div>
-            <div style="font-size:11px;color:var(--b);font-family:var(--mono);margin-bottom:4px;letter-spacing:1px" id="prLvShow">RUNNER LV1</div>
-            <div style="font-size:10px;color:rgba(255,255,255,.35);font-family:var(--mono);margin-bottom:20px" id="prGhostInfo">👻 Spöke: Ditt bästa lopp visas</div>
+            <div style="font-size:11px;color:var(--b);font-family:var(--mono);margin-bottom:6px;letter-spacing:1px" id="prLvShow">RUNNER LV1</div>
+            <div style="display:flex;gap:8px;justify-content:center;margin-bottom:10px;flex-wrap:wrap">
+              <div style="background:#0d0d0d;border:2px solid rgba(0,217,255,.4);border-radius:4px;padding:3px 10px;font-size:9px;font-family:var(--mono);color:var(--b)">✦ DOUBLE JUMP</div>
+              <div style="background:#0d0d0d;border:2px solid rgba(255,0,127,.4);border-radius:4px;padding:3px 10px;font-size:9px;font-family:var(--mono);color:var(--pk)">👻 SPÖKE: @ella_s</div>
+            </div>
+            <div style="font-size:10px;color:rgba(255,255,255,.35);font-family:var(--mono);margin-bottom:16px" id="prGhostInfo">Tapp 2x i luften = double jump!</div>
             <div style="font-size:12px;color:var(--g);font-family:var(--mono);letter-spacing:2px;animation:bitePulse .6s ease-in-out infinite">▶ TRYCK FÖR ATT STARTA</div>
           </div>
         </div>
@@ -9112,14 +9146,21 @@ function prRestart(){
 }
 function _prJump(on){
   if(!_pr.started){
-    // Start game on first tap
     _pr.started=true;
     const ss=$('prStartScreen');if(ss)ss.style.display='none';
     _prInitGame();
     _prLoop();
     return;
   }
-  if(on&&_pr.grounded){_pr.vy=_pr.JUMP_F;_pr.grounded=false;vibe&&vibe(15);}
+  if(on){
+    if(_pr.grounded){_pr.vy=_pr.JUMP_F;_pr.grounded=false;_pr.djUsed=false;vibe&&vibe(15);}
+    else if(!_pr.djUsed){
+      _pr.vy=_pr.JUMP_F*.82;_pr.djUsed=true;
+      vibe&&vibe([15,5,25]);
+      if(!_pr.scoreParticles)_pr.scoreParticles=[];
+      _pr.scoreParticles.push({x:_pr.x,y:_pr.y-20,val:'✦ x2',life:1,col:'#00D9FF'});
+    }
+  }
 }
 function _prInitGame(){
   const canvas=$('prCanvas');if(!canvas)return;
@@ -9134,9 +9175,15 @@ function _prInitGame(){
   _pr.x=70;_pr.y=cH*.65;_pr.vy=0;_pr.grounded=true;
   _pr.obstacles=[];_pr.gems=[];_pr.clouds=[];_pr.powerups=[];_pr.bgOffset=0;
   _pr.nextObstacle=90;_pr.nextGem=50;_pr.nextPowerup=400;
-  _pr.pHp=3;_pr.combo=0;_pr.shield=false;_pr.shieldTimer=0;_pr.magnetTimer=0;_pr.boostTimer=0;
+  _pr.pHp=3;_pr.combo=0;_pr.djUsed=false;_pr.shield=false;_pr.shieldTimer=0;_pr.magnetTimer=0;_pr.boostTimer=0;
   // Ghost runner — shows your best run pace
   _pr.ghost={score:0,x:70,y:cH*.65,active:_pr.best>0};
+  // Friend ghost runners — simulated social competition
+  const _fb=_pr.best;
+  _pr.friendGhosts=_fb>0?[
+    {nm:'@ella_s',best:Math.round(_fb*1.15),pet:'🦊',score:0,active:true},
+    {nm:'@maxruns',best:Math.round(_fb*0.85),pet:'🐺',score:0,active:_fb>50}
+  ]:[];
   _prInitClouds(canvas);
   // Second resize after paint to catch layout reflows
   setTimeout(()=>{
@@ -9176,6 +9223,12 @@ function _prUpdate(canvas){
     _pr.ghost.score+=(_pr.best*10)/(Math.max(_pr.best,100)*10/spd);
     _pr.ghost.score=Math.min(_pr.ghost.score,_pr.best*10+1);
   }
+  // Advance friend ghost runners
+  (_pr.friendGhosts||[]).forEach(fg=>{
+    if(!fg.active||!fg.best)return;
+    fg.score+=(fg.best*10)/(Math.max(fg.best,100)*10/spd);
+    fg.score=Math.min(fg.score,fg.best*10+1);
+  });
   // Level check — new level every 250m
   const newLv=Math.floor(_pr.score/2500)+1;
   if(newLv>_pr.level){
@@ -9529,6 +9582,20 @@ function _prDraw(canvas,ctx){
     ctx.fillText(ahead?'▲ AHEAD':'▼ BEHIND',ghostX,_pr.y-52);
     ctx.restore();
   }
+  // Friend ghost runners
+  (_pr.friendGhosts||[]).forEach((fg,i)=>{
+    if(!fg.active||!fg.best)return;
+    const fScoreDiff=(fg.score-_pr.score)/10;
+    const fGhostX=Math.max(15,Math.min(W-15,_pr.x+fScoreDiff*0.8));
+    const fCol=i===0?'rgba(255,0,127,.7)':'rgba(191,95,255,.7)';
+    ctx.save();ctx.globalAlpha=0.18+i*.04;ctx.shadowBlur=8;ctx.shadowColor=fCol;
+    ctx.font='26px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(fg.pet,fGhostX,_pr.y-12+Math.sin(t*.009+i*1.8)*2);
+    ctx.restore();
+    ctx.save();ctx.font='bold 7px monospace';ctx.textAlign='center';ctx.fillStyle=fCol;
+    ctx.fillText(fg.nm,fGhostX,_pr.y-46+i*10);
+    ctx.restore();
+  });
 
   // Pet — with neon glow, motion blur, jump tilt
   const petX=_pr.x,petY=_pr.y-15;
@@ -10728,13 +10795,13 @@ function nav(name){
   const btn=document.querySelector('.nb[data-v="'+name+'"]');if(btn){btn.classList.add('on');const ni=btn.querySelector('.ni');if(ni){ni.style.animation='none';requestAnimationFrame(()=>ni.style.animation='');}  }
   vibe(8);
   ({
-    home:()=>{updatePetView();renderSocialPower();renderFriendCarePackages();renderCareNotifs();renderStreakMilestones();renderFriendLB();updatePetStatusRings();updatePetWeather();if(!_speechTimer)schedulePetSpeech();startKarmaPulse();renderJackpot();const st=$('spinTeaserSub');if(st)st.textContent=G.lastSpin===new Date().toDateString()?'✅ Spinnat idag — kom tillbaka imorgon':'🎰 Gratis spin tillgängligt nu!';},
+    home:()=>{updatePetView();renderSocialPower();renderFriendCarePackages();renderCareNotifs();renderStreakMilestones();renderFriendLB();updatePetStatusRings();updatePetWeather();if(!_speechTimer)schedulePetSpeech();startKarmaPulse();renderJackpot();const st=$('spinTeaserSub');if(st)st.textContent=G.lastSpin===new Date().toDateString()?'✅ Spinnat idag — kom tillbaka imorgon':'🎰 Gratis spin tillgängligt nu!';const kc=$('kcBalanceLbl');if(kc)kc.textContent=(G.coins||0).toLocaleString('sv')+' KC';},
     flash:()=>{renderFlashFeed();renderStoriesBar();startFlashTimeReward();renderDailyChallenges();},
     circles:renderCircles,
     social:()=>switchSocial('activity',document.querySelector('#socialTabs .tab')),
     uppdrag:()=>{if(!_quests.length)initQuests();renderKmbDaily();renderKmbBoss();_kmbUpdateTimer();},
     shop:()=>{renderSrcFilter();renderShop();},
-    map:()=>{setTimeout(()=>{if(!G.mapInit)locateMe();},200);renderNearby();},
+    map:()=>{setTimeout(()=>{if(!G.mapInit)locateMe();if(G.lMap)G.lMap.invalidateSize();},200);renderNearby();},
     lb:()=>renderLB2('level',document.querySelector('#lbTabs .tab')),
     profile:()=>{updateHUD();renderHistList();renderBadges();const pc=$('view-profile .prof-cover');if(pc){const wc={cosmic:'linear-gradient(135deg,#0d0520 0%,#07040f 50%,#0a0520 100%)',nature:'linear-gradient(135deg,#041a04 0%,#030d03 50%,#071207 100%)',city:'linear-gradient(135deg,#04060f 0%,#030415 50%,#040612 100%)',pixel:'linear-gradient(135deg,#0a0800 0%,#0a0800 50%,#060500 100%)'};pc.style.background=wc[G.world||'cosmic']||wc.cosmic;}},
     explore:()=>{const el=$('explorePetLv');if(el)el.textContent='LV '+G.level;const en=$('explorePetEmoji');if(en)en.textContent=G.petEmoji||'🐾';const enm=$('explorePetName');if(enm)enm.textContent=G.petName||'Din pet';renderWeeklyChallenges();renderCraftGrid();const tp=$('talentTeaserPts');if(tp)tp.textContent=(G.talentPoints||0)+' TP';const ts=$('talentTeaserSub');if(ts)ts.textContent=(G.talents&&G.talents.length>0?G.talents.length+' av 147 förmågor inlärda':'Tjäna Talent Points genom att levla upp');},
