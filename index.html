@@ -2751,7 +2751,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
       </div>
       <div class="ob-h2" id="obPetWelcome" style="text-align:center;margin-bottom:4px;font-size:26px;background:linear-gradient(135deg,#fff,var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Välkommen, Eldraken!</div>
       <div class="ob-p2" style="text-align:center;font-size:12px;margin-bottom:16px">Din pet är hungrig! Mata den nu — det är det första du alltid ska göra. 🍖</div>
-      <div class="ob-feed-btn" id="obFeedBtnEl" onclick="obFeedPet()">
+      <div class="ob-feed-btn" id="obFeedBtnEl" onclick="obFeedPet()" ontouchend="obFeedPet()">
         <span class="ob-feed-ico">🍖</span>
         <div style="flex:1">
           <div class="ob-feed-main">Mata din pet!</div>
@@ -2759,7 +2759,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
         </div>
         <span style="font-size:22px;color:var(--o);animation:bitePulse .7s ease-in-out infinite">→</span>
       </div>
-      <button class="btn btn-g btn-lg btn-full" id="obStartBtn" disabled style="opacity:.35;font-family:var(--mono);font-size:16px;letter-spacing:2px;padding:15px;border:3px solid var(--g);border-radius:6px;box-shadow:5px 5px 0px var(--g);transition:all .2s,transform .08s,box-shadow .08s" ontouchstart="this.style.transform='translate(5px,5px)';this.style.boxShadow='0px 0px 0px var(--g)'" ontouchend="this.style.transform='';this.style.boxShadow='5px 5px 0px var(--g)'" onclick="obNext(3)">⚡ NÄSTA →</button>
+      <button class="btn btn-g btn-lg btn-full" id="obStartBtn" style="font-family:var(--mono);font-size:16px;letter-spacing:2px;padding:15px;border:3px solid var(--g);border-radius:6px;box-shadow:5px 5px 0px var(--g);transition:all .2s,transform .08s,box-shadow .08s" ontouchstart="this.style.transform='translate(5px,5px)';this.style.boxShadow='0px 0px 0px var(--g)'" ontouchend="this.style.transform='';this.style.boxShadow='5px 5px 0px var(--g)'" onclick="if(!_obFed)obFeedPet();setTimeout(function(){obNext(3)},_obFed?0:350)">⚡ NÄSTA →</button>
     </div>
   </div>
 
