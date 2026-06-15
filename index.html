@@ -1463,13 +1463,19 @@ button.btn{border-width:3px!important;}
 .ob-pb-em{font-size:26px;display:block;margin-bottom:2px;}
 .ob-pb-nm{font-size:7px;font-weight:700;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 /* Big animated pet preview */
-.ob-pet-preview{font-size:88px;text-align:center;display:block;margin:4px auto 16px;animation:petBob 1.8s ease-in-out infinite;filter:drop-shadow(0 0 28px rgba(57,255,20,.45));}
+.ob-pet-preview{font-size:110px;text-align:center;display:block;margin:0 auto 10px;animation:petBob 1.6s ease-in-out infinite;filter:drop-shadow(0 0 36px rgba(57,255,20,.55)) drop-shadow(0 0 14px rgba(57,255,20,.3));position:relative;z-index:2;}
+.ob-pet-wrap{position:relative;text-align:center;margin-bottom:10px;}
+.ob-pet-ring{position:absolute;inset:-16px;border-radius:50%;border:2px solid rgba(57,255,20,.25);animation:obPetRingPulse 2s ease-in-out infinite;pointer-events:none;}
+.ob-pet-ring2{position:absolute;inset:-28px;border-radius:50%;border:1px solid rgba(57,255,20,.12);animation:obPetRingPulse 2s ease-in-out infinite .5s;pointer-events:none;}
+@keyframes obPetRingPulse{0%,100%{transform:scale(1);opacity:.6;}50%{transform:scale(1.06);opacity:1;}}
 /* Tutorial feed action */
-.ob-feed-btn{width:100%;padding:18px 16px;border-radius:6px;background:#0d0d0d;border:3px solid var(--o);box-shadow:5px 5px 0px var(--o);display:flex;align-items:center;gap:14px;cursor:pointer;margin-bottom:14px;-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;}
+.ob-feed-btn{width:100%;padding:18px 16px;border-radius:6px;background:#0d0d0d;border:3px solid var(--o);box-shadow:5px 5px 0px var(--o);display:flex;align-items:center;gap:14px;cursor:pointer;margin-bottom:14px;-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;animation:obFeedPulse 1.4s ease-in-out infinite;}
+@keyframes obFeedPulse{0%,100%{box-shadow:5px 5px 0px var(--o);}50%{box-shadow:5px 5px 0px var(--o),0 0 18px rgba(255,159,10,.45);}}
+.ob-feed-btn:active,.ob-feed-btn.done{animation:none;}
 .ob-feed-btn:active{transform:translate(5px,5px);box-shadow:0px 0px 0px transparent;}
 .ob-feed-btn.done{background:#001a00;border-color:var(--g);box-shadow:5px 5px 0px var(--g);}
-.ob-feed-ico{font-size:40px;flex-shrink:0;}
-.ob-feed-main{font-size:15px;font-weight:900;margin-bottom:3px;font-family:var(--mono);}
+.ob-feed-ico{font-size:44px;flex-shrink:0;}
+.ob-feed-main{font-size:16px;font-weight:900;margin-bottom:3px;font-family:var(--mono);letter-spacing:.5px;}
 .ob-feed-sub{font-size:11px;color:rgba(255,255,255,.5);font-family:var(--mono);}
 
 /* ═══════════════════════════════════
@@ -2704,7 +2710,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
         <div class="ob-world-ds">8-bit retro pixel</div>
       </div>
     </div>
-    <button type="button" class="btn btn-g btn-lg btn-full" id="obwBtn" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:8px;border:none;box-shadow:0 0 24px rgba(57,255,20,.5)" onclick="obNext(0)">VÄLJ VÄRLD →</button>
+    <button type="button" class="btn btn-g btn-lg btn-full" id="obwBtn" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:6px;border:3px solid var(--g);box-shadow:5px 5px 0px var(--g);transition:transform .08s,box-shadow .08s" ontouchstart="this.style.transform='translate(5px,5px)';this.style.boxShadow='0px 0px 0px var(--g)'" ontouchend="this.style.transform='';this.style.boxShadow='5px 5px 0px var(--g)'" onclick="obNext(0)">VÄLJ VÄRLD →</button>
   </div>
 
   <!-- STEP 0: Name -->
@@ -2717,7 +2723,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
       <div class="ob-p2">Välj ett smeknamn — det är din KARMA-identitet i appen.</div>
       <label class="lbl">DITT NAMN</label>
       <input class="inp" id="obName" placeholder="Ex: ella_runs / axelsthlm" maxlength="18" style="font-size:16px;margin-bottom:16px;border-radius:6px;border:3px solid rgba(57,255,20,.4);background:#0d0d0d;color:#fff;font-family:var(--mono)">
-      <button type="button" class="btn btn-g btn-lg btn-full" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:8px;border:none;box-shadow:0 0 24px rgba(57,255,20,.5)" onclick="obNext(1)">NÄSTA →</button>
+      <button type="button" class="btn btn-g btn-lg btn-full" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:6px;border:3px solid var(--g);box-shadow:5px 5px 0px var(--g);transition:transform .08s,box-shadow .08s" ontouchstart="this.style.transform='translate(5px,5px)';this.style.boxShadow='0px 0px 0px var(--g)'" ontouchend="this.style.transform='';this.style.boxShadow='5px 5px 0px var(--g)'" onclick="obNext(1)">NÄSTA →</button>
     </div>
   </div>
 
@@ -2730,7 +2736,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
       <div class="ob-pet-big" id="obPetGrid"></div>
       <label class="lbl">PET-NAMN</label>
       <input class="inp" id="obPetName" placeholder="Ex: Eldrake / Luna / Shadow" style="font-size:16px;margin-bottom:16px">
-      <button type="button" class="btn btn-g btn-lg btn-full" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:8px;border:none;box-shadow:0 0 24px rgba(57,255,20,.5)" onclick="obNext(2)">NÄSTA →</button>
+      <button type="button" class="btn btn-g btn-lg btn-full" style="font-family:var(--mono);font-size:15px;letter-spacing:2px;padding:14px;border-radius:6px;border:3px solid var(--g);box-shadow:5px 5px 0px var(--g);transition:transform .08s,box-shadow .08s" ontouchstart="this.style.transform='translate(5px,5px)';this.style.boxShadow='0px 0px 0px var(--g)'" ontouchend="this.style.transform='';this.style.boxShadow='5px 5px 0px var(--g)'" onclick="obNext(2)">NÄSTA →</button>
     </div>
   </div>
 
@@ -2738,18 +2744,22 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
   <div class="ob-step" id="obs2">
     <div class="ob-content">
       <div class="ob-prog2"><div class="ob-d2 on"></div><div class="ob-d2 on"></div><div class="ob-d2 on"></div><div class="ob-d2 on"></div></div>
-      <span id="obBigPet" class="ob-pet-preview">🐉</span>
-      <div class="ob-h2" id="obPetWelcome" style="text-align:center;margin-bottom:6px">Välkommen, Eldraken!</div>
-      <div class="ob-p2" style="text-align:center;font-size:13px">Din pet är hungrig! Mata den nu — det är det första du alltid ska göra. 🍖</div>
+      <div class="ob-pet-wrap" style="width:130px;height:130px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
+        <div class="ob-pet-ring"></div>
+        <div class="ob-pet-ring2"></div>
+        <span id="obBigPet" class="ob-pet-preview" style="margin:0">🐉</span>
+      </div>
+      <div class="ob-h2" id="obPetWelcome" style="text-align:center;margin-bottom:4px;font-size:26px;background:linear-gradient(135deg,#fff,var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Välkommen, Eldraken!</div>
+      <div class="ob-p2" style="text-align:center;font-size:12px;margin-bottom:16px">Din pet är hungrig! Mata den nu — det är det första du alltid ska göra. 🍖</div>
       <div class="ob-feed-btn" id="obFeedBtnEl" onclick="obFeedPet()">
         <span class="ob-feed-ico">🍖</span>
         <div style="flex:1">
           <div class="ob-feed-main">Mata din pet!</div>
           <div class="ob-feed-sub">Tryck för att ge den mat</div>
         </div>
-        <span style="font-size:22px;opacity:.6">→</span>
+        <span style="font-size:22px;color:var(--o);animation:bitePulse .7s ease-in-out infinite">→</span>
       </div>
-      <button class="btn btn-g btn-lg btn-full" id="obStartBtn" disabled style="opacity:.35" onclick="obNext(3)">⚡ NÄSTA →</button>
+      <button class="btn btn-g btn-lg btn-full" id="obStartBtn" disabled style="opacity:.35;font-family:var(--mono);font-size:16px;letter-spacing:2px;padding:15px;border:3px solid var(--g);border-radius:6px;box-shadow:5px 5px 0px var(--g);transition:all .2s,transform .08s,box-shadow .08s" ontouchstart="this.style.transform='translate(5px,5px)';this.style.boxShadow='0px 0px 0px var(--g)'" ontouchend="this.style.transform='';this.style.boxShadow='5px 5px 0px var(--g)'" onclick="obNext(3)">⚡ NÄSTA →</button>
     </div>
   </div>
 
@@ -11467,10 +11477,17 @@ function setObMode(mode,el){
 function obFeedPet(){
   if(_obFed)return;
   _obFed=true;
-  const fb=$('obFeedBtnEl');if(fb){fb.classList.add('done');fb.innerHTML='<span class="ob-feed-ico">✅</span><div style="flex:1"><div class="ob-feed-main" style="color:var(--g)">Pet matad!</div><div class="ob-feed-sub">🍖 Din pet är glad!</div></div>';}
-  const sb=$('obStartBtn');if(sb){sb.disabled=false;sb.style.opacity='1';sb.style.pointerEvents='';}
-  G.hunger=Math.min(100,G.hunger+30);vibe([20,10,40]);SFX.click();
-  floatNum('🍖+30',window.innerWidth/2,window.innerHeight*.35,'var(--o)',16);
+  const fb=$('obFeedBtnEl');if(fb){
+    fb.classList.add('done');
+    fb.innerHTML='<span class="ob-feed-ico" style="animation:petBob .5s ease-in-out infinite">✅</span><div style="flex:1"><div class="ob-feed-main" style="color:var(--g);font-size:17px">Pet matad! 🎉</div><div class="ob-feed-sub" style="color:rgba(57,255,20,.7)">Din pet är jätteglad!</div></div><span style="font-size:22px">🌟</span>';
+    _obBurst(fb,'#FF9F0A');
+  }
+  const sb=$('obStartBtn');if(sb){sb.disabled=false;sb.style.opacity='1';sb.style.pointerEvents='';sb.style.boxShadow='5px 5px 0px var(--g),0 0 20px rgba(57,255,20,.4)';}
+  // Pet emoji bounces extra
+  const bp=$('obBigPet');if(bp){bp.style.animation='none';setTimeout(()=>{if(bp)bp.style.animation='';},50);}
+  G.hunger=Math.min(100,G.hunger+30);vibe([20,10,40,10,60]);SFX.click();
+  floatNum('🍖 +30 HUNGER',window.innerWidth/2,window.innerHeight*.35,'#FF9F0A',16);
+  showT('🍖 Pet matad! +30 hunger','o');
 }
 // ── Particle burst for onboarding ──
 function _obBurst(el,color){
