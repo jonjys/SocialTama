@@ -2751,15 +2751,16 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
       </div>
       <div class="ob-h2" id="obPetWelcome" style="text-align:center;margin-bottom:4px;font-size:26px;background:linear-gradient(135deg,#fff,var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Välkommen, Eldraken!</div>
       <div class="ob-p2" style="text-align:center;font-size:12px;margin-bottom:16px">Din pet är hungrig! Mata den nu — det är det första du alltid ska göra. 🍖</div>
-      <div class="ob-feed-btn" id="obFeedBtnEl" onclick="obFeedPet()" ontouchend="obFeedPet()">
+      <div class="ob-feed-btn" id="obFeedBtnEl" onclick="obFeedPet()" ontouchstart="this.classList.add('ob-feed-active')" ontouchend="this.classList.remove('ob-feed-active');obFeedPet()">
         <span class="ob-feed-ico">🍖</span>
         <div style="flex:1">
           <div class="ob-feed-main">Mata din pet!</div>
-          <div class="ob-feed-sub">Tryck för att ge den mat</div>
+          <div class="ob-feed-sub">Tryck — appen fortsätter automatiskt</div>
         </div>
         <span style="font-size:22px;color:var(--o);animation:bitePulse .7s ease-in-out infinite">→</span>
       </div>
-      <button class="btn btn-g btn-lg btn-full" id="obStartBtn" style="font-family:var(--mono);font-size:16px;letter-spacing:2px;padding:15px;border:3px solid var(--g);border-radius:6px;box-shadow:5px 5px 0px var(--g);transition:all .2s,transform .08s,box-shadow .08s" ontouchstart="this.style.transform='translate(5px,5px)';this.style.boxShadow='0px 0px 0px var(--g)'" ontouchend="this.style.transform='';this.style.boxShadow='5px 5px 0px var(--g)'" onclick="if(!_obFed)obFeedPet();setTimeout(function(){obNext(3)},_obFed?0:350)">⚡ NÄSTA →</button>
+      <div style="font-size:10px;color:rgba(255,255,255,.3);font-family:var(--mono);text-align:center;margin-bottom:8px;letter-spacing:1px">— eller —</div>
+      <button class="btn btn-g btn-lg btn-full" id="obStartBtn" style="font-family:var(--mono);font-size:16px;letter-spacing:2px;padding:15px;border:3px solid var(--g);border-radius:6px;box-shadow:5px 5px 0px var(--g);transition:all .2s,transform .08s,box-shadow .08s" ontouchstart="this.style.transform='translate(5px,5px)';this.style.boxShadow='0px 0px 0px var(--g)'" ontouchend="this.style.transform='';this.style.boxShadow='5px 5px 0px var(--g)';obFeedPet()" onclick="obFeedPet()">⚡ HOPPA ÖVER →</button>
     </div>
   </div>
 
@@ -11477,17 +11478,23 @@ function setObMode(mode,el){
 function obFeedPet(){
   if(_obFed)return;
   _obFed=true;
-  const fb=$('obFeedBtnEl');if(fb){
-    fb.classList.add('done');
-    fb.innerHTML='<span class="ob-feed-ico" style="animation:petBob .5s ease-in-out infinite">✅</span><div style="flex:1"><div class="ob-feed-main" style="color:var(--g);font-size:17px">Pet matad! 🎉</div><div class="ob-feed-sub" style="color:rgba(57,255,20,.7)">Din pet är jätteglad!</div></div><span style="font-size:22px">🌟</span>';
-    _obBurst(fb,'#FF9F0A');
-  }
-  const sb=$('obStartBtn');if(sb){sb.disabled=false;sb.style.opacity='1';sb.style.pointerEvents='';sb.style.boxShadow='5px 5px 0px var(--g),0 0 20px rgba(57,255,20,.4)';}
-  // Pet emoji bounces extra
-  const bp=$('obBigPet');if(bp){bp.style.animation='none';setTimeout(()=>{if(bp)bp.style.animation='';},50);}
-  G.hunger=Math.min(100,G.hunger+30);vibe([20,10,40,10,60]);SFX.click();
-  floatNum('🍖 +30 HUNGER',window.innerWidth/2,window.innerHeight*.35,'#FF9F0A',16);
-  showT('🍖 Pet matad! +30 hunger','o');
+  try{
+    const fb=$('obFeedBtnEl');if(fb){
+      fb.classList.add('done');
+      fb.style.pointerEvents='none';
+      fb.innerHTML='<span class="ob-feed-ico" style="animation:petBob .5s ease-in-out infinite">✅</span><div style="flex:1"><div class="ob-feed-main" style="color:var(--g);font-size:17px">Pet matad! 🎉</div><div class="ob-feed-sub" style="color:rgba(57,255,20,.7)">+30 hunger — bra jobbat!</div></div><span style="font-size:22px">🌟</span>';
+      try{_obBurst(fb,'#FF9F0A');}catch(e){}
+    }
+    const sb=$('obStartBtn');if(sb){sb.style.boxShadow='5px 5px 0px var(--g),0 0 20px rgba(57,255,20,.4)';}
+    const bp=$('obBigPet');if(bp){bp.style.filter='drop-shadow(0 0 40px rgba(57,255,20,.9))';}
+    G.hunger=Math.min(100,(G.hunger||80)+30);
+    try{vibe([20,10,40,10,60]);}catch(e){}
+    try{SFX.click();}catch(e){}
+    try{floatNum('🍖 +30',window.innerWidth/2,window.innerHeight*.4,'#FF9F0A',18);}catch(e){}
+    try{showT('🍖 Pet matad! +30 hunger','o');}catch(e){}
+  }catch(e){}
+  // Auto-advance after 900ms — user only needs ONE tap
+  setTimeout(()=>{try{obNext(3);}catch(e){}},900);
 }
 // ── Particle burst for onboarding ──
 function _obBurst(el,color){
