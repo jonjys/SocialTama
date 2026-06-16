@@ -7103,7 +7103,6 @@ function pcReact(m){
 function updateHUD(){
   $('hCoins').textContent=G.coins.toLocaleString('sv');
   $('hStreak').textContent=G.streak;
-  $('hTrust').textContent=G.trustScore;
   $('gcLbl').textContent=G.coins.toLocaleString('sv');
   const s=gS();
   $('pcEm').textContent=s.e+(G.equippedGear||s.g||'');
@@ -11525,25 +11524,34 @@ function finishOB(){
   setTimeout(()=>flash.remove(),500);
 
   setTimeout(()=>{
-    $('ob').style.display='none';
-    const app=$('app');app.style.display='flex';app.classList.add('app-entering');
-    setTimeout(()=>app.classList.remove('app-entering'),600);
-    G.world=obWorld;
-    const pendingUn=localStorage.getItem('kv8_pending_username');
-    if(pendingUn&&!G.name){G.name=pendingUn;}
-    localStorage.removeItem('kv8_pending_username');
-    save();updateHUD();nav('home');
-    vibe([50,30,100,30,80]);showT('⚡ WELCOME '+(G.name||'').toUpperCase()+'!','g');
-    addH('🎮 '+G.name+' joined KARMA v2!');
-    setTimeout(()=>{initPetRoom();renderBondBar();},200);
-    setTimeout(startPetAnim,100);
-    setTimeout(initAmbientSparkles,700);setTimeout(_startLiveCounts,1200);
-    setTimeout(initQuests,500);setTimeout(scheduleEvents,10000);SFX.lvlup();
-    setTimeout(renderStoriesBar,800);
-    setTimeout(_startKarmaTicker,400);
-    setTimeout(_schedulePetEvent,12000);
-    setTimeout(sbCreateProfile,1500);
-    setTimeout(sbSubscribeRealtime,2000);
+    // Critical path: always leave onboarding and show the app, even if a
+    // cosmetic step below throws (e.g. a stale DOM id reference).
+    try{
+      $('ob').style.display='none';
+      const app=$('app');app.style.display='flex';app.classList.add('app-entering');
+      setTimeout(()=>app.classList.remove('app-entering'),600);
+      G.world=obWorld;
+      const pendingUn=localStorage.getItem('kv8_pending_username');
+      if(pendingUn&&!G.name){G.name=pendingUn;}
+      localStorage.removeItem('kv8_pending_username');
+      save();
+    }catch(e){}
+    try{updateHUD();}catch(e){}
+    try{nav('home');}catch(e){}
+    try{vibe([50,30,100,30,80]);showT('⚡ WELCOME '+(G.name||'').toUpperCase()+'!','g');}catch(e){}
+    try{addH('🎮 '+G.name+' joined KARMA v2!');}catch(e){}
+    setTimeout(()=>{try{initPetRoom();renderBondBar();}catch(e){}},200);
+    setTimeout(()=>{try{startPetAnim();}catch(e){}},100);
+    setTimeout(()=>{try{initAmbientSparkles();}catch(e){}},700);
+    setTimeout(()=>{try{_startLiveCounts();}catch(e){}},1200);
+    setTimeout(()=>{try{initQuests();}catch(e){}},500);
+    setTimeout(()=>{try{scheduleEvents();}catch(e){}},10000);
+    try{SFX.lvlup();}catch(e){}
+    setTimeout(()=>{try{renderStoriesBar();}catch(e){}},800);
+    setTimeout(()=>{try{_startKarmaTicker();}catch(e){}},400);
+    setTimeout(()=>{try{_schedulePetEvent();}catch(e){}},12000);
+    setTimeout(()=>{try{sbCreateProfile();}catch(e){}},1500);
+    setTimeout(()=>{try{sbSubscribeRealtime();}catch(e){}},2000);
   },180);
 }
 // Init onboarding background
@@ -16230,3 +16238,6 @@ function renderSettings(){
     </div>
   `;
 }
+</script>
+</body>
+</html>
