@@ -1145,6 +1145,14 @@ button.btn{border-width:3px!important;}
 .arcade-scan{position:absolute;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);pointer-events:none;animation:arcadeScanMove 5s linear infinite;z-index:2;}
 .featured-gcard{animation:featuredGlowPulse 2.8s ease-in-out infinite;}
 .live-blip{width:7px;height:7px;border-radius:50%;background:#FF3B30;display:inline-block;animation:liveBlip .9s ease-in-out infinite;}
+/* ═══ HOME BASE CANVAS ═══ */
+@keyframes hbBuildPop{0%{transform:scale(1)}50%{transform:scale(1.18)}100%{transform:scale(1)}}
+.merum-bpanel{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,12,.94);border-top:2px solid rgba(255,215,0,.5);border-radius:14px 14px 0 0;padding:14px 16px 20px;z-index:15;transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.4,1);}
+.merum-bpanel.open{transform:translateY(0);}
+.home-build-card{flex-shrink:0;width:72px;background:rgba(255,255,255,.04);border:1.5px solid var(--line);border-radius:12px;padding:8px 6px 7px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background .15s,transform .1s;}
+.home-build-card.built{border-color:rgba(57,255,20,.35);background:rgba(57,255,20,.04);}
+.home-build-card.maxed{border-color:rgba(255,215,0,.45);background:rgba(255,215,0,.05);}
+.home-build-card:active{transform:scale(.93);}
 .arcade-hdr-txt{animation:hdrFlicker 8s ease-in-out infinite;}
 /* ═══ EPIC PET CARE BUTTONS ═══ */
 @keyframes chbGlow{0%,100%{box-shadow:0 0 0 0 transparent;}50%{box-shadow:0 0 18px var(--chb-col,rgba(255,159,10,.5)),0 0 40px var(--chb-col,rgba(255,159,10,.2));}}
@@ -3892,30 +3900,26 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
       </div>
       <!-- RUM panel -->
       <div class="me-spanel on" id="me-panel-rum">
-        <!-- Room preview — full-width immersive -->
-        <div id="meRumPreview" style="margin:0;height:280px;position:relative;background:linear-gradient(180deg,#080020 0%,#0d0830 40%,#050818 100%);overflow:hidden">
-          <!-- Animated stars bg -->
-          <canvas id="meRumStarsCanvas" style="position:absolute;inset:0;width:100%;height:100%;opacity:.6"></canvas>
-          <!-- Floor glow -->
-          <div style="position:absolute;bottom:0;left:0;right:0;height:70px;background:linear-gradient(0deg,rgba(57,255,20,.12),transparent)"></div>
-          <!-- Floor -->
-          <div style="position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(180deg,rgba(57,255,20,.06),rgba(57,255,20,.02));border-top:2px solid rgba(57,255,20,.3)"></div>
-          <!-- Room decorations placed by JS -->
-          <div id="meRumItems" style="position:absolute;inset:0;z-index:3"></div>
-          <!-- Pet walking in room -->
-          <div id="meRumPet" style="position:absolute;bottom:40px;left:30%;font-size:52px;animation:roomPetWalk 3.8s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(57,255,20,.6));z-index:4;transition:font-size .3s">🐉</div>
-          <!-- Speech bubble -->
-          <div id="meRumSpeech" style="position:absolute;bottom:100px;left:30%;transform:translateX(10px);background:rgba(0,0,0,.7);border:1px solid rgba(57,255,20,.4);border-radius:12px 12px 12px 0;padding:5px 10px;font-size:11px;color:rgba(255,255,255,.8);white-space:nowrap;z-index:5;pointer-events:none;opacity:0;transition:opacity .4s">Hemma! 🏠</div>
+        <!-- Home Base — merged room + castle world canvas -->
+        <div id="meRumPreview" style="margin:0;height:320px;position:relative;overflow:hidden;background:#000;">
+          <!-- Home base canvas: world-themed scene with castle, buildings, live pet -->
+          <canvas id="meRumCastleCanvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none"></canvas>
+          <!-- Decor items layer (furniture overlaid on canvas) -->
+          <div id="meRumItems" style="position:absolute;inset:0;z-index:3;pointer-events:none"></div>
           <!-- Top bar overlay -->
-          <div style="position:absolute;top:0;left:0;right:0;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,rgba(0,0,0,.6),transparent);z-index:6">
-            <div style="font-size:13px;font-weight:900;color:#fff;font-family:var(--mono);text-shadow:0 0 10px rgba(57,255,20,.5)">🏠 MITT RUM</div>
-            <div style="display:flex;gap:8px">
-              <button onclick="openRoomShop()" style="background:rgba(0,0,0,.5);border:1.5px solid rgba(0,217,255,.5);border-radius:20px;color:var(--b);font-size:10px;font-weight:900;padding:4px 12px;cursor:pointer;font-family:var(--ff)">🎨 DEKORERA</button>
-              <button onclick="openModal('roomCustomModal')" style="background:rgba(0,0,0,.5);border:1.5px solid rgba(57,255,20,.5);border-radius:20px;color:var(--g);font-size:10px;font-weight:900;padding:4px 12px;cursor:pointer;font-family:var(--ff)">+ ITEM</button>
+          <div style="position:absolute;top:0;left:0;right:0;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,rgba(0,0,0,.72),transparent);z-index:6">
+            <div style="font-size:13px;font-weight:900;color:#fff;font-family:var(--mono);text-shadow:0 0 10px rgba(255,215,0,.5)">🏡 DITT HEM</div>
+            <div style="display:flex;gap:6px">
+              <button onclick="openCastleWorld()" style="background:rgba(0,0,0,.5);border:1.5px solid rgba(255,215,0,.5);border-radius:20px;color:var(--y);font-size:10px;font-weight:900;padding:4px 10px;cursor:pointer;font-family:var(--ff)">🏰 UTFORSKA</button>
+              <button onclick="openRoomShop()" style="background:rgba(0,0,0,.5);border:1.5px solid rgba(0,217,255,.5);border-radius:20px;color:var(--b);font-size:10px;font-weight:900;padding:4px 10px;cursor:pointer;font-family:var(--ff)">🎨 DEKORERA</button>
             </div>
           </div>
-          <!-- Level badge -->
-          <div style="position:absolute;bottom:50px;right:14px;background:rgba(0,0,0,.6);border:1.5px solid rgba(57,255,20,.4);border-radius:10px;padding:4px 10px;font-size:10px;font-weight:900;color:var(--g);font-family:var(--mono);z-index:6" id="meRumLvBadge">🏠 LV1</div>
+          <!-- Castle + home level badge -->
+          <div id="meRumLvBadge" style="position:absolute;bottom:8px;right:14px;background:rgba(0,0,0,.65);border:1.5px solid rgba(255,215,0,.45);border-radius:10px;padding:4px 10px;font-size:10px;font-weight:900;color:var(--y);font-family:var(--mono);z-index:6">🏰 HEM LV1</div>
+          <!-- Inline build upgrade panel (slides up on building tap) -->
+          <div id="meRumBuildPanel" class="merum-bpanel">
+            <div id="meRumBuildPanelInner"></div>
+          </div>
         </div>
         <!-- Pet stats mini row -->
         <div style="display:flex;gap:0;background:#0d0d0d;border-bottom:1px solid var(--line)">
@@ -3930,6 +3934,14 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
           <button onclick="pcPlay();renderMeRoom()" style="flex:1;background:rgba(191,95,255,.1);border:1.5px solid rgba(191,95,255,.3);border-radius:12px;padding:8px;font-size:11px;font-weight:900;color:var(--p);cursor:pointer">🎮 LEK</button>
           <button onclick="pcSleep();renderMeRoom()" style="flex:1;background:rgba(0,217,255,.1);border:1.5px solid rgba(0,217,255,.3);border-radius:12px;padding:8px;font-size:11px;font-weight:900;color:var(--b);cursor:pointer">😴 SOVA</button>
           <button onclick="pcBath();renderMeRoom()" style="flex:1;background:rgba(57,255,20,.1);border:1.5px solid rgba(57,255,20,.3);border-radius:12px;padding:8px;font-size:11px;font-weight:900;color:var(--g);cursor:pointer">🛁 BADA</button>
+        </div>
+        <!-- Imperium building strip -->
+        <div style="background:#000;border-bottom:1px solid var(--line);padding:8px 14px 10px">
+          <div style="font-size:9px;font-weight:900;color:rgba(255,215,0,.55);letter-spacing:1.5px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">
+            <span>🏗️ DITT IMPERIUM</span>
+            <span id="homeImpCoins" style="color:var(--y);font-family:var(--mono);font-size:9px">0⚡</span>
+          </div>
+          <div id="meHomeBuildStrip" style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px"></div>
         </div>
         <!-- Furniture & gear section -->
         <div style="padding:10px 14px 4px;display:flex;align-items:center;justify-content:space-between">
@@ -10878,7 +10890,7 @@ function switchMeTab(tab, el){
   if(el)el.classList.add('on');
   else{const t=document.querySelector('.me-stab[onclick*="\''+tab+'\'"]');if(t)t.classList.add('on');}
   const panel=$('me-panel-'+tab);if(panel)panel.classList.add('on');
-  if(tab==='rum')renderMeRum();
+  if(tab==='rum'){renderMeRum();_startMeRumLoop();}
   else if(tab==='profil')renderMeProfil();
   else if(tab==='shop')renderMeShop('');
   else if(tab==='gave')renderMeGave();
@@ -10887,25 +10899,29 @@ function switchMeTab(tab, el){
 }
 
 function renderMeRum(){
-  // Update pet emoji
-  const pet=$('meRumPet');if(pet)pet.textContent=G.petEmoji||'🐉';
   // Update stats
   const h=$('meRumHunger');if(h)h.textContent=G.hunger||80;
   const e=$('meRumEnergy');if(e)e.textContent=G.energy||100;
   const m=$('meRumMood');if(m)m.textContent=G.mood||90;
   const k=$('meRumKarma');if(k)k.textContent=G.karma||42;
-  // Level badge
-  const lb=$('meRumLvBadge');if(lb)lb.textContent='🏠 LV'+(G.level||1);
-  // Animated star canvas
-  const sc=$('meRumStarsCanvas');
-  if(sc&&!sc._init){
-    sc._init=true;
-    const ctx=sc.getContext('2d');
-    sc.width=sc.offsetWidth||380;sc.height=sc.offsetHeight||280;
-    const stars=Array.from({length:60},()=>({x:Math.random()*sc.width,y:Math.random()*sc.height,r:Math.random()*1.5+.3,a:Math.random(),da:0.002+Math.random()*.004}));
-    const animS=()=>{ctx.clearRect(0,0,sc.width,sc.height);stars.forEach(s=>{s.a+=s.da;if(s.a>1||s.a<0.1)s.da*=-1;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,'+s.a.toFixed(2)+')';ctx.fill();});requestAnimationFrame(animS);};
-    animS();
+  // Castle level badge (shows home building level, not player level)
+  const lb=$('meRumLvBadge');if(lb)lb.textContent='🏰 HEM LV'+(G.castle?.buildings?.home||1);
+  // Wire up canvas tap events (once)
+  const cv=$('meRumCastleCanvas');
+  if(cv&&!cv._tapped){
+    cv._tapped=true;
+    cv.addEventListener('click',e=>{
+      const r=cv.getBoundingClientRect();
+      _meRumCanvasTap((e.clientX-r.left)*(cv.width/r.width),(e.clientY-r.top)*(cv.height/r.height));
+    });
+    cv.addEventListener('touchend',e=>{
+      e.preventDefault();
+      const r=cv.getBoundingClientRect();const touch=e.changedTouches[0];
+      _meRumCanvasTap((touch.clientX-r.left)*(cv.width/r.width),(touch.clientY-r.top)*(cv.height/r.height));
+    },{passive:false});
   }
+  // Building strip
+  renderHomeBuildStrip();
   // Room items
   const items=$('meRumItems');
   if(items){
@@ -10913,14 +10929,6 @@ function renderMeRum(){
     const ROOM_ITEMS_DECOR=['🛋️','📺','🪴','🎮','🎵','🏆','🖼️','🪑','🎸','💡','🌟','📚'];
     const defaults=placed.length?placed:ROOM_ITEMS_DECOR.slice(0,4).map((em,i)=>({em,x:15+i*22,wall:i<2}));
     items.innerHTML=defaults.map(it=>`<div style="position:absolute;font-size:${it.wall?'24px':'28px'};${it.wall?`top:20%;left:${it.x||30}%`:`bottom:calc(14% + 4px);left:${it.x||40}%`};transform:translateX(-50%);filter:drop-shadow(0 4px 8px rgba(0,0,0,.6))">${it.em}</div>`).join('');
-  }
-  // Show speech bubble with pet comment
-  const sp=$('meRumSpeech');
-  if(sp){
-    const moods=['Hemma! 🏠','Hungrig... 🍖','Chilla 😴','Vill leka! 🎮','Kärlek! 💖'];
-    sp.textContent=moods[Math.floor(Math.random()*moods.length)];
-    sp.style.opacity='1';
-    setTimeout(()=>{if(sp)sp.style.opacity='0';},3000);
   }
   // Gear list
   const gl=$('meRumGearList');
@@ -10932,6 +10940,304 @@ function renderMeRum(){
   }
 }
 function renderMeRoom(){renderMeRum();renderRwTasks();renderFriendRoomActivity();}
+
+// ══════════════════════════════════════════
+// ── HOME BASE CANVAS SYSTEM ──
+// ══════════════════════════════════════════
+
+const _HB_POSITIONS=[
+  {id:'farm',   angle:-150,dist:80},
+  {id:'tower',  angle:-90, dist:84},
+  {id:'arena',  angle:-30, dist:80},
+  {id:'market', angle:30,  dist:80},
+  {id:'stable', angle:150, dist:80},
+];
+const _CASTLE_EMOJIS=['🏚️','🏠','🏡','🏛️','🏰','🗼'];
+const _WORLD_SKY_COLS={
+  cosmic:['#140530','#08011c'],
+  nature:['#051e05','#030d03'],
+  city:  ['#030616','#020512'],
+  pixel: ['#100a00','#070500'],
+};
+const _WORLD_FLOOR_COLS={
+  cosmic:['#1a0a3a','#0c051a'],
+  nature:['#0a2a0a','#051405'],
+  city:  ['#081020','#040810'],
+  pixel: ['#1e1000','#0e0800'],
+};
+const _WORLD_ACCENT_RGB={
+  cosmic:'191,95,255',
+  nature:'57,255,20',
+  city:  '0,217,255',
+  pixel: '255,159,10',
+};
+const _WORLD_FLOAT_EMOJIS={
+  cosmic:['✨','⭐','💫','🌙','🌟','🔮'],
+  nature:['🌿','🍃','🌱','🌳','🌸','🦋'],
+  city:  ['💡','⚡','🏢','💎','🌃','🌉'],
+  pixel: ['🎮','🕹️','⭐','💾','🔲','🧱'],
+};
+const _EVOL_STAGE_COLS=['#aaa','#39FF14','#00D9FF','#FFE600','#FF9F0A','#BF5FFF','#FF2D55','#FFE600'];
+
+let _hbParticles=null,_hbFloatEmojis=null,_hbLastWorld=null;
+
+function _hbEvolStageIdx(){
+  const lv=G.level||1;
+  const EVOL_STAGES=[{lv:0},{lv:1},{lv:3},{lv:5},{lv:10},{lv:15},{lv:20},{lv:30}];
+  let idx=0;for(let i=0;i<EVOL_STAGES.length;i++)if(lv>=EVOL_STAGES[i].lv)idx=i;
+  return idx;
+}
+
+function renderHomeBase(canvasId){
+  const canvas=$(canvasId);if(!canvas)return;
+  const rect=canvas.getBoundingClientRect();
+  const W=rect.width>0?Math.round(rect.width):390;
+  const H=rect.height>0?Math.round(rect.height):320;
+  if(canvas.width!==W||canvas.height!==H){canvas.width=W;canvas.height=H;}
+  if(W<30||H<30)return;
+  const ctx=canvas.getContext('2d');
+  const t=Date.now()/1000;
+  const wld=G.world||'cosmic';
+  const cx=W/2,cy=H*0.47;
+
+  // Reset particles when world changes
+  if(_hbLastWorld!==wld){_hbLastWorld=wld;_hbParticles=null;_hbFloatEmojis=null;}
+
+  // Background sky
+  const skyCols=_WORLD_SKY_COLS[wld]||_WORLD_SKY_COLS.cosmic;
+  const bg=ctx.createLinearGradient(0,0,0,H);
+  bg.addColorStop(0,skyCols[0]);bg.addColorStop(1,skyCols[1]);
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+  // Floating world emojis (ambient ambience)
+  if(!_hbFloatEmojis){
+    const emjs=_WORLD_FLOAT_EMOJIS[wld]||_WORLD_FLOAT_EMOJIS.cosmic;
+    _hbFloatEmojis=Array.from({length:20},(_,i)=>({
+      x:Math.random(),y:0.05+Math.random()*.5,
+      em:emjs[i%emjs.length],sz:6+Math.random()*5,
+      spd:0.006+Math.random()*.01,phase:Math.random()*Math.PI*2,
+      a:0.1+Math.random()*.2,
+    }));
+  }
+  _hbFloatEmojis.forEach(f=>{
+    ctx.globalAlpha=f.a*(0.65+0.35*Math.sin(f.phase+t*f.spd*8));
+    ctx.font=f.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(f.em,f.x*W,f.y*H+Math.sin(f.phase+t*f.spd*4)*5);
+  });
+  ctx.globalAlpha=1;
+
+  // Ground plane
+  const flrCols=_WORLD_FLOOR_COLS[wld]||_WORLD_FLOOR_COLS.cosmic;
+  const flr=ctx.createLinearGradient(0,H*.48,0,H);
+  flr.addColorStop(0,flrCols[0]);flr.addColorStop(1,flrCols[1]);
+  ctx.fillStyle=flr;ctx.fillRect(0,H*.48,W,H*.52);
+  // Horizon line
+  const acc=_WORLD_ACCENT_RGB[wld]||'57,255,20';
+  ctx.strokeStyle='rgba('+acc+',.18)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,H*.48);ctx.lineTo(W,H*.48);ctx.stroke();
+  // Ground glow
+  const gnd=ctx.createRadialGradient(cx,H,0,cx,H,Math.min(W,H)*.7);
+  gnd.addColorStop(0,'rgba('+acc+',.07)');gnd.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=gnd;ctx.fillRect(0,H*.4,W,H*.6);
+
+  // ── Buildings ──
+  const bl=(G.castle&&G.castle.buildings)||{};
+  _HB_POSITIONS.forEach(bp=>{
+    const rad=bp.angle*Math.PI/180;
+    const bx=cx+Math.cos(rad)*bp.dist;
+    const by=cy+Math.sin(rad)*bp.dist*0.62;
+    const bInfo=CASTLE_BUILDINGS.find(x=>x.id===bp.id);if(!bInfo)return;
+    const lvl=bl[bp.id]||0;
+    // Ground shadow ellipse
+    ctx.fillStyle='rgba(0,0,0,.38)';
+    ctx.beginPath();ctx.ellipse(bx,by+15,13+lvl*2,5+lvl*.5,0,0,Math.PI*2);ctx.fill();
+    if(lvl>0){
+      // Aura (radius grows with level)
+      const aR=16+lvl*7,pulse=0.7+0.3*Math.sin(t*1.7+bp.angle*.05);
+      const aur=ctx.createRadialGradient(bx,by,0,bx,by,aR*pulse);
+      aur.addColorStop(0,'rgba('+acc+',.22)');aur.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=aur;ctx.beginPath();ctx.arc(bx,by,aR*pulse,0,Math.PI*2);ctx.fill();
+      // Building emoji grows with level
+      const bsz=16+lvl*5;
+      ctx.font=bsz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(bInfo.em,bx,by-bsz*.12);
+      ctx.font='bold 7px monospace';ctx.fillStyle='rgba(255,215,0,.88)';ctx.textAlign='center';
+      ctx.fillText('LV'+lvl,bx,by+bsz*.52);
+      ctx.font='6px monospace';ctx.fillStyle='rgba(255,255,255,.4)';
+      ctx.fillText(bInfo.nm,bx,by+bsz*.52+9);
+    }else{
+      // Under construction — tap to build
+      ctx.globalAlpha=0.3;
+      ctx.font='18px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText('🚧',bx,by-2);ctx.globalAlpha=1;
+      ctx.font='bold 6.5px monospace';ctx.fillStyle='rgba(255,255,255,.32)';ctx.textAlign='center';
+      ctx.fillText(bInfo.nm,bx,by+12);
+      const costVal=bInfo.costs[0];
+      ctx.font='6px monospace';ctx.fillStyle='rgba(255,215,0,.28)';
+      ctx.fillText(costVal+'⚡',bx,by+21);
+    }
+  });
+
+  // ── Castle center ──
+  const homeLvl=bl.home||1;
+  const castleEm=_CASTLE_EMOJIS[Math.min(homeLvl,5)];
+  const csz=30+homeLvl*5;
+  const bob=Math.sin(t*1.3)*3;
+  // Castle aura (golden, grows with home level)
+  const caur=ctx.createRadialGradient(cx,cy,0,cx,cy,48+homeLvl*9);
+  caur.addColorStop(0,'rgba(255,215,0,0.16)');caur.addColorStop(.5,'rgba(255,150,0,0.07)');caur.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=caur;ctx.beginPath();ctx.arc(cx,cy+bob*.5,55+homeLvl*8,0,Math.PI*2);ctx.fill();
+  // Castle shadow
+  ctx.fillStyle='rgba(0,0,0,.4)';
+  ctx.beginPath();ctx.ellipse(cx,cy+csz*.68+bob,csz*.4,csz*.14,0,0,Math.PI*2);ctx.fill();
+  // Castle emoji
+  ctx.font=csz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(castleEm,cx,cy-csz*.08+bob);
+  // Player name label
+  ctx.font='bold 7.5px monospace';ctx.fillStyle='rgba(255,215,0,.82)';ctx.textAlign='center';
+  const nameLabel=((G.name||'Spelaren').slice(0,12)+' · LV'+homeLvl);
+  ctx.fillText(nameLabel,cx,cy+csz*.68+bob+4);
+
+  // ── Pet orbiting castle ──
+  const es=gS();
+  const etree=EVOL[G.petEmoji]||EVOL['🐉'];
+  const petStageIdx=Math.max(0,etree.indexOf(es));
+  const globalStageIdx=_hbEvolStageIdx();
+  const stageCol=_EVOL_STAGE_COLS[globalStageIdx]||'#39FF14';
+  const petSz=22+petStageIdx*6;
+  const petX=cx+Math.cos(t*.42)*32;
+  const petY=cy+Math.sin(t*.42)*20-4;
+  // Pet glow (soft radial using globalAlpha + stage color)
+  ctx.globalAlpha=0.32;
+  ctx.fillStyle=stageCol;
+  ctx.beginPath();ctx.arc(petX,petY,petSz*.9,0,Math.PI*2);ctx.fill();
+  ctx.globalAlpha=1;
+  // Pet shadow
+  ctx.fillStyle='rgba(0,0,0,.32)';
+  ctx.beginPath();ctx.ellipse(petX,petY+petSz*.55,petSz*.35,petSz*.12,0,0,Math.PI*2);ctx.fill();
+  // Pet emoji
+  ctx.font=petSz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(es.e||G.petEmoji||'🐉',petX,petY);
+  // Stage badge emoji above pet
+  if(es.g){
+    ctx.font='11px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(es.g,petX+petSz*.5,petY-petSz*.56);
+  }
+  // Stage name (only show if beyond stage 0)
+  if(petStageIdx>0){
+    ctx.font='bold 6.5px monospace';ctx.fillStyle='rgba(255,255,255,.55)';ctx.textAlign='center';
+    ctx.fillText(es.s,petX,petY-petSz*.72);
+  }
+
+  // ── Rising embers / sparkles ──
+  if(!_hbParticles){
+    _hbParticles=Array.from({length:14},(_,i)=>({
+      x:cx+(Math.random()-.5)*44,y:cy+(Math.random()-.5)*32,
+      vy:-0.45-Math.random()*.38,vx:(Math.random()-.5)*.28,
+      life:Math.random(),maxLife:2.4+Math.random()*2,
+    }));
+  }
+  const accParts=acc.split(',');
+  _hbParticles.forEach(p=>{
+    p.life+=0.016;
+    if(p.life>p.maxLife){p.life=0;p.x=cx+(Math.random()-.5)*44;p.y=cy+12;}
+    const a=1-(p.life/p.maxLife);
+    ctx.fillStyle='rgba('+accParts[0]+','+(+accParts[1]+Math.floor(a*30))+','+accParts[2]+','+a*.65+')';
+    ctx.beginPath();ctx.arc(p.x+Math.sin(p.life*3)*5,p.y-p.life*28,1.5*a,0,Math.PI*2);ctx.fill();
+  });
+
+  // Vignette
+  const vig=ctx.createRadialGradient(cx,H*.5,Math.min(W,H)*.18,cx,H*.5,Math.max(W,H)*.65);
+  vig.addColorStop(0,'rgba(0,0,0,0)');vig.addColorStop(1,'rgba(0,0,5,.52)');
+  ctx.fillStyle=vig;ctx.fillRect(0,0,W,H);
+}
+
+let _meRumLoopActive=false;
+function _startMeRumLoop(){
+  if(_meRumLoopActive)return;
+  _meRumLoopActive=true;
+  (function loop(){
+    const va=$('view-me')?.classList.contains('active');
+    const pa=$('me-panel-rum')?.classList.contains('on');
+    if(va&&pa){renderHomeBase('meRumCastleCanvas');requestAnimationFrame(loop);}
+    else{_meRumLoopActive=false;}
+  })();
+}
+
+function _meRumCanvasTap(x,y){
+  const canvas=$('meRumCastleCanvas');if(!canvas)return;
+  const W=canvas.width,H=canvas.height;
+  const cx=W/2,cy=H*0.47;
+  if(Math.hypot(x-cx,y-cy)<40){openHomeBuildUpgrade('home');return;}
+  for(const bp of _HB_POSITIONS){
+    const rad=bp.angle*Math.PI/180;
+    const bx=cx+Math.cos(rad)*bp.dist;
+    const by=cy+Math.sin(rad)*bp.dist*0.62;
+    if(Math.hypot(x-bx,y-by)<26){openHomeBuildUpgrade(bp.id);return;}
+  }
+}
+
+function openHomeBuildUpgrade(id){
+  const b=CASTLE_BUILDINGS.find(x=>x.id===id);if(!b)return;
+  const bl=G.castle?.buildings||{};
+  const lvl=bl[id]||0;const maxed=lvl>=5;
+  const cost=maxed?null:b.costs[lvl];
+  const canAfford=cost&&G.coins>=cost;
+  const inner=$('meRumBuildPanelInner');if(!inner)return;
+  const dots=Array.from({length:5},(_,i)=>`<div style="width:14px;height:5px;border-radius:2px;background:${i<lvl?'var(--g)':'rgba(255,255,255,.1)'}"></div>`).join('');
+  inner.innerHTML=`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+      <div style="font-size:38px">${b.em}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:16px;font-weight:900;color:var(--y);font-family:var(--mono)">${b.nm}</div>
+        <div style="font-size:10px;color:var(--t3);margin-top:1px;line-height:1.4">${b.desc}</div>
+        <div style="font-size:10px;color:var(--g);margin-top:2px">${b.bonus}</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:4px;margin-bottom:12px">${dots}</div>
+    <div style="display:flex;gap:8px">
+      ${maxed
+        ?`<div style="flex:1;text-align:center;padding:12px;color:var(--y);font-weight:900;font-family:var(--mono)">✅ MAX LEVEL</div>`
+        :`<button onclick="upgradeBuilding('${id}');_meRumDismissPanel()" style="flex:1;background:${canAfford?'rgba(57,255,20,.15)':'rgba(255,255,255,.04)'};border:2px solid ${canAfford?'var(--g)':'rgba(255,255,255,.1)'};border-radius:12px;padding:12px;font-size:14px;font-weight:900;color:${canAfford?'var(--g)':'var(--t3)'};cursor:pointer;font-family:var(--mono)">${lvl===0?'🔨 BYGG':'⬆️ UPPGRADERA'} · ${cost}⚡</button>`}
+      <button onclick="_meRumDismissPanel()" style="background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 16px;font-size:14px;color:var(--t3);cursor:pointer">✕</button>
+    </div>`;
+  const panel=$('meRumBuildPanel');
+  if(panel){
+    panel.classList.add('open');
+    setTimeout(()=>document.addEventListener('click',_meRumOutsideClick,{once:true}),80);
+  }
+}
+
+function _meRumOutsideClick(e){
+  const p=$('meRumBuildPanel');
+  if(p&&!p.contains(e.target))_meRumDismissPanel();
+  else if(p&&p.classList.contains('open'))document.addEventListener('click',_meRumOutsideClick,{once:true});
+}
+
+function _meRumDismissPanel(){
+  const p=$('meRumBuildPanel');if(p)p.classList.remove('open');
+}
+
+function renderHomeBuildStrip(){
+  const el=$('meHomeBuildStrip');if(!el)return;
+  const ci=$('homeImpCoins');if(ci)ci.textContent=(G.coins||0)+'⚡';
+  const bl=G.castle?.buildings||{};
+  el.innerHTML=CASTLE_BUILDINGS.map(b=>{
+    const lvl=bl[b.id]||0,maxed=lvl>=5;
+    const cost=maxed?null:b.costs[lvl];
+    const canAfford=cost&&(G.coins||0)>=cost;
+    const dots=Array.from({length:5},(_,i)=>`<div style="width:8px;height:3px;border-radius:1.5px;background:${i<lvl?'var(--g)':'rgba(255,255,255,.1)'}"></div>`).join('');
+    return`<div class="home-build-card ${maxed?'maxed':lvl>0?'built':''}" onclick="openHomeBuildUpgrade('${b.id}')">
+      <div style="font-size:${lvl>0?'26':'20'}px;filter:${lvl>0?'drop-shadow(0 0 6px rgba(57,255,20,.45))':'grayscale(1) opacity(.35)'}">${lvl>0?b.em:'🚧'}</div>
+      <div style="font-size:7px;font-weight:900;color:${lvl>0?'rgba(255,255,255,.75)':'rgba(255,255,255,.28)'};text-align:center;line-height:1.2;font-family:var(--mono)">${b.nm}</div>
+      <div style="display:flex;gap:2px">${dots}</div>
+      ${maxed
+        ?`<div style="font-size:7px;color:var(--y);font-weight:900">MAX ✅</div>`
+        :cost?`<div style="font-size:7px;font-weight:900;font-family:var(--mono);color:${canAfford?'var(--g)':'rgba(255,255,255,.28)'}">${cost}⚡</div>`:''}
+    </div>`;
+  }).join('');
+}
+
 function renderFriendRoomActivity(){
   const el=$('meRumFriendActivity');if(!el)return;
   const acts=FRIENDS_DATA.filter(f=>f.status==='online').slice(0,3);
@@ -12466,10 +12772,13 @@ function upgradeBuilding(id){
   spawnParticles(window.innerWidth/2,window.innerHeight*.4,'stars');
   addDiaryEntry('Uppgraderade '+b.em+' '+b.nm+' till level '+(lvl+1)+'!');
   save();updateHUD();renderCastle();
+  // Update home base canvas + building strip
+  renderHomeBuildStrip();
+  const lbr=$('meRumLvBadge');if(lbr)lbr.textContent='🏰 HEM LV'+(G.castle?.buildings?.home||1);
   // Flash the castle grid to show it updated
   const cg=$('castleBuildGrid');if(cg){cg.style.transition='opacity .1s';cg.style.opacity='.3';setTimeout(()=>{cg.style.opacity='1';},120);}
   // Also update castle world if open
-  if($('castleWorld')?.classList.contains('open')){_cwRenderPanel();renderCastleWorld();}
+  if($('castleWorld')?.classList.contains('open')){_cwRenderPanel();}
 }
 
 // ── CASTLE WORLD (Diablo-style map) ──
@@ -12669,13 +12978,28 @@ function renderCastleWorld(){
     }
     ctx.globalAlpha=1;
   });
-  // Player castle
+  // Player castle — tiered emoji by home level, with pet orbiting
   const bob=Math.sin(t*1.5)*3;
+  const cHomeLvl=(G.castle?.buildings?.home)||1;
+  const cCastleEm=_CASTLE_EMOJIS[Math.min(cHomeLvl,5)];
   ctx.font='48px serif';ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillText('🏰',cx,cy-6+bob);
+  ctx.fillText(cCastleEm,cx,cy-6+bob);
   ctx.font='bold 9px monospace';ctx.fillStyle='rgba(255,215,0,.95)';
   const cLvl=(G.castle&&G.castle.lvl)||1;
   ctx.fillText((G.name||'Spelaren').slice(0,12)+' · LV'+cLvl,cx,cy+32+bob);
+  // Pet orbiting castle (evolution-aware)
+  const ces=gS();const cEtree=EVOL[G.petEmoji]||EVOL['🐉'];
+  const cStageIdx=Math.max(0,cEtree.indexOf(ces));
+  const cPetSz=22+cStageIdx*7;
+  const cPetX=cx+Math.cos(t*.4)*38;const cPetY=cy+Math.sin(t*.4)*24-4;
+  const cGlobalStage=_hbEvolStageIdx();
+  const cStageCol=_EVOL_STAGE_COLS[cGlobalStage]||'#39FF14';
+  ctx.globalAlpha=0.32;ctx.fillStyle=cStageCol;
+  ctx.beginPath();ctx.arc(cPetX,cPetY,cPetSz*.9,0,Math.PI*2);ctx.fill();
+  ctx.globalAlpha=1;
+  ctx.font=cPetSz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(ces.e||G.petEmoji||'🐉',cPetX,cPetY);
+  if(ces.g){ctx.font='11px serif';ctx.fillText(ces.g,cPetX+cPetSz*.48,cPetY-cPetSz*.52);}
   // Embers
   if(!_cwParticles)_cwParticles=Array.from({length:18},(_,i)=>({
     x:cx+(Math.random()-.5)*60,y:cy+(Math.random()-.5)*40,vy:-0.3-Math.random()*.5,vx:(Math.random()-.5)*.4,life:Math.random(),maxLife:2+Math.random()*3
