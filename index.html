@@ -3707,6 +3707,18 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
           <div class="xgame-info"><div class="xgame-nm">BOSS BATTLE</div><div class="xgame-sub">Epic boss fights</div><div class="xgame-rew">+COINS +XP</div></div>
           <div class="game-live-ct" id="liveCtBoss">512 live</div>
         </div>
+        <div class="xgame-card" style="position:relative" onclick="openPetQuiz()">
+          <div class="hot-badge">📚 NY</div>
+          <div class="xgame-banner" style="background:linear-gradient(135deg,#001220,#002044)">📚</div>
+          <div class="xgame-info"><div class="xgame-nm">PET QUIZ</div><div class="xgame-sub">Dagliga trivia-frågor</div><div class="xgame-rew">+COINS +XP</div></div>
+          <div class="game-live-ct">DAGLIG</div>
+        </div>
+        <div class="xgame-card" style="position:relative" onclick="openWeeklyTournament()">
+          <div class="hot-badge">🏆 VECKA</div>
+          <div class="xgame-banner" style="background:linear-gradient(135deg,#1a1000,#332000)">🏆</div>
+          <div class="xgame-info"><div class="xgame-nm">TURNERING</div><div class="xgame-sub">Veckans highscore</div><div class="xgame-rew">+BADGE +COINS</div></div>
+          <div class="game-live-ct">LIVE</div>
+        </div>
       </div>
 
       <!-- WEEKLY CHALLENGES -->
@@ -4924,6 +4936,9 @@ const G={
   dnaInventory:[],
   petMemory:{lastFed:0,lastTrained:0,lastBattle:0,lastFish:0,totalFeeds:0,favouriteAct:'none'},
   expedition:{active:false,id:null,startTime:0,endTime:0},
+  petBirthday:0,petSick:false,sickSince:0,
+  evolHistory:[],gameScores:{},weeklyTournament:{week:'',scores:{}},
+  _notifOn:false,
 };
 
 const EVOL={
@@ -8534,6 +8549,7 @@ function triggerEvolution(stage){
   el.classList.add('show');SFX.win();vibe([50,30,100,30,150,50,200]);
   spawnParticles(window.innerWidth/2,window.innerHeight*.45,'stars');
   _runEvolConfetti();
+  recordEvolution(stage);
   gainCoins(100);showT('🎉 EVOLUTION! +100 COINS','g');
 }
 function closeEvolCeremony(){if(_evolClosed)return;_evolClosed=true;$('evolCeremony')?.classList.remove('show');}
@@ -9722,6 +9738,7 @@ function _prGameOver(){
   const m=Math.floor(_pr.score/10);
   const isNew=m>_pr.best;
   if(isNew){_pr.best=m;localStorage.setItem('kv8_prBest',m);const bt=$('prBestTag');if(bt)bt.textContent='Best: '+m+'m';}
+  if(typeof saveGameScore==='function'){saveGameScore('runner',m);saveWeeklyScore&&saveWeeklyScore('runner',m);}
   const coins=Math.floor(_pr.gemsCollected*2+m*.3);
   gainCoins(coins);gainXP(Math.floor(m*.5),'action');
   advanceDailyChallenge&&advanceDailyChallenge('play',1);
@@ -10949,7 +10966,7 @@ function renderMeRum(){
     const placed=G.roomItems||[];
     const ROOM_ITEMS_DECOR=['🛋️','📺','🪴','🎮','🎵','🏆','🖼️','🪑','🎸','💡','🌟','📚'];
     const defaults=placed.length?placed:ROOM_ITEMS_DECOR.slice(0,4).map((em,i)=>({em,x:15+i*22,wall:i<2}));
-    items.innerHTML=defaults.map(it=>`<div style="position:absolute;font-size:${it.wall?'24px':'28px'};${it.wall?`top:20%;left:${it.x||30}%`:`bottom:calc(14% + 4px);left:${it.x||40}%`};transform:translateX(-50%);filter:drop-shadow(0 4px 8px rgba(0,0,0,.6))">${it.em}</div>`).join('');
+    items.innerHTML=defaults.map(it=>`<div style="position:absolute;font-size:${it.wall?'24px':'28px'};${it.wall?`top:40%;left:${it.x||30}%`:`bottom:7%;left:${it.x||40}%`};transform:translateX(-50%);filter:drop-shadow(0 4px 8px rgba(0,0,0,.6))">${it.em}</div>`).join('');
   }
   // Gear list
   const gl=$('meRumGearList');
@@ -11183,6 +11200,13 @@ function renderHomeBase(canvasId){
     ctx.fillStyle='rgba('+accParts[0]+','+(+accParts[1]+Math.floor(a*30))+','+accParts[2]+','+a*.65+')';
     ctx.beginPath();ctx.arc(p.x+Math.sin(p.life*3)*5,p.y-p.life*28,1.5*a,0,Math.PI*2);ctx.fill();
   });
+
+  // ── Neighbor placeholder bases ──
+  const _nbData=[{name:'Alex',em:'🏠',x:cx-W*.41,y:cy},{name:'Sara',em:'🏡',x:cx+W*.41,y:cy-6}];
+  _nbData.forEach(nb=>{ctx.globalAlpha=0.4;ctx.font='20px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(nb.em,nb.x,nb.y);ctx.globalAlpha=0.55;ctx.font='bold 5.5px monospace';ctx.fillStyle='rgba(160,180,255,.7)';ctx.fillText(nb.name,nb.x,nb.y+16);ctx.globalAlpha=1;});
+
+  // ── Season sky wash ──
+  if(typeof _SEASON_DATA!=='undefined'){const _szn=typeof _getCurrentSeason==='function'?_getCurrentSeason():'cosmic';const _ssd=_SEASON_DATA[_szn];if(_ssd){const sw=ctx.createLinearGradient(0,0,0,H*.5);sw.addColorStop(0,'rgba('+_ssd.accent+',0.055)');sw.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=sw;ctx.fillRect(0,0,W,H*.5);}}
 
   // Vignette
   const vig=ctx.createRadialGradient(cx,H*.5,Math.min(W,H)*.18,cx,H*.5,Math.max(W,H)*.65);
@@ -11484,6 +11508,13 @@ function sendMeGift(){
 
 function renderMeDagbok(){
   const list=$('meDagbokList');if(!list)return;
+  // Evolution history badges above diary
+  const hist=G.evolHistory||[];
+  if(hist.length){
+    let hel=$('evolHistInDagbok');
+    if(!hel){hel=document.createElement('div');hel.id='evolHistInDagbok';hel.style.cssText='padding:10px 14px;border-bottom:1px solid var(--line);background:#0a0a0a';list.parentNode.insertBefore(hel,list);}
+    hel.innerHTML=`<div style="font-size:8px;color:var(--t3);font-family:var(--mono);margin-bottom:7px;letter-spacing:1px">EVOLUTIONSHISTORIK</div><div style="display:flex;gap:7px;flex-wrap:wrap">${hist.map(h=>`<div style="display:inline-flex;flex-direction:column;align-items:center;gap:3px;padding:8px 10px;background:rgba(255,255,255,.04);border:1.5px solid var(--line);border-radius:12px"><div style="font-size:22px">${h.em}</div><div style="font-size:8px;color:var(--y);font-family:var(--mono);font-weight:700">${h.stage}</div><div style="font-size:7px;color:var(--t3)">${h.date}</div></div>`).join('')}</div>`;
+  }
   const entries=(G.diaryEntries||[]).slice().reverse();
   if(!entries.length){list.innerHTML=`<div style="text-align:center;padding:40px 20px;color:var(--t3)"><div style="font-size:42px;margin-bottom:10px">📖</div><div style="font-size:13px;font-weight:700">Dagboken är tom</div><div style="font-size:11px;margin-top:5px">Börja spela för att skriva minnen!</div></div>`;return;}
   list.innerHTML=entries.map((e,i)=>`<div style="background:var(--c1);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:8px">
@@ -16621,8 +16652,386 @@ function renderSettings(){
       ${toggleRow('🔊',sl?'Sound':'Ljud',sl?'Game sounds & effects':'Spelljud & effekter',typeof _soundOn!=='undefined'?_soundOn:true,'toggleSound()')}
       ${row('🗑️',sl?'Reset data':'Återställ data',sl?'Delete all progress':'Radera all progress','',`if(confirm('${sl?'Reset all data?':'Återställ all data?'}')){localStorage.clear();location.reload();}`)}
     </div>
+    <div class="settings-section-title">Pet & Socialt</div>
+    <div class="settings-group">
+      ${row('🃏','Mitt husdjurskort','Visa & dela ditt pet-kort','',`openPetProfileCard();closeSettings()`)}
+      ${row('📚','Pet Quiz','Dagliga trivia-frågor','',`openPetQuiz();closeSettings()`)}
+      ${row('🏆','Veckans Turnering','Tävla mot andra spelares scores','',`openWeeklyTournament();closeSettings()`)}
+      ${row('📊','Imperium Rapport','Byggnadsintäkter & income','',`openIncomePanel();closeSettings()`)}
+      ${row('🏅','Leaderboard','Top scores i KARMA ARCADE','',`openLeaderboard('runner');closeSettings()`)}
+      ${row('📄','NFT Export','Exportera pet-data som JSON','',`exportPetNFT();closeSettings()`)}
+      ${row('🔔','Notiser','Push-notiser om din pet','',`requestPushPermission();renderSettings()`)}
+    </div>
   `;
 }
+
+// ══════════════════════════════════════════
+// ── EXTENDED FEATURES: PET AGE / SICK / EVENTS / QUIZ / SOCIAL ──
+// ══════════════════════════════════════════
+
+// ── PET AGE SYSTEM ──
+function getPetAge(){if(!G.petBirthday)return 0;return Math.floor((Date.now()-G.petBirthday)/86400000);}
+function getPetAgeLabel(){const d=getPetAge();if(d<1)return'Nyfödd 🐣';if(d<7)return d+'d gammal 🌱';if(d<30)return Math.floor(d/7)+'v gammal 🌿';return Math.floor(d/30)+'mån gammal 🌳';}
+
+// ── SICKNESS SYSTEM ──
+function checkPetSick(){
+  if(!G.name)return;
+  const hunger=Math.min(100,Math.max(0,G.hunger||80));
+  if(hunger<20){
+    if(!G.sickSince||G.sickSince===0)G.sickSince=Date.now();
+    if(!G.petSick&&(Date.now()-G.sickSince)>1800000){
+      G.petSick=true;save();
+      showT('🤒 '+G.petName+' är sjuk! Ge medicin! (Inställningar → Mitt kort → Läkare)','r');
+      SFX.error&&SFX.error();
+    }
+  }else{
+    G.sickSince=0;
+    if(G.petSick){G.petSick=false;save();}
+  }
+}
+function healPet(){
+  if(!G.petSick){showT('💚 '+G.petName+' är redan frisk!','g');return;}
+  if(G.coins<50){showT('❌ Behöver 50⚡ för medicin','r');SFX.error&&SFX.error();return;}
+  G.coins-=50;G.petSick=false;G.sickSince=0;
+  G.mood=Math.min(100,(G.mood||70)+20);G.hunger=Math.min(100,(G.hunger||50)+20);
+  save();updateHUD&&updateHUD();updatePetView&&updatePetView();
+  showT('💊 '+G.petName+' är frisk igen! +20 MOOD +20 HUNGER','g');
+  SFX.win&&SFX.win();
+  addDiaryEntry&&addDiaryEntry(G.petName+' var sjuk men fick medicin och är frisk igen! 💊');
+}
+
+// ── MOOD EVENTS ──
+const _MOOD_EVENTS=[
+  {ico:'💰',msg:'Din {pet} hittade ett mynt i soffan!',sub:'+50⚡',fn(){gainCoins(50);}},
+  {ico:'🌙',msg:'Din {pet} drömde om stjärnor...',sub:'+8 Mood',fn(){G.mood=Math.min(100,(G.mood||70)+8);save();}},
+  {ico:'⚡',msg:'Din {pet} känner power-surge!',sub:'+20 Energi',fn(){G.energy=Math.min(100,(G.energy||80)+20);save();}},
+  {ico:'🍀',msg:'Din {pet} hittade en lyckokatt!',sub:'+30⚡ +5XP',fn(){gainCoins(30);gainXP&&gainXP(5,'action');}},
+  {ico:'🎵',msg:'Din {pet} dansar till musik!',sub:'+12 Mood',fn(){G.mood=Math.min(100,(G.mood||70)+12);save();}},
+  {ico:'😴',msg:'Din {pet} sover längre idag...',sub:'+25 Energi',fn(){G.energy=Math.min(100,(G.energy||80)+25);save();}},
+  {ico:'🌟',msg:'Din {pet} lyser extra starkt!',sub:'+15XP',fn(){gainXP&&gainXP(15,'action');}},
+  {ico:'🌈',msg:'Regnbåge utanför fönstret!',sub:'+25⚡ +10 Mood',fn(){gainCoins(25);G.mood=Math.min(100,(G.mood||70)+10);save();}},
+  {ico:'😢',msg:'Din {pet} saknar mer kärlek...',sub:'-5 Mood',fn(){G.mood=Math.max(0,(G.mood||70)-5);save();}},
+  {ico:'🎁',msg:'Hemligt paket levererat till slottet!',sub:'+75⚡',fn(){gainCoins(75);}},
+  {ico:'🏆',msg:'Din {pet} vann ett secret tournament!',sub:'+100⚡ +20XP',fn(){gainCoins(100);gainXP&&gainXP(20,'action');}},
+  {ico:'🍕',msg:'Din {pet} beställde pizza till er båda!',sub:'+30 Hunger +8 Mood',fn(){G.hunger=Math.min(100,(G.hunger||50)+30);G.mood=Math.min(100,(G.mood||70)+8);save();}},
+];
+let _lastMoodEvent=0;
+function _triggerMoodEvent(){
+  if(!G.name)return;
+  if(Date.now()-_lastMoodEvent<600000)return; // min 10 min between events
+  _lastMoodEvent=Date.now();
+  const ev=_MOOD_EVENTS[Math.floor(Math.random()*_MOOD_EVENTS.length)];
+  const evIdx=_MOOD_EVENTS.indexOf(ev);
+  const msg=ev.msg.replace('{pet}',G.petName||'ditt pet');
+  const ov=document.createElement('div');
+  ov.id='moodEventOverlay';
+  ov.style.cssText='position:fixed;inset:0;z-index:1200;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:24px;animation:fadeIn .2s';
+  ov.innerHTML=`<div style="background:#0d0d0d;border:3px solid var(--y);border-radius:20px;box-shadow:6px 6px 0 var(--y);padding:28px 24px;text-align:center;max-width:320px;width:100%">
+    <div style="font-size:52px;margin-bottom:12px">${ev.ico}</div>
+    <div style="font-size:16px;font-weight:900;color:#fff;font-family:var(--mono);margin-bottom:8px;line-height:1.35">${msg}</div>
+    <div style="font-size:14px;color:var(--y);font-family:var(--mono);font-weight:700;margin-bottom:22px">${ev.sub}</div>
+    <button id="_moodEvBtn" style="width:100%;background:rgba(255,230,0,.12);border:2px solid var(--y);border-radius:12px;padding:14px;font-size:14px;font-weight:900;color:var(--y);cursor:pointer;font-family:var(--mono)">✨ TOPPEN!</button>
+  </div>`;
+  document.body.appendChild(ov);
+  ov.querySelector('#_moodEvBtn').onclick=()=>{
+    ov.remove();
+    ev.fn();
+    updateHUD&&updateHUD();updatePetView&&updatePetView();
+    addDiaryEntry&&addDiaryEntry('Händelse: '+ev.ico+' '+msg+' ('+ev.sub+')');
+  };
+}
+setInterval(()=>{if(G.name&&!document.hidden&&Math.random()<0.55)_triggerMoodEvent();},1200000);
+
+// ── EVOLUTION HISTORY ──
+function recordEvolution(stage){
+  if(!G.evolHistory)G.evolHistory=[];
+  const nm=stage?.nm||stage?.name||stage?.s||'Ny stage';
+  const em=stage?.ico||stage?.e||stage?.em||'⭐';
+  const already=G.evolHistory.some(h=>h.stage===nm);
+  if(already)return;
+  G.evolHistory.push({stage:nm,em,date:new Date().toLocaleDateString('sv-SE'),ts:Date.now()});
+  save();
+  if(typeof renderMeDagbok==='function'&&$('meDagbokList'))renderMeDagbok();
+}
+
+// ── OFFLINE DECAY (timestamp-based) ──
+function applyOfflineDecay(){
+  const last=parseInt(localStorage.getItem('kv8_lastActive')||'0');
+  if(!last||!G.name)return;
+  const minGone=Math.min((Date.now()-last)/60000,720); // cap at 12 hours
+  if(minGone<2)return;
+  const hungerLoss=Math.floor(minGone/5*2);
+  const energyLoss=Math.floor(minGone/5);
+  if(hungerLoss>0){G.hunger=Math.max(0,(G.hunger||80)-hungerLoss);}
+  if(energyLoss>0){G.energy=Math.max(0,(G.energy||100)-energyLoss);}
+  if(hungerLoss>10||energyLoss>10){
+    const hrs=Math.max(1,Math.floor(minGone/60));
+    save();
+    setTimeout(()=>showT('⏰ '+hrs+'h borta — '+G.petName+' saknade dig! 😢','r'),1200);
+  }
+}
+setInterval(()=>localStorage.setItem('kv8_lastActive',Date.now()),30000);
+
+// ── HIGHSCORE / LEADERBOARD ──
+function saveGameScore(game,score){
+  if(!score||score<=0)return false;
+  if(!G.gameScores)G.gameScores={};
+  const prev=G.gameScores[game]?.best||0;
+  if(score>prev){
+    G.gameScores[game]={best:score,date:new Date().toLocaleDateString('sv-SE')};
+    save();
+    setTimeout(()=>showT('🏆 NY REKORD '+game.toUpperCase()+'! '+score,'y'),200);
+    return true;
+  }
+  return false;
+}
+function getGameBest(game){return G.gameScores?.[game]?.best||0;}
+const _FAKE_LEADERS=[
+  {name:'Mia_T',lv:30,scores:{fish:1840,battle:2100,runner:4200,blocks:1650,dna:24}},
+  {name:'SaraS',lv:22,scores:{fish:1203,battle:980,runner:1890,blocks:1240,dna:18}},
+  {name:'Viktor_M',lv:15,scores:{fish:620,battle:1580,runner:3100,blocks:720,dna:9}},
+  {name:'Alex_K',lv:18,scores:{fish:847,battle:1204,runner:2340,blocks:890,dna:12}},
+  {name:'Denny_J',lv:12,scores:{fish:380,battle:760,runner:1200,blocks:590,dna:6}},
+];
+function openLeaderboard(game){
+  game=game||'runner';
+  const myScore=getGameBest(game);
+  const allPlayers=[..._FAKE_LEADERS,{name:G.name||'Du',lv:G.level,scores:{[game]:myScore}}]
+    .sort((a,b)=>(b.scores[game]||0)-(a.scores[game]||0));
+  const myRank=allPlayers.findIndex(p=>p.name===(G.name||'Du'))+1;
+  const medals=['🥇','🥈','🥉'];
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:1150;background:rgba(0,0,0,.97);overflow-y:auto;padding:20px 16px';
+  const gameNames={fish:'FISKA',battle:'BATTLE',runner:'RUNNER',blocks:'BLOCKS',dna:'DNA MIXER'};
+  ov.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+    <div><div style="font-size:18px;font-weight:900;font-family:var(--mono)">🏆 ${gameNames[game]||game.toUpperCase()} LEADERBOARD</div><div style="font-size:10px;color:var(--t3)">Din ranking: #${myRank} · Best: ${myScore}</div></div>
+    <button onclick="this.closest('div[style]').remove()" style="margin-left:auto;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:6px 12px;color:#fff;cursor:pointer">✕</button>
+  </div>
+  <div style="display:flex;gap:6px;margin-bottom:14px;overflow-x:auto">${['fish','battle','runner','blocks'].map(g=>`<button onclick="document.querySelector('[id=\\'_lb\\']')?.remove();openLeaderboard('${g}')" style="flex-shrink:0;padding:6px 12px;background:${g===game?'rgba(255,215,0,.15)':'rgba(255,255,255,.05)'};border:1.5px solid ${g===game?'var(--y)':'rgba(255,255,255,.1)'};border-radius:8px;color:${g===game?'var(--y)':'var(--t2)'};font-size:11px;font-weight:700;cursor:pointer">${gameNames[g]||g}</button>`).join('')}</div>
+  ${allPlayers.slice(0,10).map((p,i)=>{const isMe=p.name===(G.name||'Du');return`<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:6px;background:${isMe?'rgba(57,255,20,.07)':'rgba(255,255,255,.03)'};border:1.5px solid ${isMe?'var(--g)':'rgba(255,255,255,.07)'};border-radius:12px"><div style="font-size:18px;min-width:26px;text-align:center">${medals[i]||(i+1+'.')}</div><div style="flex:1"><div style="font-weight:900;color:${isMe?'var(--g)':'#fff'};font-size:13px">${p.name}${isMe?' (Du)':''}</div><div style="font-size:9px;color:var(--t3)">LV${p.lv}</div></div><div style="font-family:var(--mono);font-weight:900;font-size:15px;color:var(--y)">${(p.scores[game]||0).toLocaleString()}</div></div>`;}).join('')}`;
+  document.body.appendChild(ov);
+}
+
+// ── BUILDING INCOME SUMMARY ──
+function getBuildingIncome(){
+  const bl=G.castle?.buildings||{};
+  return{coinsPerHour:(bl.farm||0)*8+(bl.market||0)*5+(bl.stable||0)*3+(bl.tower||0)*4,xpBonus:(bl.arena||0)*10};
+}
+function openIncomePanel(){
+  const inc=getBuildingIncome();const bl=G.castle?.buildings||{};
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:1150;background:rgba(0,0,0,.97);overflow-y:auto;padding:20px 16px';
+  const bRows=(typeof CASTLE_BUILDINGS!=='undefined'?CASTLE_BUILDINGS:[]).map(b=>{
+    const lv=bl[b.id]||0;
+    const bonusMap={farm:`+${lv*8}⚡/h`,arena:`+${lv*10}% XP`,market:`+${lv*5}⚡/h`,stable:`+${lv*3}⚡/h`,tower:`+${lv*4}⚡/h`,home:'Slottets hjärta'};
+    return`<div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;margin-bottom:6px"><div style="font-size:28px">${b.em}</div><div style="flex:1"><div style="font-weight:900;color:#fff">${b.nm}</div><div style="font-size:10px;color:var(--t3)">${b.desc||''}</div></div><div style="text-align:right"><div style="font-family:var(--mono);font-weight:900;color:${lv>0?'var(--g)':'var(--t3)'};font-size:12px">${lv>0?(bonusMap[b.id]||'aktiv'):'Ej byggt'}</div><div style="font-size:9px;color:var(--t3)">LV${lv}/5</div></div></div>`;
+  }).join('');
+  ov.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><div style="font-size:18px;font-weight:900;font-family:var(--mono)">📊 IMPERIUM RAPPORT</div><button onclick="this.closest('div[style]').remove()" style="margin-left:auto;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:6px 12px;color:#fff;cursor:pointer">✕</button></div>
+  <div style="background:#0d0d0d;border:2px solid var(--y);border-radius:12px;padding:16px;margin-bottom:14px"><div style="font-size:11px;color:var(--t3);margin-bottom:6px">PASSIV INKOMST</div><div style="font-size:32px;font-weight:900;color:var(--y);font-family:var(--mono)">${inc.coinsPerHour}⚡/h</div>${inc.xpBonus>0?`<div style="font-size:11px;color:var(--g);margin-top:4px">+${inc.xpBonus}% XP-bonus (Arena)</div>`:''}</div>
+  ${bRows}`;
+  document.body.appendChild(ov);
+}
+// Building income tick — every 10 minutes
+let _lastBuildIncome=Date.now();
+setInterval(()=>{
+  if(!G.name)return;
+  const elapsed=(Date.now()-_lastBuildIncome)/3600000;
+  const inc=getBuildingIncome();
+  if(inc.coinsPerHour>0){
+    const earned=Math.floor(inc.coinsPerHour*elapsed);
+    if(earned>0){gainCoins&&gainCoins(earned);_lastBuildIncome=Date.now();showT('🏰 Imperiet +'+earned+'⚡!','y');}
+  }
+},600000);
+
+// ── SEASON SYSTEM ──
+function _getCurrentSeason(){const m=new Date().getMonth();if(m>=2&&m<=4)return'spring';if(m>=5&&m<=7)return'summer';if(m>=8&&m<=10)return'autumn';return'winter';}
+const _SEASON_DATA={
+  spring:{em:'🌸',nm:'VÅR',accent:'57,255,100',floaters:['🌸','🦋','🌱','🌷','🌿','🐝']},
+  summer:{em:'☀️',nm:'SOMMAR',accent:'255,200,10',floaters:['☀️','🌊','🌺','🦈','🌴','🍦']},
+  autumn:{em:'🍂',nm:'HÖST',accent:'255,100,10',floaters:['🍂','🍁','🎃','🍄','🦊','🌾']},
+  winter:{em:'❄️',nm:'VINTER',accent:'100,150,255',floaters:['❄️','⛄','🎄','🌨️','🦌','✨']},
+};
+
+// ── NFT / PET EXPORT ──
+function exportPetNFT(){
+  const data={schema:'karma-pet-v1',name:G.petName||'Unnamed',owner:G.name||'Unknown',emoji:G.petEmoji||'🐉',level:G.level||1,evolutionStage:(typeof gS==='function'?gS()?.s:null)||'Egg',dna:G.petDNA||{body:'base',element:'none',perk:'none'},stats:{hunger:Math.round(G.hunger||80),energy:Math.round(G.energy||100),mood:Math.round(G.mood||90)},ageDays:getPetAge(),petBorn:G.petBirthday?new Date(G.petBirthday).toISOString():'unknown',evolHistory:G.evolHistory||[],streak:G.streak||0,world:G.world||'cosmic',exportedAt:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=(G.petName||'pet').replace(/\s+/g,'_')+'-karma-nft.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+  showT('📄 '+(G.petName||'pet')+'-karma-nft.json exporterad!','g');
+  addDiaryEntry&&addDiaryEntry('Exporterade '+G.petName+' som NFT-data! 🎨');
+}
+
+// ── PWA / BROWSER NOTIFICATIONS ──
+function requestPushPermission(){
+  if(!('Notification' in window)){showT('🔔 Notiser stöds ej i denna webbläsare','r');return;}
+  if(Notification.permission==='granted'){showT('🔔 Notiser redan aktiverade! ✅','g');G._notifOn=true;save();return;}
+  Notification.requestPermission().then(p=>{if(p==='granted'){showT('🔔 Notiser aktiverade! ✅','g');G._notifOn=true;save();}else showT('🔕 Notiser nekades','r');});
+}
+function _sendPushNotif(title,body){
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+  if(document.visibilityState==='visible')return;
+  try{new Notification(title,{body,icon:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">'+encodeURIComponent(G.petEmoji||'🐉')+'</text></svg>'});}catch(e){}
+}
+setInterval(()=>{
+  if(!G.name||document.visibilityState==='visible')return;
+  const h=Math.round(G.hunger||80);const e=Math.round(G.energy||100);
+  if(h<25)_sendPushNotif('KARMA 🍕',G.petName+' är hungrig! Mata nu! 🍖');
+  else if(e<20)_sendPushNotif('KARMA 😴',G.petName+' är trött! Låt den sova! 💤');
+  else if(G.petSick)_sendPushNotif('KARMA 🤒',G.petName+' är sjuk! Ge medicin! 💊');
+},300000);
+
+// ── WEEKLY TOURNAMENT ──
+function _getWeekKey(){const d=new Date();return d.getFullYear()+'-W'+Math.floor((d-new Date(d.getFullYear(),0,1))/604800000);}
+function saveWeeklyScore(game,score){
+  if(!score||score<=0)return;
+  const wk=_getWeekKey();
+  if(!G.weeklyTournament)G.weeklyTournament={};
+  if(G.weeklyTournament.week!==wk){G.weeklyTournament={week:wk,scores:{}};}
+  const prev=G.weeklyTournament.scores[game]||0;
+  if(score>prev){G.weeklyTournament.scores[game]=score;save();}
+}
+function openWeeklyTournament(){
+  const wk=_getWeekKey();
+  if(!G.weeklyTournament||G.weeklyTournament.week!==wk)G.weeklyTournament={week:wk,scores:{}};
+  const games=['fish','battle','runner','blocks'];
+  const gn={fish:'FISKA',battle:'BATTLE',runner:'RUNNER',blocks:'BLOCKS'};
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:1150;background:rgba(0,0,0,.97);overflow-y:auto;padding:20px 16px';
+  ov.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><div style="font-size:18px;font-weight:900;font-family:var(--mono)">🏆 VECKANS TURNERING</div><button onclick="this.closest('div[style]').remove()" style="margin-left:auto;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:6px 12px;color:#fff;cursor:pointer">✕</button></div>
+  <div style="font-size:10px;color:var(--t3);margin-bottom:14px">Vecka ${wk} — Topp 1 vinner 500⚡ + special-badge! 🏅</div>
+  ${games.map(g=>{
+    const myScore=G.weeklyTournament.scores?.[g]||0;
+    const leaders=[..._FAKE_LEADERS].sort((a,b)=>(b.scores[g]||0)-(a.scores[g]||0)).slice(0,3);
+    return`<div style="background:rgba(255,255,255,.03);border:1.5px solid rgba(255,255,255,.1);border-radius:14px;padding:12px;margin-bottom:10px"><div style="font-size:12px;font-weight:900;margin-bottom:8px;color:var(--y)">${gn[g]||g}</div>${leaders.map((p,i)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span>${['🥇','🥈','🥉'][i]}</span><span style="flex:1;font-size:11px">${p.name}</span><span style="font-family:var(--mono);font-size:11px;color:var(--t2)">${p.scores[g]||0}</span></div>`).join('')}<div style="display:flex;align-items:center;gap:8px;margin-top:7px;padding-top:7px;border-top:1px solid rgba(255,255,255,.06)"><span>👤</span><span style="flex:1;font-size:11px;color:var(--g)">${G.name||'Du'} (Du)</span><span style="font-family:var(--mono);font-size:11px;color:var(--g)">${myScore}</span></div></div>`;
+  }).join('')}`;
+  document.body.appendChild(ov);
+}
+
+// ── PET PROFILE CARD ──
+function openPetProfileCard(){
+  const stg=typeof gS==='function'?gS():null;
+  const inc=getBuildingIncome();
+  const wld=G.world||'cosmic';
+  const wc={cosmic:'135deg,#0d0520 0%,#07040f 100%',nature:'135deg,#041a04 0%,#030d03 100%',city:'135deg,#04060f 0%,#020416 100%',pixel:'135deg,#0a0800 0%,#060500 100%'};
+  const ov=document.createElement('div');ov.id='petProfileCard';
+  ov.style.cssText='position:fixed;inset:0;z-index:1200;background:rgba(0,0,0,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
+  const szn=typeof _getCurrentSeason==='function'?_getCurrentSeason():'winter';
+  const sznEm=typeof _SEASON_DATA!=='undefined'?(_SEASON_DATA[szn]?.em||''):'';
+  ov.innerHTML=`
+    <div style="width:100%;max-width:340px;background:linear-gradient(${wc[wld]||wc.cosmic});border:3px solid var(--y);border-radius:24px;box-shadow:8px 8px 0 var(--y),0 0 40px rgba(255,215,0,.15);padding:24px;position:relative">
+      <div style="text-align:center;margin-bottom:18px">
+        <div style="font-size:72px;margin-bottom:8px">${G.petEmoji||'🐉'}${G.petSick?'🤒':''}</div>
+        <div style="font-size:22px;font-weight:900;font-family:var(--mono)">${G.petName||'Ditt Pet'}</div>
+        <div style="font-size:11px;color:var(--y);margin-top:5px">@${G.name||'Spelaren'} · ${getPetAgeLabel()} ${sznEm}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+        <div style="background:rgba(255,255,255,.06);border-radius:12px;padding:10px;text-align:center"><div style="font-size:22px;font-weight:900;color:var(--g);font-family:var(--mono)">LV${G.level}</div><div style="font-size:8px;color:var(--t3)">LEVEL</div></div>
+        <div style="background:rgba(255,255,255,.06);border-radius:12px;padding:10px;text-align:center"><div style="font-size:14px;font-weight:900;color:var(--p);font-family:var(--mono)">${stg?.s||'Ägg'}</div><div style="font-size:8px;color:var(--t3)">EVOLUTION</div></div>
+        <div style="background:rgba(255,255,255,.06);border-radius:12px;padding:10px;text-align:center"><div style="font-size:22px;font-weight:900;color:var(--o);font-family:var(--mono)">${G.streak||0}🔥</div><div style="font-size:8px;color:var(--t3)">STREAK</div></div>
+        <div style="background:rgba(255,255,255,.06);border-radius:12px;padding:10px;text-align:center"><div style="font-size:22px;font-weight:900;color:var(--b);font-family:var(--mono)">${Math.round(G.mood||90)}%</div><div style="font-size:8px;color:var(--t3)">MOOD</div></div>
+      </div>
+      ${(G.evolHistory||[]).length>0?`<div style="margin-bottom:14px"><div style="font-size:8px;color:var(--t3);margin-bottom:6px;font-family:var(--mono)">EVOLUTIONSHISTORIK</div><div style="display:flex;gap:6px;flex-wrap:wrap">${(G.evolHistory||[]).map(h=>`<div style="background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:8px;padding:5px 7px;text-align:center"><div style="font-size:16px">${h.em}</div><div style="font-size:7px;color:var(--y);font-family:var(--mono)">${h.stage}</div></div>`).join('')}</div></div>`:''}
+      <div style="background:rgba(255,255,255,.04);border-radius:12px;padding:10px 12px;margin-bottom:16px">
+        <div style="font-size:9px;color:var(--t3);margin-bottom:4px">DNA · ${wld.toUpperCase()} · ${inc.coinsPerHour}⚡/h</div>
+        <div style="font-size:11px;color:var(--t2)">${G.petDNA?.body||'basis'} · ${G.petDNA?.element||'none'} · ${G.petDNA?.perk||'none'}</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="_sharePetCard()" style="flex:1;background:rgba(57,255,20,.1);border:2px solid var(--g);border-radius:12px;padding:12px;font-size:13px;font-weight:900;color:var(--g);cursor:pointer;font-family:var(--mono)">📤 DELA</button>
+        <button onclick="exportPetNFT()" style="flex:1;background:rgba(191,95,255,.1);border:2px solid var(--p);border-radius:12px;padding:12px;font-size:13px;font-weight:900;color:var(--p);cursor:pointer;font-family:var(--mono)">📄 NFT</button>
+        ${G.petSick?`<button onclick="healPet();document.getElementById('petProfileCard')?.remove()" style="flex:1;background:rgba(255,0,100,.1);border:2px solid #ff3366;border-radius:12px;padding:12px;font-size:13px;font-weight:900;color:#ff3366;cursor:pointer">💊 LÄKARE</button>`:''}
+        <button onclick="document.getElementById('petProfileCard')?.remove()" style="background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.15);border-radius:12px;padding:12px 14px;color:var(--t2);cursor:pointer;font-size:14px">✕</button>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:10px;color:rgba(255,255,255,.28);font-family:var(--mono)">KARMA APP · Made with ⚡</div>`;
+  document.body.appendChild(ov);
+}
+function _sharePetCard(){
+  const stg=typeof gS==='function'?gS():null;
+  const txt='⚡ '+G.petName+' på KARMA!\n'+G.petEmoji+' '+(stg?.s||'Ägg')+' · LV'+G.level+'\n🔥 '+G.streak+'d streak · 😊 '+Math.round(G.mood||90)+'% mood\n'+getPetAgeLabel()+'\nReal life. Game engine.';
+  if(navigator.share)navigator.share({title:'KARMA Pet — '+G.petName,text:txt});
+  else{navigator.clipboard?.writeText(txt);showT('📋 Kopierat! Klistra in var du vill 📱','g');}
+}
+
+// ── PET QUIZ MINIGAME ──
+const _PQ=[
+  {q:'Vad kostar det att mata ditt pet?',o:['5⚡','10⚡','20⚡','Gratis'],a:1},
+  {q:'Vilken evolution-stage är "Prime"?',o:['Stage 3','Stage 4','Stage 5','Stage 6'],a:2},
+  {q:'Vad händer om hunger < 20 i 30 min?',o:['Pet somnar','Pet blir sjuk','Pet försvinner','Ingenting'],a:1},
+  {q:'Vilket är det starkaste slottet-emoji?',o:['🏚️','🏡','🗼','🏠'],a:2},
+  {q:'Vad ger Arena-byggnaden för bonus?',o:['+coins/h','+XP-bonus','Healing','DNA-fragment'],a:1},
+  {q:'Hur länge laddar Sova-action (CD)?',o:['30 min','45 min','60 min','90 min'],a:2},
+  {q:'Vad är KARMA World-valutan?',o:['SEK','KP','⚡','WP'],a:2},
+  {q:'Vilken world-theme ger grön accent-färg?',o:['Cosmic','Nature','City','Pixel'],a:1},
+  {q:'Hur många evolution-stages finns totalt?',o:['4','6','7','8'],a:3},
+  {q:'Vad ger Gacha-hjulet (daily)?',o:['Coins','DNA-fragment','Båda möjliga','Gear'],a:2},
+  {q:'Vilken care-action ger mest energi (+50)?',o:['Mata','Leka','Sova','Bada'],a:2},
+  {q:'Vad är max level för byggnaderna?',o:['3','5','8','10'],a:1},
+  {q:'Var hittar du Pet Quiz-spelet?',o:['Me-tab','Home-tab','SPELA-tab','World-tab'],a:2},
+  {q:'Vilken byggnad ger mest +coins/h per level?',o:['Torn','Stall','Gård','Marknad'],a:2},
+];
+let _pqActive=false,_pqQs=[],_pqIdx=0,_pqScore=0;
+function openPetQuiz(){
+  const today=new Date().toDateString();
+  if(localStorage.getItem('kv8_lastQuiz')===today){showT('📚 Quiz klart för idag! Kom tillbaka imorgon 📅','y');return;}
+  _pqActive=true;
+  _pqQs=[..._PQ].sort(()=>Math.random()-.5).slice(0,5);
+  _pqIdx=0;_pqScore=0;
+  _renderPQ();
+}
+function _renderPQ(){
+  const q=_pqQs[_pqIdx];if(!q){_finishPQ();return;}
+  let ov=$('petQuizOv');
+  if(!ov){ov=document.createElement('div');ov.id='petQuizOv';document.body.appendChild(ov);}
+  ov.style.cssText='position:fixed;inset:0;z-index:1200;background:rgba(0,0,0,.98);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px';
+  ov.innerHTML=`<div style="width:100%;max-width:370px">
+    <div style="display:flex;align-items:center;margin-bottom:16px"><div style="font-size:16px;font-weight:900;font-family:var(--mono)">📚 PET QUIZ</div><div style="margin-left:auto;background:rgba(255,255,255,.08);padding:4px 10px;border-radius:6px;font-size:11px;font-family:var(--mono)">${_pqIdx+1}/5 · ${_pqScore}pt</div></div>
+    <div style="background:rgba(255,255,255,.04);border:2px solid var(--b);border-radius:16px;padding:20px;margin-bottom:16px"><div style="font-size:15px;font-weight:700;color:#fff;line-height:1.4">${q.q}</div></div>
+    <div style="display:flex;flex-direction:column;gap:8px">${q.o.map((o,i)=>`<button onclick="_answerPQ(${i})" style="background:rgba(255,255,255,.04);border:2px solid rgba(255,255,255,.12);border-radius:12px;padding:13px 16px;text-align:left;font-size:13px;color:#fff;cursor:pointer;font-family:var(--ff);transition:background .15s">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>
+  </div>`;
+}
+function _answerPQ(idx){
+  const q=_pqQs[_pqIdx];if(!q)return;
+  if(idx===q.a)_pqScore++;
+  const ov=$('petQuizOv');if(!ov)return;
+  const btns=ov.querySelectorAll('button');
+  btns.forEach((b,i)=>{b.style.pointerEvents='none';if(i===q.a)b.style.borderColor='var(--g)';if(i===idx&&idx!==q.a)b.style.borderColor='#ff3366';});
+  setTimeout(()=>{_pqIdx++;_renderPQ();},850);
+}
+function _finishPQ(){
+  _pqActive=false;
+  localStorage.setItem('kv8_lastQuiz',new Date().toDateString());
+  const reward=_pqScore*15+(_pqScore===5?100:0);
+  gainCoins&&gainCoins(reward);gainXP&&gainXP(_pqScore*10,'action');
+  const ov=$('petQuizOv');if(!ov)return;
+  ov.innerHTML=`<div style="text-align:center;padding:20px;max-width:320px;margin:auto">
+    <div style="font-size:66px;margin-bottom:14px">${_pqScore===5?'🏆':_pqScore>=3?'🎉':'📚'}</div>
+    <div style="font-size:24px;font-weight:900;font-family:var(--mono);margin-bottom:8px">${_pqScore}/5 RÄTT!</div>
+    <div style="font-size:15px;color:var(--y);margin-bottom:6px">+${reward}⚡ · +${_pqScore*10}XP</div>
+    <div style="font-size:12px;color:var(--t3);margin-bottom:24px">${_pqScore===5?'🌟 PERFEKT! Kom tillbaka imorgon!':_pqScore>=3?'Bra jobbat! Öva mer!':'Läs på appen och försök imorgon!'}</div>
+    <button onclick="document.getElementById('petQuizOv').remove()" style="background:rgba(57,255,20,.12);border:2px solid var(--g);border-radius:12px;padding:14px 32px;font-size:14px;font-weight:900;color:var(--g);cursor:pointer;font-family:var(--mono)">✅ KLAR</button>
+  </div>`;
+  if(_pqScore===5)spawnParticles&&spawnParticles(window.innerWidth/2,window.innerHeight*.4,'stars');
+  addDiaryEntry&&addDiaryEntry('Klarade Pet Quiz med '+_pqScore+'/5! +'+reward+'⚡ +'+(_pqScore*10)+'XP 📚');
+}
+
+// ── STARTUP HOOKS ──
+// Apply offline decay on first load
+setTimeout(()=>{if(G.name){applyOfflineDecay();checkPetSick();}},900);
+// Initialize pet birthday if missing
+setTimeout(()=>{
+  if(G.name&&!G.petBirthday){
+    G.petBirthday=Date.now()-Math.max(0,(G.level||1)-1)*43200000; // estimate based on level
+    save();
+  }
+  // Request notif permission on 3rd+ session
+  if(G.name&&!G._notifOn&&parseInt(localStorage.getItem('kv8_sc')||'0')>2){
+    requestPushPermission();
+  }
+},2000);
+// Sick check timer every 90 seconds
+setInterval(checkPetSick,90000);
+
 </script>
 </body>
 </html>
