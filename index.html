@@ -3733,12 +3733,28 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
           <div class="xgame-info"><div class="xgame-nm">FÅNGA PETS</div><div class="xgame-sub">Judgment Ring ⭕</div><div class="xgame-rew">+XP +WP</div></div>
           <div class="game-live-ct" id="liveCtPets">89 live</div>
         </div>
-        <div class="xgame-card" style="position:relative" onclick="openBattle()">
+        <div class="xgame-card" style="position:relative" onclick="openBossBattle()">
           <div class="hot-badge">🏆 TOP</div>
           <div class="game-score-badge" id="scoreBadge_boss">🏆 0</div>
-          <div class="xgame-banner" style="background:linear-gradient(135deg,#1a0a00,#331500)">⚔️</div>
-          <div class="xgame-info"><div class="xgame-nm">BOSS BATTLE</div><div class="xgame-sub">Epic boss fights</div><div class="xgame-rew">+COINS +XP</div></div>
+          <div class="xgame-banner" style="background:linear-gradient(135deg,#1a0000,#3d0000)">👹</div>
+          <div class="xgame-info"><div class="xgame-nm">BOSS BATTLE</div><div class="xgame-sub">SKULL LORD · THUNDER GOD</div><div class="xgame-rew">3× BELÖNING</div></div>
           <div class="game-live-ct" id="liveCtBoss">512 live</div>
+        </div>
+        <div class="xgame-card" style="position:relative" onclick="openPetRunner()">
+          <div class="game-score-badge" id="scoreBadge_runner_x">🏆 0</div>
+          <div class="xgame-banner" style="background:linear-gradient(135deg,#000420,#010830)">🏃</div>
+          <div class="xgame-info"><div class="xgame-nm">RUNNER</div><div class="xgame-sub">Endless runner</div><div class="xgame-rew">+XP +COINS</div></div>
+          <div class="game-live-ct">LIVE</div>
+        </div>
+        <div class="xgame-card" style="position:relative" onclick="openPetBlocks()">
+          <div class="xgame-banner" style="background:linear-gradient(135deg,#001800,#002800)">🟩</div>
+          <div class="xgame-info"><div class="xgame-nm">BLOCKS</div><div class="xgame-sub">Pet Tetris</div><div class="xgame-rew">+XP</div></div>
+          <div class="game-live-ct">LIVE</div>
+        </div>
+        <div class="xgame-card" style="position:relative" onclick="openDNAMixer()">
+          <div class="xgame-banner" style="background:linear-gradient(135deg,#0a0022,#130035)">🧬</div>
+          <div class="xgame-info"><div class="xgame-nm">DNA MIXER</div><div class="xgame-sub">Hybridisera pets</div><div class="xgame-rew">+XP +DNA</div></div>
+          <div class="game-live-ct">LIVE</div>
         </div>
         <div class="xgame-card" style="position:relative" onclick="openPetQuiz()">
           <div class="hot-badge">📚 NY</div>
@@ -5598,6 +5614,20 @@ function closeBattle(){
   closeJudgmentRing&&closeJudgmentRing();
 }
 
+function openBossBattle(){
+  _bt={active:false,wave:4,eHp:0,eMax:0,pHp:100,pMax:100,pMp:80,pMaxMp:80,
+       blocking:false,dodging:false,enemy:null,combo:0,fusionReady:false,
+       statusPlayer:null,statusEnemy:null,statusTimer:null,ePhase:0,
+       pendingAtk:null,turnsWon:0,totalDmgDealt:0,earnedXp:0,earnedCoins:0,
+       _bossMode:true};
+  $('baVictory').style.display='none';
+  $('baDefeat').style.display='none';
+  startBattleWave();
+  $('battleArena').classList.add('open');
+  showT('👹 BOSS BATTLE! Skull Lord väntar · 3× belöning!','r');
+  SFX.battle&&SFX.battle();vibe([50,20,100,20,200,50,300]);
+}
+
 function startBattleWave(){
   const e=BATTLE_ENEMIES[Math.min(_bt.wave-1,BATTLE_ENEMIES.length-1)];
   _bt.enemy=e;_bt.eHp=e.maxHp;_bt.eMax=e.maxHp;_bt.active=true;
@@ -6019,6 +6049,7 @@ function battleWin(){
 
 function _baFinalRewards(){
   let xp=_bt.earnedXp,coins=_bt.earnedCoins;
+  if(_bt._bossMode){xp=Math.round(xp*3);coins=Math.round(coins*3);}
   // K7a Warlord: battle rewards ×3
   if(G._talentK7a){xp=Math.round(xp*3);coins=Math.round(coins*3);}
   // K6b Fortress: heal 20% of max HP per win
@@ -6109,7 +6140,7 @@ function cp(n){const d=document.createElement('div');d.className='cpop';d.textCo
 function sa(sel,el){document.querySelectorAll(sel+' .topt').forEach(x=>x.className='topt');el.classList.add('on');}
 function dist(la1,lo1,la2,lo2){const R=6371e3,f1=la1*Math.PI/180,f2=la2*Math.PI/180,df=(la2-la1)*Math.PI/180,dl=(lo2-lo1)*Math.PI/180;const a=Math.sin(df/2)**2+Math.cos(f1)*Math.cos(f2)*Math.sin(dl/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
 function fmtD(m){return m<1000?Math.round(m)+'m':+(m/1000).toFixed(1)+'km';}
-function save(){try{const d={n:G.name,p:G.petEmoji,pn:G.petName,l:G.level,c:G.coins,st:G.streak,x:G.exp,as:G.actionStat,cs:G.commerceStat,ss:G.socialStat,g:JSON.stringify(G.gear),eg:G.equippedGear||'',sek:G.totalSEK,ts:G.trustScore,posts:G.postCount,b:G.bountiesDone,hu:G.hunger,en:G.energy,mo:G.mood,brands:JSON.stringify(G.brands),circles:JSON.stringify(G.circles),sw:JSON.stringify(G.streakWeek),petCfg:JSON.stringify(G.petConfig),pm:G.premium?1:0,pt:G.premiumTier,wld:G.world,bond:JSON.stringify(G.todayBond),bdate:G.bondDate,wp:G.worldPoints,bz:JSON.stringify(G.builtZones),wpc:G.wildPetsCaught,wflash:G.wldFlash,wbattle:G.wldBattle,wmarket:G.wldMarket,wstreak:G.wldStreak,wsocial:G.wldSocial,po:G.packsOpened,col:JSON.stringify(G.collectibles),tp:G.talentPoints,tl:JSON.stringify(G.talents),tlvl:JSON.stringify(G.talentLvls||{}),diary:JSON.stringify(G.diaryEntries.slice(-20)),ls:G.lastSpin,ltt:G.lastTalkTime||0,lwb:G.lastWpBoost||0,castle:JSON.stringify(G.castle||{}),ownedZones:JSON.stringify(G.ownedZones||[]),terrLastIncome:JSON.stringify(G.terrLastIncome||{}),dnaMixes:JSON.stringify(G.dnaMixes||[]),lastFortune:G.lastFortune||'',lft:G.lastFlashTime||0,lfd:G.lastFlashDate||'',pdna:JSON.stringify(G.petDNA||{body:'base',element:'none',perk:'none'}),dinv:JSON.stringify(G.dnaInventory||[]),pmem:JSON.stringify(G.petMemory||{}),expd:JSON.stringify(G.expedition||{})};for(const k in d)localStorage.setItem('kv8_'+k,d[k]);localStorage.setItem('kv8_lastFortune',G.lastFortune||'');}catch(e){}sbQueueSync();}
+function save(){try{const d={n:G.name,p:G.petEmoji,pn:G.petName,l:G.level,c:G.coins,st:G.streak,x:G.exp,as:G.actionStat,cs:G.commerceStat,ss:G.socialStat,g:JSON.stringify(G.gear),eg:G.equippedGear||'',sek:G.totalSEK,ts:G.trustScore,posts:G.postCount,b:G.bountiesDone,hu:G.hunger,en:G.energy,mo:G.mood,brands:JSON.stringify(G.brands),circles:JSON.stringify(G.circles),sw:JSON.stringify(G.streakWeek),petCfg:JSON.stringify(G.petConfig),pm:G.premium?1:0,pt:G.premiumTier,wld:G.world,bond:JSON.stringify(G.todayBond),bdate:G.bondDate,wp:G.worldPoints,bz:JSON.stringify(G.builtZones),wpc:G.wildPetsCaught,wflash:G.wldFlash,wbattle:G.wldBattle,wmarket:G.wldMarket,wstreak:G.wldStreak,wsocial:G.wldSocial,po:G.packsOpened,col:JSON.stringify(G.collectibles),tp:G.talentPoints,tl:JSON.stringify(G.talents),tlvl:JSON.stringify(G.talentLvls||{}),diary:JSON.stringify(G.diaryEntries.slice(-20)),ls:G.lastSpin,ltt:G.lastTalkTime||0,lwb:G.lastWpBoost||0,castle:JSON.stringify(G.castle||{}),ownedZones:JSON.stringify(G.ownedZones||[]),terrLastIncome:JSON.stringify(G.terrLastIncome||{}),dnaMixes:JSON.stringify(G.dnaMixes||[]),lastFortune:G.lastFortune||'',lft:G.lastFlashTime||0,lfd:G.lastFlashDate||'',pdna:JSON.stringify(G.petDNA||{body:'base',element:'none',perk:'none'}),dinv:JSON.stringify(G.dnaInventory||[]),pmem:JSON.stringify(G.petMemory||{}),expd:JSON.stringify(G.expedition||{}),strs:JSON.stringify((G.petStories||[]).slice(0,20)),vrl:G.viralUntil||0,pvb:G.petVibe||'',dlog:JSON.stringify((G.dramaLog||[]).slice(0,20)),pbday:G.petBirthday||0,psick:G.petSick?1:0,ssince:G.sickSince||0,evhist:JSON.stringify((G.evolHistory||[]).slice(0,10)),gscores:JSON.stringify(G.gameScores||{}),wtrn:JSON.stringify(G.weeklyTournament||{}),lfdc:G._lastFeed||0,lsdc:G._lastSleep||0,lpdc:G._lastPlay||0,lbdc:G._lastBath||0};for(const k in d)localStorage.setItem('kv8_'+k,d[k]);localStorage.setItem('kv8_lastFortune',G.lastFortune||'');}catch(e){}sbQueueSync();}
 
 // ── DNA + MOOD SYSTEM ──
 function getPetDNA(){
@@ -14278,6 +14309,21 @@ function _loadFromLocalStorage(){
     G.lastFlashDate=localStorage.getItem('kv8_lfd')||'';
     try{const pm=localStorage.getItem('kv8_pmem');if(pm)G.petMemory=JSON.parse(pm);}catch(e){}
     try{const ex=localStorage.getItem('kv8_expd');if(ex)G.expedition=JSON.parse(ex);}catch(e){}
+    // Load new KARMA VIRAL ENGINE fields
+    try{const strs=localStorage.getItem('kv8_strs');if(strs)G.petStories=JSON.parse(strs);}catch(e){}
+    G.viralUntil=parseInt(localStorage.getItem('kv8_vrl')||'0');
+    G.petVibe=localStorage.getItem('kv8_pvb')||null;
+    try{const dl=localStorage.getItem('kv8_dlog');if(dl)G.dramaLog=JSON.parse(dl);}catch(e){}
+    G.petBirthday=parseInt(localStorage.getItem('kv8_pbday')||'0');
+    G.petSick=localStorage.getItem('kv8_psick')==='1';
+    G.sickSince=parseInt(localStorage.getItem('kv8_ssince')||'0');
+    try{const evh=localStorage.getItem('kv8_evhist');if(evh)G.evolHistory=JSON.parse(evh);}catch(e){}
+    try{const gs=localStorage.getItem('kv8_gscores');if(gs)G.gameScores=JSON.parse(gs);}catch(e){}
+    try{const wt=localStorage.getItem('kv8_wtrn');if(wt)G.weeklyTournament=JSON.parse(wt);}catch(e){}
+    G._lastFeed=parseInt(localStorage.getItem('kv8_lfdc')||'0');
+    G._lastSleep=parseInt(localStorage.getItem('kv8_lsdc')||'0');
+    G._lastPlay=parseInt(localStorage.getItem('kv8_lpdc')||'0');
+    G._lastBath=parseInt(localStorage.getItem('kv8_lbdc')||'0');
     const _today=new Date().toDateString();const _last=localStorage.getItem('kv8_lastLogin');
     if(_last!==_today){localStorage.setItem('kv8_lastLogin',_today);if(_last){const _b=G.premium?300:75;G.coins+=_b;
       if(G._talentS4b)setTimeout(()=>{gainXP(20,'social');showT('🤝 HYPE BUILDER! +20 XP login bonus','pk');},3200);
