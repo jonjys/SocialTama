@@ -1016,6 +1016,25 @@ button:active{opacity:.85;}
 .chb-cd-bar{position:absolute;bottom:0;left:0;height:3px;background:rgba(255,255,255,.22);border-radius:0 0 6px 6px;width:100%;transition:none;}
 .chb-cd-bar::after{content:'';position:absolute;inset:0;background:var(--chb-col,rgba(57,255,20,.7));border-radius:inherit;transform-origin:left;transition:transform .9s linear;}
 .chb.on-cd{opacity:.62;}
+/* ══ KARMA VIRAL ENGINE ══ */
+@keyframes storyRingRot{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes storyRingPop{0%,100%{opacity:.9}50%{opacity:1}}
+.story-ring{position:absolute;inset:-7px;border-radius:50%;z-index:0;pointer-events:all;cursor:pointer;display:none;}
+.story-ring.active{display:block;}
+.story-ring::before{content:'';position:absolute;inset:0;border-radius:50%;background:conic-gradient(#FF007F 0%,#FF9F0A 20%,#FFE600 40%,#39FF14 60%,#00D9FF 80%,#BF5FFF 92%,#FF007F 100%);animation:storyRingRot 3s linear infinite,storyRingPop 1.8s ease-in-out infinite;}
+.story-ring::after{content:'';position:absolute;inset:5px;border-radius:50%;background:var(--c1,#0a0a0f);}
+.story-ring-badge{position:absolute;top:-2px;right:-2px;width:16px;height:16px;background:#FF3B30;border-radius:50%;border:2px solid #0a0a0f;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#fff;z-index:10;display:none;}
+.story-ring-badge.show{display:flex;}
+.pc-b{position:relative;}
+.pc-b.has-stories::before{content:'';position:absolute;inset:-4px;border-radius:50%;background:conic-gradient(#FF007F,#FF9F0A,#FFE600,#39FF14,#00D9FF,#BF5FFF,#FF007F);animation:storyRingRot 3s linear infinite;z-index:-1;}
+.pc-b.has-stories::after{content:'';position:absolute;inset:-1px;border-radius:50%;background:var(--c1,#0a0a0f);z-index:-1;}
+@keyframes viralSlide{from{opacity:0;transform:translateX(-50%) translateY(-12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.viral-badge{position:fixed;top:54px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#FF3B30,#FF6B00);border:2px solid #FFE600;border-radius:20px;padding:5px 16px;font-size:11px;font-weight:900;color:#fff;font-family:var(--mono);z-index:400;letter-spacing:.06em;display:none;box-shadow:0 0 24px rgba(255,80,0,.65);animation:viralSlide .4s cubic-bezier(.34,1.56,.64,1);}
+.drama-choice{display:block;width:100%;text-align:left;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;font-size:12px;color:#fff;font-family:var(--mono);}
+.drama-choice:active{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.35);}
+.story-prog-bar{height:3px;flex:1;background:rgba(255,255,255,.25);border-radius:2px;overflow:hidden;}
+.story-prog-fill{height:100%;background:#fff;border-radius:2px;width:0;}
+.story-react-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:50%;width:46px;height:46px;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .nb{position:relative;}
 .nb.on[data-v="home"]::before{content:'';position:absolute;top:0;left:6px;right:6px;height:2.5px;background:#39FF14;box-shadow:0 0 8px #39FF14,0 0 18px rgba(57,255,20,.6);border-radius:0 0 3px 3px;}
 .nb.on[data-v="play"]::before{content:'';position:absolute;top:0;left:6px;right:6px;height:2.5px;background:var(--o);box-shadow:0 0 8px var(--o),0 0 18px rgba(255,159,10,.6);border-radius:0 0 3px 3px;}
@@ -2832,6 +2851,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
 </div>
 
 <!-- APP -->
+<div id="viralBadge" class="viral-badge" onclick="openVibeAndDrama()">🔥 TRENDAR</div>
 <div class="app" id="app">
   <div class="tb">
     <button class="tb-ham" onclick="openLDrawer()"><span></span><span></span><span></span></button>
@@ -2908,6 +2928,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
         <!-- CENTER: Big pet emoji -->
         <div style="display:flex;flex-direction:column;align-items:center;padding:10px 14px 6px;position:relative;z-index:2">
           <div id="petAvWrap" style="position:relative;width:110px;height:110px;cursor:pointer;margin-bottom:8px" onclick="onPetTap(event)">
+            <div class="story-ring" id="petStoryRing" onclick="event.stopPropagation();openPetStories()"><div class="story-ring-badge" id="storyBadge"></div></div>
             <div id="petHeroEmoji" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:72px;z-index:1;filter:drop-shadow(0 0 22px rgba(57,255,20,.7));animation:petBob 2.5s ease-in-out infinite">🐉</div>
             <div class="pet-aura" id="petAura" style="z-index:3"></div>
             <div style="position:absolute;inset:0;border-radius:50%;border:2.5px solid rgba(57,255,20,.5);animation:ringPulse 3s ease-in-out infinite;z-index:2;pointer-events:none"></div>
@@ -2989,7 +3010,10 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
       <!-- CARE BUTTONS -->
       <div style="display:flex;align-items:center;justify-content:space-between;padding:3px 14px 4px">
         <div class="care-section-lbl" style="padding:0">🎮 SKÖT DIN PET <span id="careComboLabel" style="font-size:7px;background:var(--pk);color:#000;border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:900;display:none">COMBO!</span></div>
-        <button id="expedBtn" onclick="openExpedition()" style="background:rgba(0,217,255,.08);border:1.5px solid rgba(0,217,255,.35);border-radius:10px;padding:4px 10px;color:var(--b);font-size:10px;font-weight:900;cursor:pointer;font-family:var(--mono)">🗺️ EXPEDITION</button>
+        <div style="display:flex;gap:6px">
+          <button onclick="openVibeAndDrama()" style="background:rgba(255,0,127,.1);border:1.5px solid rgba(255,0,127,.35);border-radius:10px;padding:4px 9px;color:var(--pk);font-size:10px;font-weight:900;cursor:pointer;font-family:var(--mono)">🎭 STAGE</button>
+          <button id="expedBtn" onclick="openExpedition()" style="background:rgba(0,217,255,.08);border:1.5px solid rgba(0,217,255,.35);border-radius:10px;padding:4px 10px;color:var(--b);font-size:10px;font-weight:900;cursor:pointer;font-family:var(--mono)">🗺️ EXPEDITION</button>
+        </div>
       </div>
       <div class="care-hero">
         <div class="chb chb-feed" id="chbFeed" onclick="pcFeed()" style="--chb-col:rgba(255,159,10,.45);position:relative"><span class="chb-ico">🍖</span><span class="chb-lbl">MATA</span><span class="chb-val" id="chbValFeed">+HUN</span><div class="chb-cd-bar" id="cdBarFeed"></div></div>
@@ -4947,6 +4971,7 @@ const G={
   expedition:{active:false,id:null,startTime:0,endTime:0},
   petBirthday:0,petSick:false,sickSince:0,
   evolHistory:[],gameScores:{},weeklyTournament:{week:'',scores:{}},
+  petStories:[],viralUntil:0,petVibe:null,dramaLog:[],
   _notifOn:false,
 };
 
@@ -6684,6 +6709,7 @@ function performDnaSplice(){
   else{vibe([100,30,200]);SFX.error();}
   spawnParticles(window.innerWidth/2,window.innerHeight*.5,'stars');
   if(!isGlitch&&typeof _runEvolConfetti==='function')_runEvolConfetti();
+  if(typeof addPetStory==='function')addPetStory('dna');
   showT(isGlitch?'⚠️ Glitch Monster! Instabil mutation!':'🧬 SPLICE LYCKADES! +40XP',isGlitch?'r':'g');
 }
 // ── EXPLORE FEED ──
@@ -8012,7 +8038,7 @@ function submitFlash(){
     G.lastFlashDate = todayStr;
   }
   const cap=$('flashCaption').value.trim();if(!G.flashImg&&!cap){showT('❌ Lägg till video eller text','r');return;}
-  if(!alreadyPostedToday){G.streak++;G.postCount++;}
+  if(!alreadyPostedToday){G.streak++;G.postCount++;if(typeof addPetStory==='function')addPetStory('happy');if(typeof _triggerViral==='function'&&G.streak>0&&G.streak%7===0)_triggerViral();else if(typeof _triggerViral==='function'&&Math.random()<0.08)_triggerViral();}
   const day=new Date().getDay();G.streakWeek[day===0?6:day-1]=true;
   // Add to local mock feed immediately (optimistic)
   FLASH_POSTS.unshift({id:'fl'+Date.now(),user:G.name||'Du',pet:gS().e,lvl:G.level,up:'Daglig Flash #'+G.postCount,cap:cap||'⚡ Flash! '+new Date().toLocaleTimeString('sv',{hour:'2-digit',minute:'2-digit'}),xp:'+20 XP',likes:0,live:false,streak:G.streak});
@@ -8564,6 +8590,7 @@ function triggerEvolution(stage){
   _runEvolConfetti();
   recordEvolution(stage);
   gainCoins(100);showT('🎉 EVOLUTION! +100 COINS','g');
+  if(typeof addPetStory==='function')addPetStory('evolved');
 }
 function closeEvolCeremony(){if(_evolClosed)return;_evolClosed=true;$('evolCeremony')?.classList.remove('show');}
 
@@ -17041,6 +17068,258 @@ function _finishPQ(){
   addDiaryEntry&&addDiaryEntry('Klarade Pet Quiz med '+_pqScore+'/5! +'+reward+'⚡ +'+(_pqScore*10)+'XP 📚');
 }
 
+// ══════════════════════════════════════════════════════
+// ██  KARMA VIRAL ENGINE  ██
+// ══════════════════════════════════════════════════════
+
+// ── PET STORIES ──
+const _STORY_TEMPLATES=[
+  {id:'fed',      ico:'🍖',cap:'{pet} åt och är nöjd! 😋',       bg:'linear-gradient(135deg,#1a0800,#331500)',col:'#FF9F0A'},
+  {id:'evolved',  ico:'⭐',cap:'{pet} EVOLUTIONERADE! 🎉',        bg:'linear-gradient(135deg,#0a0020,#200040)',col:'#BF5FFF'},
+  {id:'battle_win',ico:'⚔️',cap:'{pet} krossade fienden! 💥',    bg:'linear-gradient(135deg,#1a0005,#3d0010)',col:'#FF007F'},
+  {id:'fishing',  ico:'🎣',cap:'{pet} fångade något episkt! 🐟',  bg:'linear-gradient(135deg,#001a2d,#003366)',col:'#00D9FF'},
+  {id:'happy',    ico:'🤩',cap:'{pet} mår KANON idag! ✨',        bg:'linear-gradient(135deg,#001a00,#003300)',col:'#39FF14'},
+  {id:'viral',    ico:'🔥',cap:'{pet} TRENDAR på KARMA! #1 🔥',   bg:'linear-gradient(135deg,#2a0000,#500000)',col:'#FFE600'},
+  {id:'expedition',ico:'🗺️',cap:'{pet} kom hem från expedition! 🎁',bg:'linear-gradient(135deg,#00001a,#000033)',col:'#00D9FF'},
+  {id:'lvlup',    ico:'⬆️',cap:'{pet} gick upp till LEVEL {level}! 🚀',bg:'linear-gradient(135deg,#1a1000,#332000)',col:'#FFE600'},
+  {id:'dna',      ico:'🧬',cap:'{pet} genomgick DNA SPLICE! 🔬',  bg:'linear-gradient(135deg,#001a0a,#003320)',col:'#39FF14'},
+  {id:'mood',     ico:'💜',cap:'{pet} mår kanon — helt i sin vibe! 💪',bg:'linear-gradient(135deg,#0d0020,#1a0040)',col:'#BF5FFF'},
+];
+
+function addPetStory(templateId,extra){
+  if(!G.name)return;
+  if(!G.petStories)G.petStories=[];
+  const tmpl=_STORY_TEMPLATES.find(t=>t.id===templateId)||_STORY_TEMPLATES[4];
+  const cap=(extra?.cap||tmpl.cap)
+    .replace(/\{pet\}/g,G.petName||'Din pet')
+    .replace(/\{level\}/g,G.level)
+    .replace(/\{mood\}/g,Math.round(G.mood||70));
+  G.petStories.unshift({id:templateId+'_'+Date.now(),ico:extra?.ico||tmpl.ico,cap,bg:tmpl.bg,col:tmpl.col,ts:Date.now(),seen:false});
+  if(G.petStories.length>30)G.petStories.length=30;
+  save();_updateStoryRing();
+}
+
+function _updateStoryRing(){
+  const unseen=(G.petStories||[]).filter(s=>!s.seen).length;
+  const ring=$('petStoryRing');if(ring)ring.className='story-ring'+(unseen>0?' active':'');
+  const badge=$('storyBadge');if(badge){badge.className='story-ring-badge'+(unseen>0?' show':'');badge.textContent=unseen>9?'9+':unseen||'';}
+  const pcb=$('pcBody');if(pcb){if(unseen>0)pcb.classList.add('has-stories');else pcb.classList.remove('has-stories');}
+}
+
+let _storyIdx=0,_storyAutoTimer=null;
+function openPetStories(){
+  if(!G.petStories||!G.petStories.length){showT('📸 Inga stories ännu! Gör saker med ditt pet 🐾','b');return;}
+  _storyIdx=0;
+  G.petStories.forEach(s=>s.seen=true);save();_updateStoryRing();
+  _renderStoryViewer();
+}
+function _renderStoryViewer(){
+  if(_storyAutoTimer){clearTimeout(_storyAutoTimer);_storyAutoTimer=null;}
+  let ov=$('storyViewerOv');if(ov)ov.remove();
+  const stories=G.petStories||[];if(!stories.length)return;
+  const si=Math.min(_storyIdx,stories.length-1);const s=stories[si];
+  const ago=_fmtStoryAge(s.ts);
+  ov=document.createElement('div');ov.id='storyViewerOv';
+  ov.style.cssText='position:fixed;inset:0;z-index:2100;display:flex;flex-direction:column;font-family:var(--mono);touch-action:pan-y;';
+  ov.innerHTML=`<div style="position:absolute;inset:0;background:${s.bg};"></div>
+  <div style="position:relative;z-index:1;display:flex;flex-direction:column;height:100%;">
+    <div style="padding:14px 14px 8px;flex-shrink:0">
+      <div style="display:flex;gap:4px;margin-bottom:12px">${stories.map((_,i)=>`<div class="story-prog-bar"><div class="story-prog-fill" id="spf_${i}" style="width:${i<si?'100%':'0%'}"></div></div>`).join('')}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div onclick="openPetStories()" style="width:36px;height:36px;border-radius:50%;background:conic-gradient(#FF007F,#FF9F0A,#FFE600,#39FF14,#00D9FF,#BF5FFF,#FF007F);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer">${G.petEmoji||'🐉'}</div>
+          <div><div style="font-size:12px;font-weight:900;color:#fff">${G.petName||'Din pet'}</div><div style="font-size:9px;color:rgba(255,255,255,.55)">${ago}</div></div>
+        </div>
+        <button onclick="document.getElementById('storyViewerOv')?.remove()" style="background:none;border:none;color:rgba(255,255,255,.7);font-size:24px;cursor:pointer;padding:4px 8px">✕</button>
+      </div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;" onclick="_storyNext()">
+      <div style="font-size:88px;margin-bottom:22px;filter:drop-shadow(0 0 40px ${s.col})">${s.ico}</div>
+      <div style="font-size:18px;font-weight:900;color:#fff;line-height:1.45;max-width:280px;text-shadow:0 2px 24px rgba(0,0,0,.7)">${s.cap}</div>
+      <div style="margin-top:16px;font-size:9px;color:rgba(255,255,255,.35);letter-spacing:.1em">TRYCK FÖR NÄSTA</div>
+    </div>
+    <div style="padding:14px 20px 32px;display:flex;justify-content:center;gap:14px;flex-shrink:0">
+      ${['❤️','🔥','😂','🤩'].map(em=>`<button class="story-react-btn" onclick="event.stopPropagation();_storyReact('${em}')">${em}</button>`).join('')}
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+  setTimeout(()=>{const f=$('spf_'+si);if(f){f.style.transition='width 5s linear';f.style.width='100%';}},60);
+  _storyAutoTimer=setTimeout(_storyNext,5300);
+}
+function _storyNext(){
+  if(_storyAutoTimer){clearTimeout(_storyAutoTimer);_storyAutoTimer=null;}
+  _storyIdx++;
+  if(_storyIdx>=(G.petStories||[]).length){document.getElementById('storyViewerOv')?.remove();return;}
+  _renderStoryViewer();
+}
+function _storyReact(em){
+  const d=document.createElement('div');d.textContent=em;
+  d.style.cssText='position:fixed;left:50%;top:45%;transform:translate(-50%,-50%);font-size:72px;pointer-events:none;z-index:2200;animation:floatUp 1s cubic-bezier(.22,1,.36,1) forwards;';
+  document.body.appendChild(d);setTimeout(()=>d.remove(),1050);
+  G.mood=Math.min(100,(G.mood||70)+3);vibe([10,5,20]);
+}
+function _fmtStoryAge(ts){
+  const m=Math.floor((Date.now()-ts)/60000);
+  if(m<1)return'Just nu';if(m<60)return m+'m';
+  const h=Math.floor(m/60);if(h<24)return h+'h';return Math.floor(h/24)+'d';
+}
+
+// ── VIRAL ENGINE ──
+function _triggerViral(){
+  if(!G.name)return;
+  if(G.viralUntil>Date.now())return;
+  G.viralUntil=Date.now()+3600000;save();
+  let ov=$('viralFullOv');if(ov)ov.remove();
+  ov=document.createElement('div');ov.id='viralFullOv';
+  ov.style.cssText='position:fixed;inset:0;z-index:2050;background:rgba(0,0,0,.93);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--mono);text-align:center;padding:24px;';
+  let views=Math.floor(800+Math.random()*3200);
+  ov.innerHTML=`<div style="font-size:64px;margin-bottom:10px;animation:petBob 1s ease-in-out infinite">🔥</div>
+  <div style="font-size:14px;font-weight:900;color:rgba(255,255,255,.5);letter-spacing:.15em;margin-bottom:4px">DIN ${(G.petName||'PET').toUpperCase()}</div>
+  <div style="font-size:38px;font-weight:900;color:#FF3B30;letter-spacing:.1em;margin-bottom:6px">TRENDAR!</div>
+  <div style="font-size:11px;color:rgba(255,255,255,.4);margin-bottom:20px">#1 PÅ KARMA JUST NU 📈</div>
+  <div id="viralViewCt" style="font-size:52px;font-weight:900;color:#fff;letter-spacing:-.02em">${views.toLocaleString('sv')}</div>
+  <div style="font-size:11px;color:rgba(255,255,255,.45);margin-bottom:28px">LIVE VIEWS / MIN</div>
+  <div style="background:rgba(255,59,48,.15);border:2px solid #FF3B30;border-radius:18px;padding:14px 24px;margin-bottom:24px">
+    <div style="font-size:16px;font-weight:900;color:#FFE600">+500 KARMA COINS 🎁</div>
+    <div style="font-size:10px;color:rgba(255,255,255,.5);margin-top:3px">VIRAL BONUS INLÖST</div>
+  </div>
+  <button onclick="document.getElementById('viralFullOv')?.remove()" style="background:linear-gradient(135deg,#FF3B30,#FF6B00);border:none;border-radius:16px;padding:15px 40px;font-size:15px;font-weight:900;color:#fff;cursor:pointer;font-family:var(--mono);letter-spacing:.05em">🔥 RIDA VÅGEN!</button>`;
+  document.body.appendChild(ov);
+  const vInt=setInterval(()=>{views+=Math.floor(40+Math.random()*160);const el=$('viralViewCt');if(el)el.textContent=views.toLocaleString('sv');else clearInterval(vInt);},350);
+  setTimeout(()=>clearInterval(vInt),6000);
+  gainCoins(500);addPetStory('viral');
+  if(typeof _runEvolConfetti==='function')_runEvolConfetti();
+  SFX.win&&SFX.win();vibe([50,20,100,20,200,50,300]);
+  const vb=$('viralBadge');if(vb){vb.style.display='block';setTimeout(()=>{if($('viralBadge'))$('viralBadge').style.display='none';},3600000);}
+}
+setInterval(()=>{if(G.name&&!document.hidden&&G.viralUntil<Date.now()&&Math.random()<0.04)_triggerViral();},1200000);
+
+// ── DRAMA ENGINE ──
+const _DRAMA_EVENTS=[
+  {ico:'📸',h:'SKANDAL!',msg:'Någon påstår att {pet} FUSKAT i Battle och sprider screenshots runt hela KARMA!',choices:[
+    {txt:'🛡️ Neka allt offentligt',fx(){G.mood=Math.min(100,(G.mood||70)+5);showT('📢 Du nekade. Ryktena tystnar... tills vidare.','b');}},
+    {txt:'😔 Erkänn & be om ursäkt',fx(){gainCoins(-20);G.karma=Math.min(100,(G.karma||42)+15);showT('💚 Ärlighet respekteras. +15 KARMA','g');}},
+    {txt:'🔥 Svara med memes',fx(){if(Math.random()<.55){gainCoins(80);showT('💥 Du vann draman! Viral moment. +80 COINS','y');}else{G.mood=Math.max(5,(G.mood||70)-20);showT('😬 Det eskalerade. Ditt pet är demoraliserat.','r');}}},
+  ]},
+  {ico:'💌',h:'MYSTERIET',msg:'Anonymt brev till {pet}: "Jag vet VAD du bär i din DNA... och det är mäktigt."',choices:[
+    {txt:'🔍 Undersök spåret',fx(){gainXP(50,'social');showT('🔬 Du hittade ett VOID DNA-fragment! +50XP','p');}},
+    {txt:'🗑️ Ignorera brevet',fx(){showT('😶 Du ignorerar. Nyfikenheten gnager...','b');}},
+    {txt:'📢 Dela som Story',fx(){addPetStory('mood',{cap:'📨 '+G.petName+' fick ett mystiskt brev... 🤫',ico:'💌'});gainCoins(30);showT('🔥 Folk är nyfikna! +30 COINS','y');}},
+  ]},
+  {ico:'⚔️',h:'UTMANING!',msg:'shadow_elk (LV35) utmanar {pet} till en publik BATTLE — hela KARMA ser!',choices:[
+    {txt:'⚔️ ACCEPTERA!',fx(){if(Math.random()<.55){gainCoins(150);gainXP(80,'action');_runEvolConfetti&&_runEvolConfetti();showT('🏆 DU VANN! +150 COINS +80XP — LEGENDE!','y');}else{G.mood=Math.max(5,(G.mood||70)-15);showT('😔 Du förlorade... Men du kämpade! Träna mer.','r');}}},
+    {txt:'🏃 Smita obemärkt',fx(){showT('😅 Du smög bort. Ingen såg... förmodligen.','b');}},
+    {txt:'🤝 Förhandla om remis',fx(){gainCoins(60);G.mood=Math.min(100,(G.mood||70)+10);showT('🤝 Kompromiss = respekt. +60 COINS +10 MOOD','g');}},
+  ]},
+  {ico:'🎁',h:'OVÄNTAD GÅVA',msg:'pixel_queen skickade en mystisk låda till {pet}. Öppnar du den?',choices:[
+    {txt:'📦 Öppna direkt!',fx(){const r=Math.random();if(r<.38){gainCoins(250);showT('💰 JACKPOT! 250 COINS i lådan!','y');}else if(r<.72){gainXP(120,'social');showT('⬆️ XP-kristall! +120 XP','p');}else{G.mood=Math.min(100,(G.mood||70)+30);showT('💜 En kärlekshandling! +30 MOOD ❤️','pk');}}},
+    {txt:'🔍 Analysera (säker)',fx(){gainCoins(50);showT('🧪 Allt säkert! 50 coins inne.','g');}},
+    {txt:'↩️ Returnera oöppnad',fx(){G.karma=Math.min(100,(G.karma||42)+20);showT('👑 Principfasthet. +20 KARMA','g');}},
+  ]},
+  {ico:'🌐',h:'VIRALT RYKTE',msg:'"Håller {pet} på att bli den starkaste i hela KARMA?" — ryktena sprids på TikTok.',choices:[
+    {txt:'💪 "JA! Och det börjar NU"',fx(){_triggerViral();}},
+    {txt:'😌 Håll låg profil',fx(){gainXP(30,'action');showT('🕊️ Du fokuserar tyst på jobbet. +30XP','b');}},
+    {txt:'📸 Posta cryptic story',fx(){addPetStory('mood',{cap:'👀 ...coming soon. #KARMA',ico:'🌐'});gainCoins(40);showT('🔮 Mystery ökar din aura. +40 coins','p');}},
+  ]},
+  {ico:'🏅',h:'RANKNINGSCHOCK',msg:'KARMA RADAR: {pet} är just nu rankad #3 bland ALLA pets på plattformen!',choices:[
+    {txt:'🥇 Push for #1!',fx(){G.energy=Math.max(3,(G.energy||100)-20);gainXP(120,'action');showT('⚡ All-in! -20 ENERGY + 120XP mot toppen!','o');}},
+    {txt:'🎉 Fira med community',fx(){addPetStory('happy');gainCoins(60);showT('🎊 Community boost! +60 COINS','y');}},
+    {txt:'😎 Njut av #3',fx(){G.mood=Math.min(100,(G.mood||70)+20);showT('🌟 +20 MOOD. #3 är ju rätt amazing.','p');}},
+  ]},
+  {ico:'💔',h:'DRAMA I CIRKELN',msg:'Ditt circle säger att {pet} är "för OP" och kräver nerf!',choices:[
+    {txt:'😤 "Ni är bara avundsjuka"',fx(){gainCoins(30);G.mood=Math.min(100,(G.mood||70)+15);showT('🔥 Confidence boost! +30 COINS +15 MOOD','y');}},
+    {txt:'🤲 Lyssna och kompromissa',fx(){G.karma=Math.min(100,(G.karma||42)+25);showT('💚 Empati ger +25 KARMA. Du är ledartyp.','g');}},
+    {txt:'👋 Lämna cirkeln',fx(){G.coins=Math.max(0,G.coins-20);showT('😤 Du gick ur. Dyrt beslut — -20 coins.','r');}},
+  ]},
+  {ico:'🌙',h:'NATTLIG BESÖKARE',msg:'Klockan 03:00: ett okänt pet hälsar på {pet} och lämnar ett DNA-fragment.',choices:[
+    {txt:'🧬 Ta emot fragmentet',fx(){gainXP(75,'action');showT('🧬 MYSTERIOUS DNA +75XP! Vad är det?','p');}},
+    {txt:'😴 Låt {pet} sova',fx(){G.energy=Math.min(100,(G.energy||100)+20);showT('😴 Sömn är hälsa. +20 ENERGY','b');}},
+    {txt:'🔦 Undersök besökaren',fx(){if(Math.random()<.5){gainCoins(100);showT('🪙 Besökaren var en belöningsbot! +100 COINS','y');}else{showT('👻 Spöke? Pet är lite skrämt nu...','r');G.mood=Math.max(5,(G.mood||70)-10);}}},
+  ]},
+];
+
+function _triggerDrama(){
+  if(!G.name)return;
+  const ev=_DRAMA_EVENTS[Math.floor(Math.random()*_DRAMA_EVENTS.length)];
+  let ov=$('dramaOv');if(ov)ov.remove();
+  ov=document.createElement('div');ov.id='dramaOv';
+  ov.style.cssText='position:fixed;inset:0;z-index:2080;background:rgba(0,0,0,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;font-family:var(--mono);text-align:center;overflow-y:auto;';
+  const msg=ev.msg.replace(/\{pet\}/g,G.petName||'Din pet');
+  ov.innerHTML=`<div style="font-size:60px;margin-bottom:10px">${ev.ico}</div>
+  <div style="font-size:12px;font-weight:900;color:#FF3B30;letter-spacing:.14em;margin-bottom:8px">${ev.h}</div>
+  <div style="font-size:14px;color:#fff;line-height:1.6;margin-bottom:28px;max-width:300px">${msg}</div>
+  <div style="width:100%;max-width:320px">${ev.choices.map((c,i)=>`<button class="drama-choice" onclick="_dramaChoice(${i})">${c.txt}</button>`).join('')}</div>
+  <div style="margin-top:16px;font-size:9px;color:rgba(255,255,255,.25);letter-spacing:.1em">🎭 KARMA DRAMA ENGINE</div>`;
+  document.body.appendChild(ov);
+  window._dramaEv=ev;SFX.click&&SFX.click();vibe([30,10,60,10,100]);
+}
+function _dramaChoice(idx){
+  const ev=window._dramaEv;if(!ev||!ev.choices[idx])return;
+  document.getElementById('dramaOv')?.remove();
+  ev.choices[idx].fx();
+  if(!G.dramaLog)G.dramaLog=[];
+  G.dramaLog.unshift({ev:ev.h,choice:ev.choices[idx].txt.replace(/^[^\s]+\s/,''),ts:Date.now()});
+  if(G.dramaLog.length>20)G.dramaLog.length=20;
+  save();updateHUD();updatePetView();
+}
+setInterval(()=>{if(G.name&&!document.hidden&&Math.random()<0.2)_triggerDrama();},1500000);
+
+// ── PET VIBE SYSTEM ──
+const _PET_VIBES=[
+  {id:'lofi',    nm:'Lofi Hip-Hop', em:'🎵',col:'#BF5FFF',rgba:'191,95,255', desc:'Chill & fokuserad. Perfekt för farming.'},
+  {id:'hyperpop',nm:'Hyperpop',     em:'⚡',col:'#FF007F',rgba:'255,0,127',  desc:'Hyperenergetisk. Dubbel combo-chans!'},
+  {id:'phonk',   nm:'Phonk',        em:'🔊',col:'#FF3B30',rgba:'255,59,48',  desc:'Dark & drifty. Battle-boost.'},
+  {id:'y2k',     nm:'Y2K Pop',      em:'💿',col:'#00D9FF',rgba:'0,217,255',  desc:'Nostalgi-energi. +bonus fishing.'},
+  {id:'darkwave',nm:'Dark Wave',    em:'🌑',col:'#7B2FFF',rgba:'123,47,255', desc:'Mystisk & djup. Void DNA boost.'},
+];
+function _getPetVibe(){
+  if(G.petVibe){const v=_PET_VIBES.find(v=>v.id===G.petVibe);if(v)return v;}
+  const dna=G.petDNA||{};
+  if(dna.element==='fire')return _PET_VIBES[2];
+  if(dna.element==='void')return _PET_VIBES[4];
+  if(dna.element==='water')return _PET_VIBES[3];
+  if(dna.body==='ghost')return _PET_VIBES[4];
+  if((G.mood||70)>80)return _PET_VIBES[1];
+  return _PET_VIBES[0];
+}
+function playPetVibe(){
+  const v=_getPetVibe();
+  G.mood=Math.min(100,(G.mood||70)+8);G.energy=Math.min(100,(G.energy||100)+5);
+  save();updatePetView();addPetStory('mood',{cap:G.petName+' vibear till '+v.nm+'! '+v.em,ico:v.em});
+  if(typeof _triggerCombo==='function')_triggerCombo(v.em+' VIBE BOOST!');
+  showT(v.em+' '+v.nm.toUpperCase()+' — VIBE ON! +8 MOOD +5 ENERGY','p');
+}
+
+// ── KARMA STAGE (Vibe + Drama hub) ──
+function openVibeAndDrama(){
+  let ov=$('vibeOv');if(ov)ov.remove();
+  ov=document.createElement('div');ov.id='vibeOv';
+  ov.style.cssText='position:fixed;inset:0;z-index:1090;background:rgba(0,0,0,.97);overflow-y:auto;font-family:var(--mono);';
+  const v=_getPetVibe();
+  const log=(G.dramaLog||[]).slice(0,6);
+  const isViral=G.viralUntil>Date.now();
+  const mLeft=isViral?Math.ceil((G.viralUntil-Date.now())/60000):0;
+  const vibeRows=_PET_VIBES.map(vb=>`<div onclick="G.petVibe='${vb.id}';save();document.getElementById('vibeOv')?.remove();playPetVibe();" style="background:rgba(${vb.rgba},.1);border:1.5px solid rgba(${vb.rgba},.3);border-radius:12px;padding:10px 14px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;gap:10px;${vb.id===v.id?'box-shadow:0 0 14px rgba('+vb.rgba+',.35);border-width:2px;':''}" >
+    <div style="font-size:24px">${vb.em}</div>
+    <div style="flex:1"><div style="font-size:12px;font-weight:900;color:${vb.col}">${vb.nm}${vb.id===v.id?' ✓':''}</div><div style="font-size:9px;color:rgba(255,255,255,.45);margin-top:1px">${vb.desc}</div></div>
+  </div>`).join('');
+  ov.innerHTML=`<div style="padding:20px 16px 32px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <div><div style="font-size:20px;font-weight:900">🎭 KARMA STAGE</div><div style="font-size:10px;color:var(--t3)">Din pets vibe & drama-center</div></div>
+      <button onclick="document.getElementById('vibeOv')?.remove()" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:7px 14px;color:var(--t2);font-size:12px;cursor:pointer">✕</button>
+    </div>
+    ${isViral?`<div style="background:rgba(255,59,48,.15);border:2px solid #FF3B30;border-radius:16px;padding:13px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px"><div style="font-size:28px">🔥</div><div><div style="font-size:14px;font-weight:900;color:#FF3B30">TRENDAR JUST NU!</div><div style="font-size:10px;color:rgba(255,255,255,.5)">${mLeft} min kvar · Njut av glansen 🌟</div></div></div>`:''}
+    <div style="font-size:10px;font-weight:900;color:var(--t3);letter-spacing:.1em;margin-bottom:10px">🎵 PET VIBE — VÄLJ SOUND IDENTITY</div>
+    ${vibeRows}
+    <button onclick="playPetVibe();document.getElementById('vibeOv')?.remove()" style="width:100%;background:rgba(${v.rgba},.18);border:1.5px solid rgba(${v.rgba},.5);border-radius:12px;padding:13px;font-size:13px;font-weight:900;color:${v.col};cursor:pointer;margin-bottom:24px">▶ SPELA ${v.em} ${v.nm.toUpperCase()} · +8 MOOD</button>
+    <div style="font-size:10px;font-weight:900;color:var(--t3);letter-spacing:.1em;margin-bottom:10px">🎭 DRAMA LOG</div>
+    ${log.length?log.map(l=>`<div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:10px 12px;margin-bottom:6px"><div style="font-size:11px;font-weight:900;color:#FF3B30">${l.ev}</div><div style="font-size:10px;color:var(--t2);margin-top:2px">Val: ${l.choice}</div><div style="font-size:9px;color:var(--t3);margin-top:1px">${_fmtStoryAge(l.ts)}</div></div>`).join(''):`<div style="text-align:center;padding:20px;color:var(--t3);font-size:12px">Ingen drama ännu 😇<br><span style="font-size:10px">Events triggar automatiskt</span></div>`}
+    <button onclick="_triggerDrama();document.getElementById('vibeOv')?.remove()" style="width:100%;margin-top:14px;background:rgba(255,59,48,.1);border:1.5px solid rgba(255,59,48,.3);border-radius:12px;padding:13px;font-size:13px;font-weight:900;color:#FF3B30;cursor:pointer">🎭 TRIGGA DRAMA EVENT NU</button>
+    <button onclick="_triggerViral();document.getElementById('vibeOv')?.remove()" style="width:100%;margin-top:8px;background:rgba(255,215,0,.08);border:1.5px solid rgba(255,215,0,.25);border-radius:12px;padding:12px;font-size:12px;font-weight:900;color:#FFE600;cursor:pointer">🔥 TRIGGA VIRAL MOMENT</button>
+  </div>`;
+  document.body.appendChild(ov);
+}
+
 // ── CARE BUTTON COOLDOWN DISPLAY ──
 function renderCareCooldowns(){
   const now=Date.now();
@@ -17079,7 +17358,7 @@ setInterval(renderCareCooldowns,10000);
 
 // ── STARTUP HOOKS ──
 // Apply offline decay on first load
-setTimeout(()=>{if(G.name){applyOfflineDecay();checkPetSick();renderCareCooldowns();}},900);
+setTimeout(()=>{if(G.name){applyOfflineDecay();checkPetSick();renderCareCooldowns();_updateStoryRing&&_updateStoryRing();if((G.petStories||[]).length===0)addPetStory('happy');}},900);
 // Initialize pet birthday if missing
 setTimeout(()=>{
   if(G.name&&!G.petBirthday){
