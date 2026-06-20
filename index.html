@@ -1013,6 +1013,9 @@ button:active{opacity:.85;}
 .game-live-ct{position:absolute;bottom:7px;right:7px;background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:2px 7px;font-size:8px;font-weight:700;color:rgba(255,255,255,.6);font-family:var(--mono);}
 .game-live-ct::before{content:'● ';color:#39FF14;font-size:7px;animation:pmGlow .9s ease-in-out infinite;}
 .game-score-badge{position:absolute;top:6px;left:6px;background:rgba(0,0,0,.75);border:1px solid rgba(255,215,0,.4);border-radius:8px;padding:2px 7px;font-size:8px;font-weight:900;color:#FFE600;font-family:var(--mono);display:none;}
+.chb-cd-bar{position:absolute;bottom:0;left:0;height:3px;background:rgba(255,255,255,.22);border-radius:0 0 6px 6px;width:100%;transition:none;}
+.chb-cd-bar::after{content:'';position:absolute;inset:0;background:var(--chb-col,rgba(57,255,20,.7));border-radius:inherit;transform-origin:left;transition:transform .9s linear;}
+.chb.on-cd{opacity:.62;}
 .nb{position:relative;}
 .nb.on[data-v="home"]::before{content:'';position:absolute;top:0;left:6px;right:6px;height:2.5px;background:#39FF14;box-shadow:0 0 8px #39FF14,0 0 18px rgba(57,255,20,.6);border-radius:0 0 3px 3px;}
 .nb.on[data-v="play"]::before{content:'';position:absolute;top:0;left:6px;right:6px;height:2.5px;background:var(--o);box-shadow:0 0 8px var(--o),0 0 18px rgba(255,159,10,.6);border-radius:0 0 3px 3px;}
@@ -2989,12 +2992,12 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
         <button id="expedBtn" onclick="openExpedition()" style="background:rgba(0,217,255,.08);border:1.5px solid rgba(0,217,255,.35);border-radius:10px;padding:4px 10px;color:var(--b);font-size:10px;font-weight:900;cursor:pointer;font-family:var(--mono)">🗺️ EXPEDITION</button>
       </div>
       <div class="care-hero">
-        <div class="chb chb-feed" onclick="pcFeed()" style="--chb-col:rgba(255,159,10,.45);position:relative"><span class="chb-ico">🍖</span><span class="chb-lbl">MATA</span><span class="chb-val">+HUN</span></div>
-        <div class="chb chb-train" onclick="pcTrain()" style="--chb-col:rgba(57,255,20,.45);position:relative"><span class="chb-ico">🏋️</span><span class="chb-lbl">TRÄNA</span><span class="chb-val">+XP</span></div>
-        <div class="chb chb-sleep" onclick="pcSleep()" style="--chb-col:rgba(0,217,255,.45);position:relative"><span class="chb-ico">😴</span><span class="chb-lbl">SOVA</span><span class="chb-val">+ENE</span></div>
-        <div class="chb chb-play" onclick="pcPlay()" style="--chb-col:rgba(255,0,127,.45);position:relative"><span class="chb-ico">🎮</span><span class="chb-lbl">LEK</span><span class="chb-val">+MOO</span></div>
-        <div class="chb chb-bath" onclick="pcBath()" style="--chb-col:rgba(191,95,255,.45);position:relative"><span class="chb-ico">🛁</span><span class="chb-lbl">BADA</span><span class="chb-val">+KRM</span></div>
-        <div class="chb chb-talk" onclick="pcTalk()" style="--chb-col:rgba(255,230,0,.45);position:relative"><span class="chb-ico">💬</span><span class="chb-lbl">PRATA</span><span class="chb-val">+BND</span></div>
+        <div class="chb chb-feed" id="chbFeed" onclick="pcFeed()" style="--chb-col:rgba(255,159,10,.45);position:relative"><span class="chb-ico">🍖</span><span class="chb-lbl">MATA</span><span class="chb-val" id="chbValFeed">+HUN</span><div class="chb-cd-bar" id="cdBarFeed"></div></div>
+        <div class="chb chb-train" id="chbTrain" onclick="pcTrain()" style="--chb-col:rgba(57,255,20,.45);position:relative"><span class="chb-ico">🏋️</span><span class="chb-lbl">TRÄNA</span><span class="chb-val">+XP</span></div>
+        <div class="chb chb-sleep" id="chbSleep" onclick="pcSleep()" style="--chb-col:rgba(0,217,255,.45);position:relative"><span class="chb-ico">😴</span><span class="chb-lbl">SOVA</span><span class="chb-val" id="chbValSleep">+ENE</span><div class="chb-cd-bar" id="cdBarSleep"></div></div>
+        <div class="chb chb-play" id="chbPlay" onclick="pcPlay()" style="--chb-col:rgba(255,0,127,.45);position:relative"><span class="chb-ico">🎮</span><span class="chb-lbl">LEK</span><span class="chb-val" id="chbValPlay">+MOO</span><div class="chb-cd-bar" id="cdBarPlay"></div></div>
+        <div class="chb chb-bath" id="chbBath" onclick="pcBath()" style="--chb-col:rgba(191,95,255,.45);position:relative"><span class="chb-ico">🛁</span><span class="chb-lbl">BADA</span><span class="chb-val" id="chbValBath">+KRM</span><div class="chb-cd-bar" id="cdBarBath"></div></div>
+        <div class="chb chb-talk" id="chbTalk" onclick="pcTalk()" style="--chb-col:rgba(255,230,0,.45);position:relative"><span class="chb-ico">💬</span><span class="chb-lbl">PRATA</span><span class="chb-val" id="chbValTalk">+BND</span><div class="chb-cd-bar" id="cdBarTalk"></div></div>
       </div>
       <!-- DAILY BOND — social actions feed your pet -->
       <div class="bond-section">
@@ -7244,6 +7247,7 @@ function updatePetView(){
   else if(G.energy<15){petAnimState.mood='sleeping';}
   else if(petAnimState.mood!=='idle'&&petAnimState.mood!=='sleeping')petAnimState.mood='idle';
   updateNeedsRow();updateTamaFace();updateCareUrgency();
+  if(typeof renderCareCooldowns==='function')renderCareCooldowns();
   // Update pet speech bubble with stat-based message
   const _st=$('petSpeechText');
   if(_st&&!_speechTimer){
@@ -11119,6 +11123,9 @@ function renderHomeBase(canvasId){
       ctx.fillText('LV'+lvl,bx,by+bsz*.52);
       ctx.font='6px monospace';ctx.fillStyle='rgba(255,255,255,.4)';
       ctx.fillText(bInfo.nm,bx,by+bsz*.52+9);
+      // Income label
+      const _incMap={farm:8,market:5,stable:3,tower:4,arena:0};const _inc=(_incMap[bp.id]||0)*lvl;
+      if(_inc>0){ctx.font='bold 6px monospace';ctx.fillStyle='rgba(255,215,0,.65)';ctx.fillText('⚡'+_inc+'/h',bx,by+bsz*.52+18);}
     }else{
       // Under construction — tap to build
       ctx.globalAlpha=0.3;
@@ -12269,7 +12276,8 @@ function updateNeedsRow(){
 }
 function updateTamaFace(){
   const face=$('tamaFace'),lbl=$('tamaState');if(!face||!lbl)return;
-  if(G.hunger<20||G.mood<20){face.textContent='😢';lbl.textContent='LEDSEN';lbl.style.color='var(--pk)';}
+  if(G.petSick){face.textContent='🤒';lbl.textContent='SJUK';lbl.style.color='#FF2D55';}
+  else if(G.hunger<20||G.mood<20){face.textContent='😢';lbl.textContent='LEDSEN';lbl.style.color='var(--pk)';}
   else if(G.energy<15){face.textContent='😴';lbl.textContent='TRÖTT';lbl.style.color='var(--b)';}
   else if(G.hunger>70&&G.mood>70&&G.energy>50){face.textContent='🤩';lbl.textContent='SUPERGLAD';lbl.style.color='var(--y)';}
   else if(G.mood>60&&G.hunger>50){face.textContent='😊';lbl.textContent='GLAD';lbl.style.color='var(--g)';}
@@ -17033,14 +17041,58 @@ function _finishPQ(){
   addDiaryEntry&&addDiaryEntry('Klarade Pet Quiz med '+_pqScore+'/5! +'+reward+'⚡ +'+(_pqScore*10)+'XP 📚');
 }
 
+// ── CARE BUTTON COOLDOWN DISPLAY ──
+function renderCareCooldowns(){
+  const now=Date.now();
+  const cds=[
+    {bar:'cdBarFeed',val:'chbValFeed',btn:'chbFeed',last:G._lastFeed||0,total:30*60000,fmt:m=>m+'m'},
+    {bar:'cdBarSleep',val:'chbValSleep',btn:'chbSleep',last:G._lastSleep||0,total:60*60000,fmt:m=>m+'m'},
+    {bar:'cdBarPlay',val:'chbValPlay',btn:'chbPlay',last:G._lastPlay||0,total:15*60000,fmt:m=>m+'m'},
+    {bar:'cdBarBath',val:'chbValBath',btn:'chbBath',last:G._lastBath||0,total:5*60000,fmt:m=>m+'m'},
+    {bar:'cdBarTalk',val:'chbValTalk',btn:'chbTalk',last:G.lastTalkTime||0,total:30000,fmt:s=>s+'s'},
+  ];
+  cds.forEach(c=>{
+    const elapsed=now-c.last;
+    const bar=$(c.bar);const valEl=$(c.val);const btn=$(c.btn);
+    if(!bar)return;
+    if(elapsed<c.total){
+      const pct=Math.round((elapsed/c.total)*100);
+      bar.style.display='block';
+      bar.style.setProperty('--cd-pct',pct+'%');
+      bar.style.background='rgba(255,255,255,.15)';
+      const fill=bar.querySelector(':scope > span')||Object.assign(document.createElement('span'),{style:'position:absolute;inset:0;background:var(--chb-col,rgba(57,255,20,.55));border-radius:inherit;'});
+      if(!bar.hasChildNodes())bar.appendChild(fill);
+      fill.style.width=pct+'%';
+      const rem=c.total===30000?Math.ceil((c.total-elapsed)/1000):Math.ceil((c.total-elapsed)/60000);
+      if(valEl)valEl.textContent=c.fmt(rem)+' ⏳';
+      if(btn)btn.classList.add('on-cd');
+    }else{
+      bar.style.display='none';bar.innerHTML='';
+      if(valEl){const defaults={cdBarFeed:'+HUN',cdBarSleep:'+ENE',cdBarPlay:'+MOO',cdBarBath:'+KRM',cdBarTalk:'+BND'};valEl.textContent=defaults[c.bar]||'✓';}
+      if(btn)btn.classList.remove('on-cd');
+    }
+  });
+  // Expedition button live countdown
+  const expedBtn=$('expedBtn');if(expedBtn){const exp=G.expedition||{};if(exp.active&&exp.endTime>now){const mLeft=Math.ceil((exp.endTime-now)/60000);expedBtn.textContent='🗺️ '+(mLeft>=60?Math.ceil(mLeft/60)+'h':mLeft+'m')+'...';expedBtn.style.color='var(--y)';}else if(exp.active&&exp.endTime<=now){expedBtn.textContent='🎁 HÄMTA!';expedBtn.style.color='var(--g)';}else{expedBtn.textContent='🗺️ EXPEDITION';expedBtn.style.color='var(--b)';}}
+}
+setInterval(renderCareCooldowns,10000);
+
 // ── STARTUP HOOKS ──
 // Apply offline decay on first load
-setTimeout(()=>{if(G.name){applyOfflineDecay();checkPetSick();}},900);
+setTimeout(()=>{if(G.name){applyOfflineDecay();checkPetSick();renderCareCooldowns();}},900);
 // Initialize pet birthday if missing
 setTimeout(()=>{
   if(G.name&&!G.petBirthday){
     G.petBirthday=Date.now()-Math.max(0,(G.level||1)-1)*43200000; // estimate based on level
     save();
+  }
+  // Birthday celebration
+  if(G.name&&G.petBirthday){
+    const b=new Date(G.petBirthday);const now2=new Date();
+    if(b.getMonth()===now2.getMonth()&&b.getDate()===now2.getDate()){
+      const bKey='kv8_bday_'+now2.getFullYear();
+      if(!localStorage.getItem(bKey)){localStorage.setItem(bKey,'1');setTimeout(()=>{showT('🎂 GRATTIS PÅ DAGEN '+G.petName+'! 🎉','y');if(typeof _runEvolConfetti==='function')_runEvolConfetti();gainCoins&&gainCoins(50);},1500);}
+    }
   }
   // Request notif permission on 3rd+ session
   if(G.name&&!G._notifOn&&parseInt(localStorage.getItem('kv8_sc')||'0')>2){
