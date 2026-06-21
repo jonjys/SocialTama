@@ -2669,6 +2669,25 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
 
 /* NB-CARD + floatUp */
 @keyframes floatUp{0%{opacity:0;transform:translateX(-50%) translateY(20px) scale(.7);}12%{opacity:1;transform:translateX(-50%) translateY(0) scale(1.05);}20%{transform:translateX(-50%) translateY(0) scale(1);}80%{opacity:1;}100%{opacity:0;transform:translateX(-50%) translateY(-90px) scale(.9);}}
+
+/* ── KARMA COLOSSEUM ── */
+.col-fighter{flex:1;border-radius:14px;padding:10px 8px;text-align:center;border:1.5px solid rgba(255,255,255,.08);}
+.col-fighter.me{border-color:rgba(57,255,20,.35);background:rgba(57,255,20,.05);}
+.col-fighter.opp{border-color:rgba(255,0,127,.35);background:rgba(255,0,127,.05);}
+.col-hp-track{height:5px;background:rgba(255,255,255,.1);border-radius:3px;margin-top:6px;overflow:hidden;}
+.col-hp-fill{height:100%;border-radius:3px;transition:width .55s ease-out;}
+.col-log-entry{font-size:11px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05);line-height:1.4;}
+@keyframes crowdPop{0%{transform:translateY(0) scale(.8);opacity:.9;}60%{transform:translateY(-40px) scale(1.1);opacity:.6;}100%{transform:translateY(-80px) scale(.7);opacity:0;}}
+.crowd-emj{position:absolute;bottom:20px;pointer-events:none;font-size:16px;animation:crowdPop 1.6s ease-out forwards;}
+.col-streak-pill{display:inline-flex;align-items:center;gap:4px;background:rgba(255,159,10,.15);border:1px solid rgba(255,159,10,.45);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:900;color:var(--o);font-family:var(--mono);}
+.col-bet-btn{flex:1;padding:9px 0;border-radius:10px;font-size:12px;font-weight:900;cursor:pointer;transition:transform .1s,opacity .15s;}
+.col-bet-btn:active{transform:scale(.93);}
+.col-bet-btn:disabled{opacity:.3;cursor:default;}
+.col-section{padding:0 14px;margin-bottom:12px;}
+
+/* ── CLOUT BADGE ── */
+@keyframes cloutPulse{0%,100%{box-shadow:0 0 6px rgba(191,95,255,.6);}50%{box-shadow:0 0 14px rgba(191,95,255,.9),0 0 28px rgba(191,95,255,.4);}}
+.clout-pill{background:rgba(191,95,255,.15);border:1px solid rgba(191,95,255,.45);border-radius:9px;padding:3px 8px;font-size:10px;font-weight:900;color:var(--p);font-family:var(--mono);cursor:pointer;animation:cloutPulse 2s ease-in-out infinite;}
 </style>
 
 </head>
@@ -2860,6 +2879,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
       <div class="pill pill-y" style="border:2px solid rgba(255,215,0,.45);background:rgba(255,215,0,.07)" title="Karma Coins (KC)">🪙<b id="hCoins">500</b><span style="font-size:8px;opacity:.7">KC</span></div>
       <div class="pill pill-r">🔥<b id="hStreak">0</b>d</div>
       <div id="hudSickBadge" style="display:none;background:rgba(255,45,85,.13);border:1px solid rgba(255,45,85,.45);border-radius:9px;padding:3px 8px;font-size:10px;font-weight:900;color:#FF2D55;font-family:var(--mono);cursor:pointer;animation:hotPulse 1.1s ease-in-out infinite" onclick="healPet&&healPet()">🤒 SJUK</div>
+      <div id="hudCloutBadge" class="clout-pill" style="display:none" onclick="openColosseum()">⚡<span id="hudCloutVal">0</span></div>
       <div class="pill" id="premiumBadge" style="display:none;background:linear-gradient(135deg,#FFE600,#FF9F0A);color:#000;font-weight:900;cursor:pointer;border:none" onclick="openModal('premiumModal')">👑</div>
       <button onclick="openSettings()" style="background:var(--c2);border:1px solid var(--line);border-radius:9px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent;">⚙️</button>
     </div>
@@ -3741,6 +3761,12 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
           <div class="xgame-info"><div class="xgame-nm">BOSS BATTLE</div><div class="xgame-sub">SKULL LORD · THUNDER GOD</div><div class="xgame-rew">3× BELÖNING</div></div>
           <div class="game-live-ct" id="liveCtBoss">512 live</div>
         </div>
+        <div class="xgame-card" style="position:relative;border:1.5px solid rgba(191,95,255,.35)" onclick="openColosseum()">
+          <div class="hot-badge" style="background:linear-gradient(135deg,#BF5FFF,#FF007F)">🔥 HOT</div>
+          <div class="xgame-banner" style="background:linear-gradient(135deg,#0a0020,#200040)">🏟️</div>
+          <div class="xgame-info"><div class="xgame-nm" style="color:var(--p)">COLOSSEUM</div><div class="xgame-sub">Live PvP · Satsa coins</div><div class="xgame-rew" style="color:var(--pk)">BET · WIN · STREAK</div></div>
+          <div class="game-live-ct" id="liveCtCol" style="color:var(--p)">2.1k live</div>
+        </div>
         <div class="xgame-card" style="position:relative" onclick="openPetRunner()">
           <div class="game-score-badge" id="scoreBadge_runner_x">🏆 0</div>
           <div class="xgame-banner" style="background:linear-gradient(135deg,#000420,#010830)">🏃</div>
@@ -4173,6 +4199,20 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
     <input class="dm-inp" id="dmInp" placeholder="Skriv..." onkeydown="if(event.key==='Enter')sendDM()">
     <button class="dm-snd" onclick="sendDM()">→</button>
   </div>
+</div>
+
+<!-- KARMA COLOSSEUM -->
+<div class="fsw" id="colosseumWin">
+  <div class="fsh" style="background:rgba(0,0,0,.8);border-bottom:1px solid rgba(191,95,255,.25)">
+    <button class="fbk" onclick="closeColosseum()">←</button>
+    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--pk));display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0">🏟️</div>
+    <div style="flex:1">
+      <div class="ftl" style="font-size:14px;color:var(--p)">KARMA COLOSSEUM</div>
+      <div id="colLiveBar" style="font-size:10px;color:var(--g);font-family:var(--mono)">● 2 100 ser på live</div>
+    </div>
+    <div id="colStreakPill" style="display:none" class="col-streak-pill">🔥 <span id="colStreakNum">0</span></div>
+  </div>
+  <div id="colosseumContent" style="flex:1;overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column;position:relative;padding-bottom:20px"></div>
 </div>
 
 <!-- FORTUNE ORACLE -->
@@ -4986,7 +5026,7 @@ const G={
   level:1,exp:0,coins:500,streak:0,
   hunger:80,energy:100,mood:90,
   actionStat:0,commerceStat:0,socialStat:0,trustScore:42,totalSEK:0,
-  gear:[],equippedGear:null,postCount:0,bountiesDone:0,
+  gear:[],equippedGear:null,postCount:0,bountiesDone:0,clout:0,_colStreak:0,
   shareMode:'friends',likedPosts:new Set(),
   hist:[{c:'var(--g)',t:'Välkommen till KARMA v2! ⚡',time:'just nu'}],
   brands:[],bEm:'👖',
@@ -6174,7 +6214,7 @@ function cp(n){const d=document.createElement('div');d.className='cpop';d.textCo
 function sa(sel,el){document.querySelectorAll(sel+' .topt').forEach(x=>x.className='topt');el.classList.add('on');}
 function dist(la1,lo1,la2,lo2){const R=6371e3,f1=la1*Math.PI/180,f2=la2*Math.PI/180,df=(la2-la1)*Math.PI/180,dl=(lo2-lo1)*Math.PI/180;const a=Math.sin(df/2)**2+Math.cos(f1)*Math.cos(f2)*Math.sin(dl/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
 function fmtD(m){return m<1000?Math.round(m)+'m':+(m/1000).toFixed(1)+'km';}
-function save(){try{const d={n:G.name,p:G.petEmoji,pn:G.petName,l:G.level,c:G.coins,st:G.streak,x:G.exp,as:G.actionStat,cs:G.commerceStat,ss:G.socialStat,g:JSON.stringify(G.gear),eg:G.equippedGear||'',sek:G.totalSEK,ts:G.trustScore,posts:G.postCount,b:G.bountiesDone,hu:G.hunger,en:G.energy,mo:G.mood,brands:JSON.stringify(G.brands),circles:JSON.stringify(G.circles),sw:JSON.stringify(G.streakWeek),petCfg:JSON.stringify(G.petConfig),pm:G.premium?1:0,pt:G.premiumTier,wld:G.world,bond:JSON.stringify(G.todayBond),bdate:G.bondDate,wp:G.worldPoints,bz:JSON.stringify(G.builtZones),wpc:G.wildPetsCaught,wflash:G.wldFlash,wbattle:G.wldBattle,wmarket:G.wldMarket,wstreak:G.wldStreak,wsocial:G.wldSocial,po:G.packsOpened,col:JSON.stringify(G.collectibles),tp:G.talentPoints,tl:JSON.stringify(G.talents),tlvl:JSON.stringify(G.talentLvls||{}),diary:JSON.stringify(G.diaryEntries.slice(-20)),ls:G.lastSpin,ltt:G.lastTalkTime||0,lwb:G.lastWpBoost||0,castle:JSON.stringify(G.castle||{}),ownedZones:JSON.stringify(G.ownedZones||[]),terrLastIncome:JSON.stringify(G.terrLastIncome||{}),dnaMixes:JSON.stringify(G.dnaMixes||[]),lastFortune:G.lastFortune||'',lft:G.lastFlashTime||0,lfd:G.lastFlashDate||'',pdna:JSON.stringify(G.petDNA||{body:'base',element:'none',perk:'none'}),dinv:JSON.stringify(G.dnaInventory||[]),pmem:JSON.stringify(G.petMemory||{}),expd:JSON.stringify(G.expedition||{}),strs:JSON.stringify((G.petStories||[]).slice(0,20)),vrl:G.viralUntil||0,pvb:G.petVibe||'',dlog:JSON.stringify((G.dramaLog||[]).slice(0,20)),pbday:G.petBirthday||0,psick:G.petSick?1:0,ssince:G.sickSince||0,evhist:JSON.stringify((G.evolHistory||[]).slice(0,10)),gscores:JSON.stringify(G.gameScores||{}),wtrn:JSON.stringify(G.weeklyTournament||{}),lfdc:G._lastFeed||0,lsdc:G._lastSleep||0,lpdc:G._lastPlay||0,lbdc:G._lastBath||0};for(const k in d)localStorage.setItem('kv8_'+k,d[k]);localStorage.setItem('kv8_lastFortune',G.lastFortune||'');}catch(e){}sbQueueSync();}
+function save(){try{const d={n:G.name,p:G.petEmoji,pn:G.petName,l:G.level,c:G.coins,st:G.streak,x:G.exp,as:G.actionStat,cs:G.commerceStat,ss:G.socialStat,g:JSON.stringify(G.gear),eg:G.equippedGear||'',sek:G.totalSEK,ts:G.trustScore,posts:G.postCount,b:G.bountiesDone,hu:G.hunger,en:G.energy,mo:G.mood,brands:JSON.stringify(G.brands),circles:JSON.stringify(G.circles),sw:JSON.stringify(G.streakWeek),petCfg:JSON.stringify(G.petConfig),pm:G.premium?1:0,pt:G.premiumTier,wld:G.world,bond:JSON.stringify(G.todayBond),bdate:G.bondDate,wp:G.worldPoints,bz:JSON.stringify(G.builtZones),wpc:G.wildPetsCaught,wflash:G.wldFlash,wbattle:G.wldBattle,wmarket:G.wldMarket,wstreak:G.wldStreak,wsocial:G.wldSocial,po:G.packsOpened,col:JSON.stringify(G.collectibles),tp:G.talentPoints,tl:JSON.stringify(G.talents),tlvl:JSON.stringify(G.talentLvls||{}),diary:JSON.stringify(G.diaryEntries.slice(-20)),ls:G.lastSpin,ltt:G.lastTalkTime||0,lwb:G.lastWpBoost||0,castle:JSON.stringify(G.castle||{}),ownedZones:JSON.stringify(G.ownedZones||[]),terrLastIncome:JSON.stringify(G.terrLastIncome||{}),dnaMixes:JSON.stringify(G.dnaMixes||[]),lastFortune:G.lastFortune||'',lft:G.lastFlashTime||0,lfd:G.lastFlashDate||'',pdna:JSON.stringify(G.petDNA||{body:'base',element:'none',perk:'none'}),dinv:JSON.stringify(G.dnaInventory||[]),pmem:JSON.stringify(G.petMemory||{}),expd:JSON.stringify(G.expedition||{}),strs:JSON.stringify((G.petStories||[]).slice(0,20)),vrl:G.viralUntil||0,pvb:G.petVibe||'',dlog:JSON.stringify((G.dramaLog||[]).slice(0,20)),pbday:G.petBirthday||0,psick:G.petSick?1:0,ssince:G.sickSince||0,evhist:JSON.stringify((G.evolHistory||[]).slice(0,10)),gscores:JSON.stringify(G.gameScores||{}),wtrn:JSON.stringify(G.weeklyTournament||{}),lfdc:G._lastFeed||0,lsdc:G._lastSleep||0,lpdc:G._lastPlay||0,lbdc:G._lastBath||0,clout:G.clout||0,colst:G._colStreak||0};for(const k in d)localStorage.setItem('kv8_'+k,d[k]);localStorage.setItem('kv8_lastFortune',G.lastFortune||'');}catch(e){}sbQueueSync();}
 
 // ── DNA + MOOD SYSTEM ──
 function getPetDNA(){
@@ -14423,6 +14463,8 @@ function _loadFromLocalStorage(){
     G._lastSleep=parseInt(localStorage.getItem('kv8_lsdc')||'0');
     G._lastPlay=parseInt(localStorage.getItem('kv8_lpdc')||'0');
     G._lastBath=parseInt(localStorage.getItem('kv8_lbdc')||'0');
+    G.clout=parseInt(localStorage.getItem('kv8_clout')||'0');
+    G._colStreak=parseInt(localStorage.getItem('kv8_colst')||'0');
     const _today=new Date().toDateString();const _last=localStorage.getItem('kv8_lastLogin');
     if(_last!==_today){localStorage.setItem('kv8_lastLogin',_today);if(_last){const _b=G.premium?300:75;G.coins+=_b;
       if(G._talentS4b)setTimeout(()=>{gainXP(20,'social');showT('🤝 HYPE BUILDER! +20 XP login bonus','pk');},3200);
@@ -16998,6 +17040,245 @@ function _animateLiveCounts(){
   });
 }
 setInterval(_animateLiveCounts,30000);
+// Also animate colosseum count
+_LIVE_RANGES.liveCtCol=[1800,2600];
+
+// ══════════════════════════════════════════════
+// ── KARMA COLOSSEUM ──
+// ══════════════════════════════════════════════
+const _COL_NAMES=['PixelFang','NeonClaw','VoidScreech','CyberRoar','StarPulse','ThunderMaw','GlitchBite','PlasmaTail','ShadowFang','CometStrike','BlitzKlaw','NightRoar','QuantumFist','ChromeClash','DarkPulse'];
+const _COL_EMOJIS=['🐺','🦊','🐯','🦁','🦅','🦉','🐍','🦖','🦈','🦗','🐝','🐲','🦊','🦂','🐗'];
+const _COL_RANKS=['Rookie','Brons','Silver','Guld','Diamant','Mästare','Legend','APEX'];
+const _COL_MOVES=[
+  {atk:'Käkhugg',dmg:[8,16],em:'🦷',crit:.12},
+  {atk:'Klokombination',dmg:[6,14],em:'👊',crit:.18},
+  {atk:'Energiblixt',dmg:[12,22],em:'⚡',crit:.22},
+  {atk:'Plasma-explosion',dmg:[16,26],em:'💥',crit:.3},
+  {atk:'Stjärnregn',dmg:[10,20],em:'⭐',crit:.2},
+  {atk:'Mörklansering',dmg:[13,23],em:'🔮',crit:.28},
+  {atk:'Virvelattack',dmg:[7,17],em:'🌀',crit:.1},
+  {atk:'Skuggdash',dmg:[9,19],em:'👻',crit:.25},
+];
+const _COL_CROWD=['🔥','⚡','👑','💥','🏆','😱','💜','🌟'];
+let _col={active:false,opp:null,bet:0,myHp:100,oppHp:100,rd:0,spectators:1800,donations:0,_t:null};
+
+function openColosseum(){
+  clearTimeout(_col._t);_col.active=false;
+  const oppLv=Math.max(1,Math.floor((G.level||1)*(.7+Math.random()*.6)));
+  _col.opp={name:_COL_NAMES[~~(Math.random()*_COL_NAMES.length)],em:_COL_EMOJIS[~~(Math.random()*_COL_EMOJIS.length)],lv:oppLv,rank:_COL_RANKS[Math.min(_COL_RANKS.length-1,~~(oppLv/6))]};
+  _col.myHp=100;_col.oppHp=100;_col.rd=0;_col.bet=0;_col.donations=0;
+  _col.spectators=1500+~~(Math.random()*1800);
+  _colDrawLobby();
+  $('colosseumWin').classList.add('open');
+  const sp=$('colStreakPill'),sn=$('colStreakNum');
+  if(sp){sp.style.display=(G._colStreak||0)>0?'inline-flex':'none';}
+  if(sn)sn.textContent=G._colStreak||0;
+  _colTickSpectators();
+  SFX.battle&&SFX.battle();vibe([40,20,80,20,120]);
+}
+
+function closeColosseum(){
+  $('colosseumWin').classList.remove('open');
+  clearTimeout(_col._t);_col.active=false;
+}
+
+function _colDrawLobby(){
+  const cc=$('colosseumContent');if(!cc)return;
+  const o=_col.opp;const myEm=G.petEmoji||'🐉';const myNm=G.petName||'Din Pet';
+  const streak=G._colStreak||0;
+  const mult=streak>=10?5:streak>=5?3:streak>=3?2:1;
+  cc.innerHTML=`
+    <div class="col-section" style="margin-top:12px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="col-fighter me">
+          <div style="font-size:38px">${myEm}</div>
+          <div style="font-size:12px;font-weight:900;color:var(--g)">${myNm}</div>
+          <div style="font-size:10px;color:var(--t3)">LV${G.level||1}</div>
+          <div class="col-hp-track"><div id="colMyBar" class="col-hp-fill me" style="width:100%"></div></div>
+          <div id="colMyHpTxt" style="font-size:9px;color:var(--g);font-family:var(--mono);margin-top:3px">100 HP</div>
+        </div>
+        <div style="font-size:20px;font-weight:900;color:var(--y);flex-shrink:0;text-align:center">
+          <div>VS</div>
+          <div style="font-size:9px;color:var(--t3);margin-top:4px;font-family:var(--mono)">${_fmtNum(_col.spectators)} live</div>
+        </div>
+        <div class="col-fighter opp">
+          <div style="font-size:38px">${o.em}</div>
+          <div style="font-size:12px;font-weight:900;color:var(--pk)">${o.name}</div>
+          <div style="font-size:10px;color:var(--t3)">LV${o.lv} ${o.rank}</div>
+          <div class="col-hp-track"><div id="colOppBar" class="col-hp-fill opp" style="width:100%"></div></div>
+          <div id="colOppHpTxt" style="font-size:9px;color:var(--pk);font-family:var(--mono);margin-top:3px">100 HP</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-section">
+      <div style="font-size:10px;font-weight:900;color:var(--t3);font-family:var(--mono);letter-spacing:.08em;margin-bottom:7px">VÄLJ INSATS ${mult>1?'<span style="color:var(--o)">'+mult+'× STREAK BONUS</span>':''}</div>
+      <div style="display:flex;gap:6px;margin-bottom:7px">
+        ${[10,50,100,500].map(a=>`<button class="col-bet-btn" onclick="_colStartFight(${a})" ${G.coins<a?'disabled':''} style="background:${G.coins>=a?'rgba(255,230,0,.1)':'rgba(255,255,255,.03)'};border:1.5px solid ${G.coins>=a?'rgba(255,230,0,.4)':'rgba(255,255,255,.08)'};color:${G.coins>=a?'var(--y)':'var(--t3)'}">${a}⚡</button>`).join('')}
+      </div>
+      <button class="col-bet-btn" onclick="_colStartFight(0)" style="width:100%;background:rgba(57,255,20,.08);border:1.5px solid rgba(57,255,20,.25);color:var(--g)">⚔️ SLÅSS GRATIS (inga coins i insats)</button>
+    </div>
+    <div id="colLog" class="col-section" style="max-height:200px;overflow-y:auto;scrollbar-width:none;padding-bottom:0"></div>
+  `;
+}
+
+function _fmtNum(n){return n>=1000?(n/1000).toFixed(1)+'k':String(n);}
+
+function _colStartFight(bet){
+  if(bet>0&&(G.coins||0)<bet){showT('❌ Inte tillräckligt coins!','r');return;}
+  if(bet>0){G.coins-=bet;updateHUD();}
+  _col.bet=bet;_col.active=true;_col.rd=0;
+  const log=$('colLog');if(log)log.innerHTML=`<div style="text-align:center;font-size:13px;font-weight:900;color:var(--y);padding:8px 0">⚔️ KAMP BÖRJAR! ${bet>0?bet+'⚡ insats':'Gratis fight'}</div>`;
+  document.querySelectorAll('.col-bet-btn').forEach(b=>b.disabled=true);
+  _col._t=setTimeout(_colRound,700);
+}
+
+function _colRound(){
+  if(!_col.active)return;
+  _col.rd++;
+  const mm=_COL_MOVES[~~(Math.random()*_COL_MOVES.length)];
+  const om=_COL_MOVES[~~(Math.random()*_COL_MOVES.length)];
+  const myLv=G.level||1;const oppLv=_col.opp.lv;
+  const lvRatio=Math.min(1.6,Math.max(0.5,(myLv+5)/(oppLv+5)));
+  const mdBase=mm.dmg[0]+~~(Math.random()*(mm.dmg[1]-mm.dmg[0]+1));
+  const mCrit=Math.random()<(mm.crit+(myLv*.003));
+  const myDmg=Math.round((mCrit?mdBase*1.9:mdBase)*lvRatio);
+  const odBase=om.dmg[0]+~~(Math.random()*(om.dmg[1]-om.dmg[0]+1));
+  const oCrit=Math.random()<om.crit;
+  const oppDmg=Math.round(oCrit?odBase*1.9:odBase);
+  _col.oppHp=Math.max(0,_col.oppHp-myDmg);
+  _col.myHp=Math.max(0,_col.myHp-oppDmg);
+  const mb=$('colMyBar'),ob=$('colOppBar'),mt=$('colMyHpTxt'),ot=$('colOppHpTxt');
+  if(mb)mb.style.width=_col.myHp+'%';
+  if(ob)ob.style.width=_col.oppHp+'%';
+  if(mt)mt.textContent=_col.myHp+' HP';
+  if(ot)ot.textContent=_col.oppHp+' HP';
+  const log=$('colLog');
+  if(log){
+    const myLine=`<div class="col-log-entry" style="color:var(--g)">${mCrit?'💥 KRITISK! ':''}${mm.em} ${mm.atk} — ${myDmg} dmg</div>`;
+    const oppLine=`<div class="col-log-entry" style="color:var(--pk)">${_col.opp.em}${oCrit?' 💥 KRITISK!':''} ${om.em} ${om.atk} — ${oppDmg} dmg</div>`;
+    log.innerHTML=`<div style="font-size:10px;color:var(--t3);font-family:var(--mono);padding-top:3px">R${_col.rd}</div>${myLine}${oppLine}`+log.innerHTML;
+    log.scrollTop=0;
+  }
+  if(mCrit){
+    const don=5+~~(Math.random()*20);_col.donations+=don;
+    if(log)log.innerHTML=`<div class="col-log-entry" style="color:var(--y)">👥 Publiken ger +${don}⚡!</div>`+log.innerHTML;
+    _colCrowdBurst();
+  }
+  _col.spectators+=~~(Math.random()*60)-15;
+  const lb=$('colLiveBar');if(lb)lb.textContent='● '+_fmtNum(Math.max(100,_col.spectators))+' ser på live';
+  vibe(mCrit?[30,10,50]:15);
+  if(_col.oppHp<=0){setTimeout(_colVictory,500);return;}
+  if(_col.myHp<=0){setTimeout(_colDefeat,500);return;}
+  _col._t=setTimeout(_colRound,700+~~(Math.random()*600));
+}
+
+function _colCrowdBurst(){
+  const cc=$('colosseumContent');if(!cc)return;
+  for(let i=0;i<5;i++){
+    const e=document.createElement('div');
+    e.className='crowd-emj';
+    e.style.left=(10+Math.random()*80)+'%';
+    e.style.animationDelay=(Math.random()*.5)+'s';
+    e.textContent=_COL_CROWD[~~(Math.random()*_COL_CROWD.length)];
+    cc.appendChild(e);
+    setTimeout(()=>e.remove(),2200);
+  }
+}
+
+function _colVictory(){
+  _col.active=false;
+  G._colStreak=(G._colStreak||0)+1;
+  const str=G._colStreak;
+  const mult=str>=10?5:str>=5?3:str>=3?2:1;
+  const betWin=Math.round(_col.bet*(1+mult*.9));
+  const base=20+~~(Math.random()*30);
+  const total=betWin+base+_col.donations;
+  const xpGain=15+_col.rd*2;
+  G.coins+=total;G.clout=(G.clout||0)+12+str*3;
+  G.battlesWon=(G.battlesWon||0)+1;
+  gainXP(xpGain,'battle');
+  _checkCloutMilestone();
+  save();updateHUD();_colUpdateHudClout();
+  const sp=$('colStreakPill'),sn=$('colStreakNum');
+  if(sp)sp.style.display='inline-flex';if(sn)sn.textContent=str;
+  const log=$('colLog');
+  if(log)log.innerHTML=`
+    <div style="background:rgba(57,255,20,.1);border:1px solid rgba(57,255,20,.3);border-radius:12px;padding:14px;text-align:center;margin-bottom:10px">
+      <div style="font-size:32px;margin-bottom:4px">🏆</div>
+      <div style="font-size:17px;font-weight:900;color:var(--g)">SEGER!</div>
+      <div style="font-size:13px;color:var(--y);font-weight:900;margin:6px 0">+${total} ⚡ coins</div>
+      ${mult>1?`<div style="font-size:11px;color:var(--o)">🔥 ${str}-WIN STREAK · ${mult}× BONUS!</div>`:''}
+      ${_col.donations>0?`<div style="font-size:11px;color:var(--t2);margin-top:3px">👥 Publikgåvor: +${_col.donations}⚡</div>`:''}
+      <div style="font-size:11px;color:var(--p);margin-top:3px">+${xpGain} XP · CLOUT +${12+str*3}</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button onclick="_colNextFight()" style="flex:1;padding:11px;background:linear-gradient(135deg,var(--p),var(--pk));border:none;border-radius:11px;font-size:13px;font-weight:900;color:#fff;cursor:pointer">⚔️ NÄSTA</button>
+      <button onclick="closeColosseum()" style="flex:1;padding:11px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:11px;font-size:13px;font-weight:700;color:#fff;cursor:pointer">🏠 HEM</button>
+    </div>`;
+  spawnParticles&&spawnParticles(window.innerWidth/2,window.innerHeight*.45,'stars');
+  coinRain&&coinRain(8);SFX.win&&SFX.win();vibe([60,30,120,30,200]);
+  addPetStory&&addPetStory('battle_win',{cap:(G.petName||'Pet')+' vann i COLOSSEUM! 🏟️ Win Streak: '+str,ico:'🏟️'});
+}
+
+function _colDefeat(){
+  _col.active=false;
+  G._colStreak=0;save();
+  const sp=$('colStreakPill');if(sp)sp.style.display='none';
+  const log=$('colLog');
+  if(log)log.innerHTML=`
+    <div style="background:rgba(255,45,85,.08);border:1px solid rgba(255,45,85,.3);border-radius:12px;padding:14px;text-align:center;margin-bottom:10px">
+      <div style="font-size:32px;margin-bottom:4px">💀</div>
+      <div style="font-size:17px;font-weight:900;color:#FF2D55">BESEGRAD</div>
+      <div style="font-size:11px;color:var(--t3);margin-top:6px">${_col.bet>0?'Insats förlorad · ':''}Streak bruten</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button onclick="openColosseum()" style="flex:1;padding:11px;background:rgba(255,45,85,.13);border:1px solid rgba(255,45,85,.4);border-radius:11px;font-size:13px;font-weight:900;color:#FF2D55;cursor:pointer">🔄 REVANSCH!</button>
+      <button onclick="closeColosseum()" style="flex:1;padding:11px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:11px;font-size:13px;font-weight:700;color:#fff;cursor:pointer">🏠 HEM</button>
+    </div>`;
+  vibe([100,50,200,50,100]);
+}
+
+function _colNextFight(){
+  const streak=G._colStreak;
+  openColosseum();
+  G._colStreak=streak;
+  const sp=$('colStreakPill'),sn=$('colStreakNum');
+  if(sp)sp.style.display='inline-flex';if(sn)sn.textContent=streak;
+}
+
+function _colTickSpectators(){
+  if(!$('colosseumWin').classList.contains('open'))return;
+  _col.spectators+=~~(Math.random()*40)-12;
+  _col.spectators=Math.max(800,_col.spectators);
+  const lb=$('colLiveBar');if(lb)lb.textContent='● '+_fmtNum(_col.spectators)+' ser på live';
+  setTimeout(_colTickSpectators,8000);
+}
+
+// ── CLOUT SYSTEM ──
+const _CLOUT_MILESTONES=[
+  {v:50,title:'⭐ INFLUENCER',col:'var(--y)'},
+  {v:200,title:'💜 CREATOR',col:'var(--p)'},
+  {v:500,title:'🔥 VIRAL KING',col:'var(--pk)'},
+  {v:1500,title:'👑 KARMA LEGEND',col:'gold'},
+];
+function _checkCloutMilestone(){
+  const cl=G.clout||0;
+  _CLOUT_MILESTONES.forEach(m=>{
+    const key='_cloutUnl'+m.v;
+    if(cl>=m.v&&!G[key]){
+      G[key]=true;
+      showT(m.title+' UPPNÅDD! 🏆','y');
+      spawnParticles&&spawnParticles(window.innerWidth/2,window.innerHeight*.35,'stars');
+      vibe([40,20,100,20,160]);save();
+    }
+  });
+}
+function _colUpdateHudClout(){
+  const cl=G.clout||0;
+  const badge=$('hudCloutBadge'),val=$('hudCloutVal');
+  if(badge){badge.style.display=cl>0?'':'none';}
+  if(val)val.textContent=cl;
+}
 const _FAKE_LEADERS=[
   {name:'Mia_T',lv:30,scores:{fish:1840,battle:2100,runner:4200,blocks:1650,dna:24}},
   {name:'SaraS',lv:22,scores:{fish:1203,battle:980,runner:1890,blocks:1240,dna:18}},
@@ -17517,7 +17798,7 @@ setInterval(renderCareCooldowns,10000);
 
 // ── STARTUP HOOKS ──
 // Apply offline decay on first load
-setTimeout(()=>{if(G.name){applyOfflineDecay();checkPetSick();renderCareCooldowns();_updateStoryRing&&_updateStoryRing();if((G.petStories||[]).length===0)addPetStory('happy');}},900);
+setTimeout(()=>{if(G.name){applyOfflineDecay();checkPetSick();renderCareCooldowns();_updateStoryRing&&_updateStoryRing();_colUpdateHudClout&&_colUpdateHudClout();if((G.petStories||[]).length===0)addPetStory('happy');}},900);
 // Initialize pet birthday if missing
 setTimeout(()=>{
   if(G.name&&!G.petBirthday){
