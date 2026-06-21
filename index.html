@@ -2935,6 +2935,7 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
             <canvas id="petCanvas" width="320" height="320" style="position:absolute;inset:0;width:110px;height:110px;border-radius:50%;z-index:3;box-shadow:0 0 32px rgba(0,232,122,.5)"></canvas>
             <div class="pet-emote" id="petEmote" style="font-size:18px;top:-14px;z-index:5"></div>
             <div class="pet-sad-alert" id="petSadAlert" style="font-size:9px;padding:2px 6px;bottom:-4px;z-index:5">😢</div>
+            <div id="petGearBadge" style="position:absolute;bottom:0;right:0;font-size:18px;line-height:1;z-index:7;filter:drop-shadow(0 1px 4px rgba(0,0,0,.9));pointer-events:none;transition:all .3s;"></div>
           </div>
           <!-- Species + evol hint -->
           <div style="font-size:9px;color:var(--t3);font-family:var(--mono);margin-bottom:6px;text-align:center">
@@ -4174,6 +4175,32 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
   </div>
 </div>
 
+<!-- FORTUNE ORACLE -->
+<div id="fortuneWrap" class="fortune-wrap hidden">
+  <button onclick="closeFortuneOracle()" style="position:absolute;top:16px;left:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:8px 14px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;z-index:1">←</button>
+  <div style="text-align:center;margin-bottom:28px;position:relative;z-index:1">
+    <div style="font-size:11px;font-weight:900;letter-spacing:.2em;color:rgba(191,95,255,.5);font-family:monospace;margin-bottom:6px">✦ K A R M A ✦</div>
+    <div style="font-size:24px;font-weight:900;color:#fff;letter-spacing:.05em">FORTUNE ORACLE</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:6px" id="fortuneSub">Tryck på orben — oändliga spådomar väntar</div>
+  </div>
+  <div id="fortuneOrb" class="fortune-orb" onclick="revealFortune()">🔮</div>
+  <div id="fortuneCard" class="fortune-card" style="margin-top:16px;width:100%;max-width:300px"></div>
+  <div style="position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(255,255,255,.18);font-family:monospace;letter-spacing:.1em;white-space:nowrap">KARMA ORACLE · OÄNDLIGA SPÅDOMAR</div>
+</div>
+
+<!-- PET CARD -->
+<div id="petCardWrap" class="pet-card-wrap hidden" onclick="closePetCard()">
+  <div class="pet-card" onclick="event.stopPropagation()">
+    <canvas id="petCardCanvas" class="pet-card-canvas"></canvas>
+    <div class="pet-card-holo"></div>
+  </div>
+  <div style="display:flex;gap:10px;margin-top:18px">
+    <button onclick="downloadPetCard()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:11px 22px;color:#fff;font-size:13px;font-weight:700;cursor:pointer">💾 Spara</button>
+    <button onclick="shareCardToFlash()" style="background:linear-gradient(135deg,var(--pk),var(--p));border:none;border-radius:12px;padding:11px 22px;color:#fff;font-size:13px;font-weight:900;cursor:pointer">⚡ Dela Flash</button>
+  </div>
+  <button onclick="closePetCard()" style="margin-top:10px;background:transparent;border:none;color:rgba(255,255,255,.35);font-size:12px;cursor:pointer;padding:6px">STÄNG ✕</button>
+</div>
+
 <!-- AI WINDOW -->
 <div class="fsw" id="aiWin">
   <div class="fsh">
@@ -4181,7 +4208,14 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
     <div style="width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--p),var(--b));display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0">🤖</div>
     <div><div class="ftl" style="font-size:14px">KARMA AI</div><div style="font-size:10px;color:var(--g)">● Online</div></div>
   </div>
-  <div class="cw-msgs" id="aiMsgs"><div class="msg them">Hej! 👋 Fråga om Flash, Circles, uppdrag, pet eller strategi!</div></div>
+  <div style="display:flex;gap:6px;overflow-x:auto;padding:8px 12px 0;scrollbar-width:none;flex-shrink:0">
+    <button onclick="_aiChip('Hur tjänar jag mer coins?')" style="flex-shrink:0;background:rgba(255,230,0,.1);border:1px solid rgba(255,230,0,.3);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--y);cursor:pointer;white-space:nowrap">💰 Coins</button>
+    <button onclick="_aiChip('Tips för Battle Arena')" style="flex-shrink:0;background:rgba(255,0,127,.1);border:1px solid rgba(255,0,127,.3);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--pk);cursor:pointer;white-space:nowrap">⚔️ Battle</button>
+    <button onclick="_aiChip('Hur tar jag hand om min pet?')" style="flex-shrink:0;background:rgba(57,255,20,.1);border:1px solid rgba(57,255,20,.3);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--g);cursor:pointer;white-space:nowrap">🐾 Pet</button>
+    <button onclick="_aiChip('Vad ska jag göra nu?')" style="flex-shrink:0;background:rgba(0,217,255,.1);border:1px solid rgba(0,217,255,.3);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--b);cursor:pointer;white-space:nowrap">🎯 Tips</button>
+    <button onclick="_aiChip('Hur fungerar DNA Mixer?')" style="flex-shrink:0;background:rgba(191,95,255,.1);border:1px solid rgba(191,95,255,.3);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--p);cursor:pointer;white-space:nowrap">🧬 DNA</button>
+  </div>
+  <div class="cw-msgs" id="aiMsgs"><div class="msg them">Hej! 👋 Jag är din KARMA AI — fråga mig om din pet, coins, battle eller vad du ska göra härnäst!</div></div>
   <div class="cw-inp-row"><input class="cw-inp" id="aiInp" placeholder="Fråga AI..." onkeydown="if(event.key==='Enter')sendAI()"><button class="cw-snd" onclick="sendAI()" style="background:var(--p)">→</button></div>
 </div>
 
@@ -7271,6 +7305,7 @@ function updatePetView(){
   $('petSpecies').textContent=s.s;$('petLvlN').textContent=G.level;
   const phe=$('petHeroEmoji');if(phe){phe.textContent=G.petEmoji||'🐉';if(G.petSick){phe.style.filter='drop-shadow(0 0 22px rgba(255,45,85,.9))';}else if((G.mood||90)<30){phe.style.filter='drop-shadow(0 0 22px rgba(80,0,130,.9))';}else if((G.mood||90)>75&&(G.hunger||80)>60){phe.style.filter='drop-shadow(0 0 26px rgba(57,255,20,.95))';}else{phe.style.filter='drop-shadow(0 0 22px rgba(57,255,20,.7))';}};
   const ne=gNE();$('petEvol').textContent=ne?'NEXT EVOL: LV'+ne:'MAX EVOLUTION ⚡';
+  const pgb=$('petGearBadge');if(pgb)pgb.textContent=G.equippedGear||'';
   $('xpNums').textContent=G.exp+'/'+need;
   $('stA').textContent=G.actionStat;$('stAb').style.width=Math.min(100,G.actionStat)+'%';
   $('stC').textContent=G.commerceStat;$('stCb').style.width=Math.min(100,G.commerceStat)+'%';
@@ -8569,11 +8604,75 @@ function renderBadges(){if(!$('badgeGrid'))return;$('badgeGrid').innerHTML=BADGE
 function shareProfile(){const txt='⚡ '+G.name+' on KARMA!\n'+gS().s+' · LV'+G.level+'\n🔥 '+G.streak+'d streak · 💸 '+G.totalSEK+' SEK\nReal life. Game engine.';if(navigator.share)navigator.share({title:'KARMA',text:txt});else{navigator.clipboard?.writeText(txt);showT('📋 Kopierat!','g');}}
 
 // ── AI ──
+function _getAIReply(txt){
+  const t=txt.toLowerCase();
+  const n=G.petName||'din pet';
+  const lv=G.level||1;
+  const coins=G.coins||0;
+  const str=G.streak||0;
+  if(t.includes('coin')||t.includes('pengar')||t.includes('tjäna')||t.includes('rik')||t.includes('fattig')){
+    const tips=['💰 Boss Battle ger 3× belöning — bästa XP+coin grind i spelet!','💰 Fiska djupvatten nattetid: Månfisk 🌙 ger 320 coins per fångst!','💰 Skapa ett varumärke i ME-tabben = +300 coins direkt!','💰 DNA Mixer med legendary-mutations = 500+ coins bonus.','💰 Dagliga uppdrag i WORLD-tabben = säkraste vägen till rikedom!'];
+    return tips[~~(Math.random()*tips.length)];
+  }
+  if(t.includes('battle')||t.includes('slåss')||t.includes('boss')||t.includes('kamp')||t.includes('arena')){
+    return '⚔️ Battle-tips: börja med BLOCK för att spara HP. Använd FUSION när du har 80 MP. Boss Battle (wave 4 Skull Lord) ger 3× coins och XP — perfekt för snabb grind!';
+  }
+  if(t.includes('sjuk')||t.includes('sick')||t.includes('ill')){
+    return `💊 ${n} är sjuk = halv XP och dåligt mood. Mata, lägg ner och bada för att läka. Undvik att ${n} svälter under 10 i hunger — det triggar sjukdom!`;
+  }
+  if(t.includes('pet')||t.includes('mat')||t.includes('hunger')||t.includes('mata')||t.includes('mood')||t.includes('energi')||t.includes('energy')){
+    return `🐾 ${n} mår bäst om du matar (hunger >60), sover (energi >50) och leker varje dag. Prata med pet bygger Bond! Sjuk pet = halv XP, så håll hunger >30 alltid.`;
+  }
+  if(t.includes('streak')||t.includes('daglig')||t.includes('login')||t.includes('dag')){
+    return str>0 ? `🔥 ${str} dagars streak — bra! Dag 7 = double XP. Dag 30 = LEGENDARY reward. Logga in kl 08 för optimal Flash-timing och max streak-bonus.` : '🔥 Starta en streak nu! Posta en Flash idag — det räcker. Streakar ger exponentiell XP-bonus!';
+  }
+  if(t.includes('dna')||t.includes('mutation')){
+    return `🧬 DNA Mixer: samla BODY + ELEMENT + PERK-fragment via fishing och battle. Legendary-kombos ger unika pets med special-perks. ${n} på LV${lv} kan evolva vid LV${Math.ceil((lv+1)/5)*5}!`;
+  }
+  if(t.includes('fisk')||t.includes('fish')){
+    return '🎣 Fiske-tips: välj djupvattenzonen för sällsynta fiskar. Natt-läge (kl 22–06) = Månfisk 🌙 och Nattjärna 🌟 dyker upp! Platinum-metspö = +35% chans legendary.';
+  }
+  if(t.includes('quiz')||t.includes('trivia')||t.includes('fråg')){
+    return '📚 Pet Quiz ger 5 frågor/dag — perfekt score = 100 bonus-coins! Quizet återställs vid midnatt. Ta det varje dag för easy XP utan risk.';
+  }
+  if(t.includes('world')||t.includes('bygg')||t.includes('stad')||t.includes('territorium')){
+    return '🌍 World-tips: uppgradera byggnader för passiv ⚡/h inkomst. Coffee Shop → Gym → Hotel = bäst ROI. Fånga vilda pets för World Points och terräng-expansion!';
+  }
+  if(t.includes('social')||t.includes('vän')||t.includes('circle')||t.includes('flash')){
+    return '⭕ Circles med 5+ aktiva vänner = 1.5× group streak bonus. Posta Flash dagligen för Trust Score. Silver Trust (70+) = badge + shop-rabatter!';
+  }
+  if(t.includes('evolution')||t.includes('evol')||t.includes('level')||t.includes('nivå')||t.includes('xp')){
+    return `⭐ ${n} är LV${lv}. XP-tips: Boss Battle ger mest XP/session. Streak + Circles + Daily Bond = triple XP. Nästa evolution runt LV${Math.ceil((lv+1)/5)*5}!`;
+  }
+  if(t.includes('gear')||t.includes('utrustning')||t.includes('kläder')||t.includes('accessory')){
+    return '⚡ Gear köps i SHOP-tabben. Equipped gear visas på din pet-avatar! Dragon Wings (+30 All) är bäst value. Gear höjer dina stats permanent.';
+  }
+  if(t.includes('fortune')||t.includes('spådom')||t.includes('oracle')){
+    return '🔮 Fortune Oracle finns i hamburgar-menyn! Tryck på orben för daglig spådom — ger XP och mystiska events. Du kan trycka hur många gånger som helst!';
+  }
+  if(t.includes('vad ska')||t.includes('hjälp')||t.includes('tips')||t.includes('bäst')||t.includes('börja')){
+    if(coins<100) return `💡 ${n} LV${lv}: du behöver coins! Fiska en gång, gör ett dagligt uppdrag, eller spela Boss Battle. Du behöver ${100-coins} coins till 100.`;
+    if(str===0) return '💡 Starta din streak NU! En Flash räcker. Posta något kul om din pet och streak-bonusen börjar ticka.';
+    if(lv<5) return `💡 Fokusera på XP nu! ${n} på LV${lv} kan nå LV5 efter 3 Battle-sessioner. LV5 = RARE-rarity på Pet Card!`;
+    return `💡 ${n} ser stark ut på LV${lv}! Nästa steg: nå LV${Math.ceil((lv+1)/5)*5} för evolution, bygg fler World-byggnader, och prova Viral Engine i STAGE-knappen. Du är på rätt väg! 🚀`;
+  }
+  const defaults=[
+    `🤖 ${n} på LV${lv} — prova Boss Battle för 3× XP, eller fiska nattetid för sällsynta fiskar!`,
+    `💡 Streak: ${str>0?str+' dagar — håll kvar!':'Börja idag med en Flash!'} Streakar = exponentiell XP.`,
+    '🌍 World-kartan har dolda uppdrag och vilda pets — kika i WORLD-tabben!',
+    '🧬 DNA Mixer + Boss Battle = snabbaste vägen till legendary pet-evolution.',
+    '🔮 Fortune Oracle i menyn — gratis XP och spådom varje session!',
+    `🏆 Leaderboard: ${coins>=500?'du ser bra ut!':'samla '+Math.max(0,500-coins)+' coins till topp-3!'} Boss Battle är snabbaste vägen!`,
+  ];
+  return defaults[~~(Math.random()*defaults.length)];
+}
+function _aiChip(txt){const inp=$('aiInp');if(inp){inp.value=txt;sendAI();}}
 function sendAI(){
   const inp=$('aiInp');const txt=inp.value.trim();if(!txt)return;inp.value='';
-  const m=$('aiMsgs');const d=document.createElement('div');d.innerHTML=`<div class="msg me">${txt}</div>`;m.appendChild(d);m.scrollTop=m.scrollHeight;
-  const typing=document.createElement('div');typing.innerHTML=`<div class="msg them" style="color:var(--t3)">✦ tänker...</div>`;m.appendChild(typing);m.scrollTop=m.scrollHeight;
-  setTimeout(()=>{typing.innerHTML=`<div class="msg them">${AI_REPLIES[~~(Math.random()*AI_REPLIES.length)]}</div>`;m.scrollTop=m.scrollHeight;},600+Math.random()*800);
+  const m=$('aiMsgs');
+  const d=document.createElement('div');d.innerHTML=`<div class="msg me">${txt}</div>`;m.appendChild(d);m.scrollTop=m.scrollHeight;
+  const typing=document.createElement('div');typing.innerHTML=`<div class="msg them" style="color:var(--t3);font-style:italic;font-size:12px">✦ tänker...</div>`;m.appendChild(typing);m.scrollTop=m.scrollHeight;
+  setTimeout(()=>{typing.innerHTML=`<div class="msg them">${_getAIReply(txt)}</div>`;m.scrollTop=m.scrollHeight;},500+Math.random()*700);
 }
 
 // ══════════════════════════════════════════════
@@ -16885,6 +16984,20 @@ function renderGameScores(){
   const map=[{id:'scoreBadge_fish',key:'fish'},{id:'scoreBadge_battle',key:'battle'},{id:'scoreBadge_catch',key:'catch'},{id:'scoreBadge_boss',key:'boss'},{id:'scoreBadge_runner',key:'runner'}];
   map.forEach(m=>{const el=$(m.id);if(!el)return;const b=getGameBest(m.key);if(b>0){el.textContent='🏆 '+b;el.style.display='block';}else{el.style.display='none';}});
 }
+
+// ── ANIMATED LIVE COUNTS ──
+const _LIVE_RANGES={liveCtFisk:[170,330],liveCtBattle:[850,1700],liveCtFlash:[2700,4400],liveCtPets:[55,145],liveCtBoss:[370,730]};
+function _animateLiveCounts(){
+  Object.entries(_LIVE_RANGES).forEach(([id,[mn,mx]])=>{
+    const el=$(id);if(!el)return;
+    const v=mn+~~(Math.random()*(mx-mn));
+    const s=v>=1000?(v/1000).toFixed(1)+'k live':v+' live';
+    el.style.transition='opacity .4s';
+    el.style.opacity='0';
+    setTimeout(()=>{el.textContent=s;el.style.opacity='1';},350);
+  });
+}
+setInterval(_animateLiveCounts,30000);
 const _FAKE_LEADERS=[
   {name:'Mia_T',lv:30,scores:{fish:1840,battle:2100,runner:4200,blocks:1650,dna:24}},
   {name:'SaraS',lv:22,scores:{fish:1203,battle:980,runner:1890,blocks:1240,dna:18}},
