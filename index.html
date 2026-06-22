@@ -2975,6 +2975,23 @@ body{padding-top:env(safe-area-inset-top,0);}
   <div class="main">
     <!-- HOME -->
     <div class="view active" id="view-home">
+      <!-- GREETING BAR -->
+      <div id="homeGreetBar" style="padding:8px 14px 0;position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div id="homeGreetTxt" style="font-size:13px;font-weight:900;color:#fff;font-family:var(--mono);line-height:1.2">Hej! 👋</div>
+          <div id="homeGreetName" style="font-size:11px;color:rgba(255,255,255,.4);font-family:var(--mono)">Laddar...</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div id="homeStreakPill" style="display:flex;align-items:center;gap:3px;background:rgba(255,68,85,.15);border:1.5px solid rgba(255,68,85,.4);border-radius:20px;padding:4px 9px">
+            <span style="font-size:13px">🔥</span>
+            <span id="homeStreakVal" style="font-size:11px;font-weight:900;color:#FF4455;font-family:var(--mono)">0d</span>
+          </div>
+          <div id="homeCoinsPill" style="display:flex;align-items:center;gap:3px;background:rgba(255,230,0,.12);border:1.5px solid rgba(255,230,0,.35);border-radius:20px;padding:4px 9px">
+            <span style="font-size:11px">⚡</span>
+            <span id="homeCoinsVal" style="font-size:11px;font-weight:900;color:var(--y);font-family:var(--mono)">0</span>
+          </div>
+        </div>
+      </div>
       <!-- PET HERO — TAMAGOTCHI FOCUS -->
       <div class="pet-hero" id="sec-pet" style="padding:0;overflow:hidden">
         <div class="pet-hero-bg"></div>
@@ -7384,6 +7401,8 @@ function updateHUD(){
   $('tr1').style.width=Math.min(100,G.bountiesDone*3)+'%';$('tv1').textContent=G.bountiesDone;
   $('tr2').style.width=Math.min(100,G.streak*4)+'%';$('tv2').textContent=G.streak+'d';
   $('tr4').style.width=Math.min(100,G.totalSEK/20)+'%';$('tv4').textContent=G.totalSEK;
+  // Home greeting bar
+  {const h=new Date().getHours();const gt=h<5?'God natt':'God morgon';const greet=h<12?gt:h<17?'God dag':h<21?'God kväll':'God natt';const gt2=$('homeGreetTxt');const gn=$('homeGreetName');const gs=$('homeStreakVal');const gc=$('homeCoinsVal');if(gt2)gt2.textContent=greet+' '+((h>=5&&h<12)?'☀️':h<17?'✨':h<21?'🌙':'⭐');if(gn)gn.textContent=(G.name||'Spelare')+' · KARMA PLAYER';if(gs)gs.textContent=G.streak+'d';if(gc)gc.textContent=G.coins>=1000?Math.round(G.coins/100)/10+'K':G.coins;}
   // Streak ring
   $('streakN').textContent=G.streak;
   const srb=$('streakRingBig');if(srb)srb.className='streak-ring-big'+(G.streak>0?' on':'');
