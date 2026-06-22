@@ -2688,6 +2688,37 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
 /* ── CLOUT BADGE ── */
 @keyframes cloutPulse{0%,100%{box-shadow:0 0 6px rgba(191,95,255,.6);}50%{box-shadow:0 0 14px rgba(191,95,255,.9),0 0 28px rgba(191,95,255,.4);}}
 .clout-pill{background:rgba(191,95,255,.15);border:1px solid rgba(191,95,255,.45);border-radius:9px;padding:3px 8px;font-size:10px;font-weight:900;color:var(--p);font-family:var(--mono);cursor:pointer;animation:cloutPulse 2s ease-in-out infinite;}
+
+/* ── TOWER DEFENSE ── */
+#tdCanvas{display:block;width:100%;flex-shrink:0;touch-action:none;cursor:crosshair;}
+.td-bottom-bar{display:flex;gap:5px;padding:8px 10px;background:rgba(0,0,0,.92);border-top:1px solid rgba(255,159,10,.2);overflow-x:auto;scrollbar-width:none;flex-shrink:0;}
+.td-tower-btn{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 11px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:12px;cursor:pointer;transition:all .12s;min-width:56px;}
+.td-tower-btn.sel{border-color:var(--y);background:rgba(255,230,0,.12);box-shadow:0 0 12px rgba(255,230,0,.25);}
+.td-tower-btn:active{transform:scale(.9);}
+.td-em{font-size:22px;line-height:1;}
+.td-nm{font-size:8px;font-weight:900;color:var(--t2);font-family:var(--mono);letter-spacing:.04em;margin-top:1px;}
+.td-cost-lbl{font-size:10px;font-weight:900;color:var(--y);}
+
+/* ── ONBOARDING STAR PARTICLES ── */
+@keyframes obStarFloat{0%{transform:translateY(0) scale(1);opacity:.8;}100%{transform:translateY(-140px) scale(.3);opacity:0;}}
+.ob-star{position:absolute;pointer-events:none;animation:obStarFloat linear infinite;font-size:9px;color:var(--g);}
+@keyframes karmaLogoPulse{0%,100%{text-shadow:0 0 25px rgba(57,255,20,.75),0 0 60px rgba(57,255,20,.3);}50%{text-shadow:0 0 50px rgba(57,255,20,1),0 0 110px rgba(57,255,20,.5);}}
+.ob-logo-hero .ok{animation:karmaLogoPulse 2.2s ease-in-out infinite!important;}
+
+/* ── PET HERO GLOW UPGRADE ── */
+@keyframes petHeroGlow{0%,100%{filter:drop-shadow(0 0 22px rgba(57,255,20,.75)) drop-shadow(0 0 55px rgba(57,255,20,.2));}50%{filter:drop-shadow(0 0 42px rgba(57,255,20,1)) drop-shadow(0 0 90px rgba(57,255,20,.4));}}
+#petHeroEmoji{animation:petBob 2.5s ease-in-out infinite,petHeroGlow 3s ease-in-out infinite!important;}
+.chb{transition:transform .1s,box-shadow .15s!important;}
+.chb:active:not(.on-cd){transform:scale(.93)!important;box-shadow:0 0 22px rgba(57,255,20,.4)!important;}
+
+/* ── FLASH FEED UPGRADE ── */
+.flash-post-card{border-radius:18px!important;margin:0 12px 14px!important;overflow:hidden!important;border:1px solid rgba(255,255,255,.08)!important;}
+.flash-post-actions{display:flex!important;flex-direction:column!important;gap:14px!important;align-items:center!important;}
+
+/* ── MOBILE SAFE AREA ── */
+.bnav{padding-bottom:max(8px,env(safe-area-inset-bottom,8px))!important;}
+body{padding-top:env(safe-area-inset-top,0);}
+.fsh{padding-top:max(14px,calc(env(safe-area-inset-top,0px) + 14px))!important;}
 </style>
 
 </head>
@@ -3789,6 +3820,12 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
           <div class="xgame-info"><div class="xgame-nm">PET QUIZ</div><div class="xgame-sub">Dagliga trivia-frågor</div><div class="xgame-rew">+COINS +XP</div></div>
           <div class="game-live-ct">DAGLIG</div>
         </div>
+        <div class="xgame-card" style="position:relative;border:1.5px solid rgba(255,159,10,.35)" onclick="openTowerDefense()">
+          <div class="hot-badge" style="background:linear-gradient(135deg,#FF9F0A,#FFE600);color:#000">⚔️ NY</div>
+          <div class="xgame-banner" style="background:linear-gradient(135deg,#1a1000,#2d1e00)">🏰</div>
+          <div class="xgame-info"><div class="xgame-nm" style="color:var(--o)">TOWER DEFENSE</div><div class="xgame-sub">Endless waves · 5 torres</div><div class="xgame-rew" style="color:var(--y)">+XP +COINS</div></div>
+          <div class="game-live-ct" id="liveCtTD" style="color:var(--o)">LIVE</div>
+        </div>
         <div class="xgame-card" style="position:relative" onclick="openWeeklyTournament()">
           <div class="hot-badge">🏆 VECKA</div>
           <div class="xgame-banner" style="background:linear-gradient(135deg,#1a1000,#332000)">🏆</div>
@@ -4198,6 +4235,38 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
   <div class="dm-inp-row">
     <input class="dm-inp" id="dmInp" placeholder="Skriv..." onkeydown="if(event.key==='Enter')sendDM()">
     <button class="dm-snd" onclick="sendDM()">→</button>
+  </div>
+</div>
+
+<!-- TOWER DEFENSE -->
+<div class="fsw" id="towerWin">
+  <div class="fsh" style="background:rgba(0,0,0,.9);gap:10px">
+    <button class="fbk" onclick="closeTowerDefense()">←</button>
+    <div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#1a1000,#3a2200);border:1px solid rgba(255,159,10,.35);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0">🏰</div>
+    <div style="flex:1"><div class="ftl" style="font-size:14px;color:var(--o)">TOWER DEFENSE</div><div style="font-size:10px;color:var(--t3);font-family:var(--mono)">Endless · Wave mode</div></div>
+    <div style="display:flex;gap:8px;font-size:11px;font-weight:900;font-family:var(--mono)">
+      <span id="tdWave" style="color:var(--p)">W1</span>
+      <span id="tdLives" style="color:#FF3B30">❤️20</span>
+      <span id="tdCoins" style="color:var(--y)">⚡150</span>
+    </div>
+  </div>
+  <div id="tdWrap" style="flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;background:#060910">
+    <canvas id="tdCanvas"></canvas>
+    <div id="tdRestartBtn" onclick="_tdRestart()" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;z-index:10;cursor:pointer;background:rgba(0,0,0,.6)">
+      <div style="background:rgba(10,10,20,.95);border:2px solid rgba(255,59,48,.5);border-radius:18px;padding:24px 36px;text-align:center">
+        <div style="font-size:24px;margin-bottom:8px">💀</div>
+        <div style="font-size:14px;font-weight:900;color:var(--y);font-family:var(--mono);margin-bottom:4px">GAME OVER</div>
+        <div style="font-size:11px;color:var(--t3);margin-bottom:14px" id="tdGoMsg">Score: 0</div>
+        <div style="background:linear-gradient(135deg,var(--o),var(--y));border:none;border-radius:12px;padding:10px 24px;color:#000;font-size:13px;font-weight:900;cursor:pointer;font-family:var(--mono)">SPELA IGEN ↻</div>
+      </div>
+    </div>
+  </div>
+  <div class="td-bottom-bar" id="tdTowerBar">
+    <div class="td-tower-btn sel" id="tdBtn0" onclick="_tdSelTower(0)"><div class="td-em">⚡</div><div class="td-nm">VOLT</div><div class="td-cost-lbl">15⚡</div></div>
+    <div class="td-tower-btn" id="tdBtn1" onclick="_tdSelTower(1)"><div class="td-em">🔥</div><div class="td-nm">INFERNO</div><div class="td-cost-lbl">22⚡</div></div>
+    <div class="td-tower-btn" id="tdBtn2" onclick="_tdSelTower(2)"><div class="td-em">🌊</div><div class="td-nm">CRYO</div><div class="td-cost-lbl">18⚡</div></div>
+    <div class="td-tower-btn" id="tdBtn3" onclick="_tdSelTower(3)"><div class="td-em">💣</div><div class="td-nm">BOMBER</div><div class="td-cost-lbl">32⚡</div></div>
+    <div class="td-tower-btn" id="tdBtn4" onclick="_tdSelTower(4)"><div class="td-em">🐉</div><div class="td-nm">APEX</div><div class="td-cost-lbl">55⚡</div></div>
   </div>
 </div>
 
@@ -17027,6 +17096,332 @@ function renderGameScores(){
   map.forEach(m=>{const el=$(m.id);if(!el)return;const b=getGameBest(m.key);if(b>0){el.textContent='🏆 '+b;el.style.display='block';}else{el.style.display='none';}});
 }
 
+// ══════════════════════════════════════════════
+// ── KARMA TOWER DEFENSE ──
+// ══════════════════════════════════════════════
+const TD_COLS=13,TD_ROWS=20;
+// Snake path: 3 horizontal runs connected by vertical segments
+const TD_PATH=[
+  [6,0],[6,1],[6,2],
+  [5,2],[4,2],[3,2],[2,2],[1,2],
+  [1,3],[1,4],[1,5],[1,6],[1,7],
+  [2,7],[3,7],[4,7],[5,7],[6,7],[7,7],[8,7],[9,7],[10,7],[11,7],
+  [11,8],[11,9],[11,10],[11,11],[11,12],
+  [10,12],[9,12],[8,12],[7,12],[6,12],[5,12],[4,12],[3,12],[2,12],[1,12],
+  [1,13],[1,14],[1,15],[1,16],[1,17],
+  [2,17],[3,17],[4,17],[5,17],[6,17],[7,17],[8,17],[9,17],[10,17],[11,17],
+  [11,18],[11,19]
+];
+const TD_TOWERS=[
+  {id:'volt',em:'⚡',nm:'VOLT',  cost:15,range:2.2,dmg:12,rate:.45,col:'#FFE600',chain:false},
+  {id:'fire',em:'🔥',nm:'INFERNO',cost:22,range:1.8,dmg:22,rate:1.1, col:'#FF6B00',burn:5},
+  {id:'cryo',em:'🌊',nm:'CRYO',  cost:18,range:2.5,dmg:7, rate:.7,  col:'#00D9FF',slow:.5},
+  {id:'boom',em:'💣',nm:'BOMBER',cost:32,range:2.1,dmg:38,rate:1.8, col:'#FF3B30',aoe:1.3},
+  {id:'apex',em:'🐉',nm:'APEX',  cost:55,range:3.8,dmg:62,rate:1.3, col:'#BF5FFF'},
+];
+const TD_ENEMIES=[
+  {em:'😈',nm:'CREEP', baseHp:18, spd:1.0,rew:3, sz:.48},
+  {em:'🧟',nm:'UNDEAD',baseHp:35, spd:.7, rew:5, sz:.55},
+  {em:'💀',nm:'REAPER',baseHp:65, spd:1.4,rew:8, sz:.5},
+  {em:'👹',nm:'BRUTE', baseHp:140,spd:.5, rew:15,sz:.75},
+  {em:'🌀',nm:'VOID',  baseHp:280,spd:.9, rew:20,sz:.65},
+  {em:'👺',nm:'BOSS',  baseHp:800,spd:.3, rew:60,sz:1.1,boss:true},
+];
+const _td={
+  canvas:null,ctx:null,W:0,H:0,cs:0,rs:0,
+  pathPx:[],pathSet:new Set(),
+  grid:[],towers:[],enemies:[],projs:[],parts:[],
+  wave:0,lives:20,coins:150,score:0,
+  selIdx:0,running:false,waveActive:false,
+  spawnQ:[],spawnTimer:0,nextWaveT:3,eid:0,
+  _raf:null,_lastT:0,
+};
+function openTowerDefense(){
+  const win=$('towerWin');if(!win)return;
+  win.classList.add('open');
+  _td.wave=0;_td.lives=20;_td.coins=150;_td.score=0;
+  _td.towers=[];_td.enemies=[];_td.projs=[];_td.parts=[];
+  _td.grid=Array.from({length:TD_ROWS},()=>Array(TD_COLS).fill(null));
+  _td.selIdx=0;_td.running=true;_td.waveActive=false;
+  _td.spawnQ=[];_td.spawnTimer=0;_td.nextWaveT=3;_td.eid=0;
+  cancelAnimationFrame(_td._raf);_td._lastT=0;
+  setTimeout(()=>{
+    const wrap=$('tdWrap');if(!wrap)return;
+    const rect=wrap.getBoundingClientRect();
+    const bbarH=70;
+    _td.W=rect.width;
+    _td.H=Math.max(200,rect.height-bbarH);
+    const canvas=$('tdCanvas');if(!canvas)return;
+    _td.canvas=canvas;_td.ctx=canvas.getContext('2d');
+    const dpr=window.devicePixelRatio||1;
+    canvas.width=Math.round(_td.W*dpr);
+    canvas.height=Math.round(_td.H*dpr);
+    canvas.style.width=_td.W+'px';
+    canvas.style.height=_td.H+'px';
+    _td.ctx.scale(dpr,dpr);
+    _td.cs=_td.W/TD_COLS;
+    _td.rs=_td.H/TD_ROWS;
+    _td.pathPx=TD_PATH.map(([c,r])=>({x:(c+.5)*_td.cs,y:(r+.5)*_td.rs}));
+    _td.pathSet=new Set(TD_PATH.map(([c,r])=>c+','+r));
+    canvas.ontouchstart=_tdPlace;canvas.onclick=_tdPlace;
+    _tdSelTower(0);_tdUI();
+    _td._raf=requestAnimationFrame(_tdLoop);
+    vibe([20,10,40]);
+  },80);
+}
+function closeTowerDefense(){
+  $('towerWin').classList.remove('open');
+  cancelAnimationFrame(_td._raf);_td.running=false;
+}
+function _tdSelTower(idx){
+  _td.selIdx=idx;
+  for(let i=0;i<5;i++){const b=$('tdBtn'+i);if(b)b.classList.toggle('sel',i===idx);}
+}
+function _tdPlace(evt){
+  evt.preventDefault();
+  const rect=_td.canvas.getBoundingClientRect();
+  const cx=evt.touches?evt.touches[0].clientX:evt.clientX;
+  const cy=evt.touches?evt.touches[0].clientY:evt.clientY;
+  const col=Math.floor((cx-rect.left)/_td.cs);
+  const row=Math.floor((cy-rect.top)/_td.rs);
+  if(col<0||col>=TD_COLS||row<0||row>=TD_ROWS)return;
+  if(_td.pathSet.has(col+','+row)){showT('❌ Vägen är blockerad!','r');return;}
+  if(_td.grid[row][col]){showT('⚠️ Platsen uppagen!','y');return;}
+  const def=TD_TOWERS[_td.selIdx];
+  if(_td.coins<def.cost){showT('❌ Behöver '+def.cost+'⚡','r');return;}
+  _td.coins-=def.cost;
+  const t={def,col,row,x:(col+.5)*_td.cs,y:(row+.5)*_td.rs,cd:0};
+  _td.grid[row][col]=t;_td.towers.push(t);
+  _tdUI();vibe(20);
+}
+function _tdStartWave(){
+  _td.wave++;_td.waveActive=true;_td.spawnTimer=0;
+  const w=_td.wave,cnt=6+w*2,q=[];
+  for(let i=0;i<cnt;i++){
+    let ti;
+    const r=Math.random();
+    if(w>=10&&r<.04)ti=5;
+    else if(w>=8&&r<.12)ti=4;
+    else if(w>=5&&r<.22)ti=3;
+    else if(w>=3&&r<.38)ti=2;
+    else if(w>=2&&r<.55)ti=1;
+    else ti=0;
+    const et=TD_ENEMIES[ti];
+    const hp=Math.floor(et.baseHp*(1+w*.18));
+    q.push({id:_td.eid++,et,hp,mhp:hp,spd:et.spd*(1+w*.04),pi:0,
+      x:_td.pathPx[0].x,y:_td.pathPx[0].y,rew:et.rew,sz:et.sz,
+      slow:0,burn:0,bdmg:0});
+  }
+  if(w%5===0){
+    const et=TD_ENEMIES[5];const hp=Math.floor(et.baseHp*(1+w*.3));
+    q.push({id:_td.eid++,et,hp,mhp:hp,spd:et.spd,pi:0,
+      x:_td.pathPx[0].x,y:_td.pathPx[0].y,rew:et.rew*w,sz:et.sz,
+      slow:0,burn:0,bdmg:0});
+  }
+  _td.spawnQ=q;_tdUI();
+  showT('⚔️ WAVE '+w+' — '+q.length+' fiender!','r');
+}
+function _tdLoop(ts){
+  if(!_td.running)return;
+  _td._raf=requestAnimationFrame(_tdLoop);
+  const dt=_td._lastT?Math.min(.05,(ts-_td._lastT)/1000):.016;
+  _td._lastT=ts;
+  if(!_td.waveActive){
+    _td.nextWaveT-=dt;
+    if(_td.nextWaveT<=0)_tdStartWave();
+    _tdDraw();return;
+  }
+  // Spawn
+  if(_td.spawnQ.length>0){
+    _td.spawnTimer-=dt;
+    if(_td.spawnTimer<=0){_td.enemies.push(_td.spawnQ.shift());_td.spawnTimer=.75+Math.random()*.45;}
+  }
+  // Update enemies
+  const W=_td.W,H=_td.H,cs=_td.cs,rs=_td.rs;
+  for(let i=_td.enemies.length-1;i>=0;i--){
+    const e=_td.enemies[i];
+    if(e.hp<=0){
+      _tdSpark(e.x,e.y,e.et.boss?'#FF007F':'#FFE600',e.et.boss?14:7);
+      _td.coins+=e.rew;_td.score+=e.rew*_td.wave;
+      _td.enemies.splice(i,1);_tdUI();continue;
+    }
+    e.slow=Math.max(0,e.slow-dt);
+    if(e.burn>0){e.burn-=dt;e.hp-=e.bdmg*dt;}
+    const eff=e.slow>0?e.spd*.4:e.spd;
+    if(e.pi>=_td.pathPx.length-1){
+      _td.lives=Math.max(0,_td.lives-1);
+      _td.enemies.splice(i,1);_tdUI();
+      vibe([60,20,120]);
+      if(_td.lives<=0){_tdGameOver();return;}
+      continue;
+    }
+    const tgt=_td.pathPx[e.pi+1];
+    const dx=tgt.x-e.x,dy=tgt.y-e.y,d=Math.sqrt(dx*dx+dy*dy);
+    const mv=eff*cs*dt*2.5;
+    if(d<=mv){e.x=tgt.x;e.y=tgt.y;e.pi++;}
+    else{e.x+=dx/d*mv;e.y+=dy/d*mv;}
+  }
+  // Tower attacks
+  for(const t of _td.towers){
+    t.cd=Math.max(0,t.cd-dt);if(t.cd>0)continue;
+    const rng=t.def.range*cs;
+    let best=null,bestPi=-1;
+    for(const e of _td.enemies){
+      const dx=e.x-t.x,dy=e.y-t.y;
+      if(dx*dx+dy*dy<=rng*rng&&e.pi>bestPi){best=e;bestPi=e.pi;}
+    }
+    if(!best)continue;
+    t.cd=t.def.rate;
+    if(t.def.aoe){
+      const ar=t.def.aoe*cs;
+      _td.enemies.forEach(e=>{const dx=e.x-best.x,dy=e.y-best.y;if(dx*dx+dy*dy<=ar*ar)e.hp-=t.def.dmg;});
+      _tdSpark(best.x,best.y,t.def.col,10);
+    }else{
+      _td.projs.push({x:t.x,y:t.y,tid:best.id,spd:5.5*cs,dmg:t.def.dmg,
+        col:t.def.col,slow:t.def.slow||0,burn:t.def.burn||0,bdmg:t.def.dmg*.3});
+    }
+  }
+  // Update projectiles
+  for(let i=_td.projs.length-1;i>=0;i--){
+    const p=_td.projs[i];
+    const tgt=_td.enemies.find(e=>e.id===p.tid);
+    if(!tgt||tgt.hp<=0){_td.projs.splice(i,1);continue;}
+    const dx=tgt.x-p.x,dy=tgt.y-p.y,d=Math.sqrt(dx*dx+dy*dy);
+    const mv=p.spd*dt;
+    if(d<=mv+5){
+      tgt.hp-=p.dmg;
+      if(p.slow)tgt.slow=1.8;
+      if(p.burn>0){tgt.burn=p.burn;tgt.bdmg=p.bdmg;}
+      _tdSpark(tgt.x,tgt.y,p.col,4);
+      _td.projs.splice(i,1);
+    }else{p.x+=dx/d*mv;p.y+=dy/d*mv;}
+  }
+  // Particles
+  for(let i=_td.parts.length-1;i>=0;i--){
+    const pt=_td.parts[i];pt.life-=dt;
+    pt.x+=pt.vx*dt;pt.y+=pt.vy*dt;pt.vy+=90*dt;
+    if(pt.life<=0)_td.parts.splice(i,1);
+  }
+  // Wave complete?
+  if(_td.waveActive&&_td.spawnQ.length===0&&_td.enemies.length===0){
+    _td.waveActive=false;_td.nextWaveT=4;
+    const bonus=12+_td.wave*5;_td.coins+=bonus;_tdUI();
+    showT('✅ WAVE '+_td.wave+' KLAR! +'+bonus+'⚡','g');
+    if(_td.wave%5===0){
+      gainXP&&gainXP(10+_td.wave,'action');
+      gainCoins&&gainCoins(Math.floor(_td.score/15));
+      spawnParticles&&spawnParticles(window.innerWidth/2,window.innerHeight/2,'stars');
+    }
+  }
+  _tdDraw();
+}
+function _tdSpark(x,y,col,n){
+  for(let i=0;i<n;i++){
+    const a=Math.random()*Math.PI*2,s=50+Math.random()*130;
+    _td.parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-50,
+      life:.3+Math.random()*.5,maxLife:.8,col,sz:1.5+Math.random()*3});
+  }
+}
+function _tdDraw(){
+  const ctx=_td.ctx,W=_td.W,H=_td.H,cs=_td.cs,rs=_td.rs;
+  ctx.fillStyle='#060910';ctx.fillRect(0,0,W,H);
+  // Grid
+  ctx.strokeStyle='rgba(255,255,255,.04)';ctx.lineWidth=.5;
+  for(let c=0;c<=TD_COLS;c++){ctx.beginPath();ctx.moveTo(c*cs,0);ctx.lineTo(c*cs,H);ctx.stroke();}
+  for(let r=0;r<=TD_ROWS;r++){ctx.beginPath();ctx.moveTo(0,r*rs);ctx.lineTo(W,r*rs);ctx.stroke();}
+  // Path glow
+  ctx.save();
+  ctx.lineJoin='round';ctx.lineCap='round';
+  ctx.strokeStyle='rgba(57,255,20,.07)';ctx.lineWidth=cs*.8;
+  ctx.beginPath();_td.pathPx.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();
+  ctx.strokeStyle='#0d1a0a';ctx.lineWidth=cs*.68;
+  ctx.beginPath();_td.pathPx.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();
+  ctx.setLineDash([cs*.28,cs*.18]);ctx.strokeStyle='rgba(57,255,20,.18)';ctx.lineWidth=1.5;
+  ctx.beginPath();_td.pathPx.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();
+  ctx.setLineDash([]);ctx.restore();
+  // Entry/exit
+  ctx.font=cs*.55+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('🚪',_td.pathPx[0].x,_td.pathPx[0].y);
+  ctx.fillText('🏁',_td.pathPx[_td.pathPx.length-1].x,_td.pathPx[_td.pathPx.length-1].y);
+  // Range ring for selected tower (grey overlay on path cells)
+  // Towers
+  for(const t of _td.towers){
+    ctx.save();
+    ctx.shadowColor=t.def.col;ctx.shadowBlur=12;
+    ctx.fillStyle='rgba(6,9,16,.9)';
+    ctx.beginPath();ctx.arc(t.x,t.y,cs*.36,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle=t.def.col+'cc';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.arc(t.x,t.y,cs*.36,0,Math.PI*2);ctx.stroke();
+    ctx.shadowBlur=0;
+    ctx.font=cs*.42+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(t.def.em,t.x,t.y);ctx.restore();
+  }
+  // Enemies
+  for(const e of _td.enemies){
+    ctx.save();
+    if(e.et.boss){ctx.shadowColor='#FF007F';ctx.shadowBlur=22;}
+    else if(e.slow>0){ctx.shadowColor='#00D9FF';ctx.shadowBlur=10;}
+    ctx.font=cs*e.sz*.95+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(e.et.em,e.x,e.y);ctx.shadowBlur=0;
+    const bw=cs*.88,bh=3,bx=e.x-bw/2,by=e.y-cs*e.sz*.62;
+    ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillRect(bx,by,bw,bh);
+    const pct=e.hp/e.mhp,hc=pct>.55?'#39FF14':pct>.25?'#FFE600':'#FF3B30';
+    ctx.fillStyle=hc;ctx.fillRect(bx,by,bw*Math.max(0,pct),bh);
+    ctx.restore();
+  }
+  // Projectiles
+  for(const p of _td.projs){
+    ctx.save();ctx.shadowColor=p.col;ctx.shadowBlur=10;
+    ctx.fillStyle=p.col;ctx.beginPath();ctx.arc(p.x,p.y,3.5,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
+  // Particles
+  for(const pt of _td.parts){
+    const a=pt.life/pt.maxLife;
+    ctx.save();ctx.globalAlpha=a;ctx.fillStyle=pt.col;
+    ctx.beginPath();ctx.arc(pt.x,pt.y,pt.sz*a,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
+  // Pre-wave overlay
+  if(!_td.waveActive&&_td.running){
+    const t=Math.ceil(_td.nextWaveT);
+    ctx.save();
+    ctx.font='900 '+Math.min(36,cs*1.5)+'px monospace';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillStyle='rgba(255,230,0,.85)';ctx.shadowColor='#FFE600';ctx.shadowBlur=24;
+    ctx.fillText('WAVE '+(_td.wave+1)+' om '+t+'s',W/2,H/2);ctx.restore();
+  }
+}
+function _tdGameOver(){
+  _td.running=false;cancelAnimationFrame(_td._raf);
+  const xp=10+_td.wave*5,coins=Math.floor(_td.score/14);
+  gainXP&&gainXP(xp,'action');gainCoins&&gainCoins(coins);save&&save();updateHUD&&updateHUD();
+  const msg=$('tdGoMsg');if(msg)msg.textContent='Wave '+_td.wave+' · Score: '+_td.score+' · +'+coins+'⚡ +'+xp+'XP';
+  const rb=$('tdRestartBtn');if(rb)rb.style.display='flex';
+  vibe([100,50,200,50,100]);showT('💀 GAME OVER! Wave '+_td.wave+' · +'+coins+'⚡','r');
+}
+function _tdRestart(){const rb=$('tdRestartBtn');if(rb)rb.style.display='none';openTowerDefense();}
+function _tdUI(){
+  const wv=$('tdWave'),lv=$('tdLives'),cv=$('tdCoins');
+  if(wv)wv.textContent='W'+(_td.wave+1);
+  if(lv)lv.textContent='❤️'+_td.lives;
+  if(cv)cv.textContent='⚡'+_td.coins;
+}
+
+// ── ONBOARDING PARTICLE STARS ──
+function _obInitStars(){
+  const bg=$('obBg');if(!bg)return;
+  const stars='✦✧⭐💫⚡🌟★';
+  for(let i=0;i<22;i++){
+    const s=document.createElement('div');
+    s.className='ob-star';
+    s.textContent=stars[~~(Math.random()*stars.length)];
+    s.style.cssText='left:'+(Math.random()*96)+'%;bottom:'+(Math.random()*30)+'%;animation-duration:'+(3+Math.random()*5)+'s;animation-delay:'+(Math.random()*6)+'s;opacity:'+(0.4+Math.random()*.5)+';font-size:'+(7+~~(Math.random()*8))+'px;';
+    bg.appendChild(s);
+  }
+}
+setTimeout(_obInitStars,200);
+
 // ── ANIMATED LIVE COUNTS ──
 const _LIVE_RANGES={liveCtFisk:[170,330],liveCtBattle:[850,1700],liveCtFlash:[2700,4400],liveCtPets:[55,145],liveCtBoss:[370,730]};
 function _animateLiveCounts(){
@@ -17042,6 +17437,7 @@ function _animateLiveCounts(){
 setInterval(_animateLiveCounts,30000);
 // Also animate colosseum count
 _LIVE_RANGES.liveCtCol=[1800,2600];
+_LIVE_RANGES.liveCtTD=[400,900];
 
 // ══════════════════════════════════════════════
 // ── KARMA COLOSSEUM ──
