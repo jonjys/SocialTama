@@ -2719,6 +2719,24 @@ div[style*="LIVE"]{border-radius:16px!important;background:rgba(57,255,20,.03)!i
 .bnav{padding-bottom:max(8px,env(safe-area-inset-bottom,8px))!important;}
 body{padding-top:env(safe-area-inset-top,0);}
 .fsh{padding-top:max(14px,calc(env(safe-area-inset-top,0px) + 14px))!important;}
+
+/* ── FLASH FEED VISUAL UPGRADE ── */
+@keyframes fvShimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+.fv-shimmer{position:absolute;inset:0;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.045) 50%,transparent 62%);background-size:250% 100%;animation:fvShimmer 5s linear infinite;pointer-events:none;z-index:1;}
+.fv-viral-pill{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:20px;font-size:9px;font-weight:900;font-family:var(--mono);letter-spacing:.5px;backdrop-filter:blur(6px);}
+.fv-viral-pill.viral{background:linear-gradient(90deg,rgba(255,0,127,.8),rgba(191,95,255,.8));color:#fff;}
+.fv-viral-pill.hot{background:linear-gradient(90deg,rgba(255,69,0,.8),rgba(255,159,10,.8));color:#fff;}
+.fv-viral-pill.new{background:rgba(57,255,20,.25);border:1px solid rgba(57,255,20,.5);color:var(--g);}
+.fv-post-counter{background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:2px 7px;font-size:9px;font-weight:900;color:rgba(255,255,255,.7);font-family:var(--mono);}
+.fv-react-row{padding:5px 10px;background:rgba(6,6,14,.98);border-top:1px solid rgba(255,255,255,.07);display:flex;gap:6px;align-items:center;overflow-x:auto;scrollbar-width:none;}
+.fv-react-row::-webkit-scrollbar{display:none;}
+.fv-react-btn{font-size:19px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:50%;min-width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:transform .1s,background .1s;}
+.fv-react-btn:active{transform:scale(.8);background:rgba(255,255,255,.2);}
+/* Onboarding hero pulse */
+@keyframes obHeroPulse{0%,100%{text-shadow:0 0 20px rgba(57,255,20,.4),0 0 60px rgba(57,255,20,.1);}50%{text-shadow:0 0 40px rgba(57,255,20,.7),0 0 100px rgba(57,255,20,.2);}}
+.ob-logo-hero{animation:obLogoIn .7s cubic-bezier(.4,0,.2,1) both,obHeroPulse 3s ease-in-out 1s infinite!important;}
+@keyframes obSubFadeIn{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:none}}
+.ob-hero-tagline{font-size:11px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:3px;text-transform:uppercase;font-family:var(--mono);margin-top:-4px;margin-bottom:16px;animation:obSubFadeIn .8s .4s both;}
 </style>
 
 </head>
@@ -2765,8 +2783,9 @@ body{padding-top:env(safe-area-inset-top,0);}
 
   <!-- WORLD SELECTION — shown first -->
   <div class="ob-step ob-active" id="obsw">
-    <div class="ob-logo-hero" style="font-size:40px;margin-bottom:0"><span class="ok">K</span>ARMA</div>
-    <div style="text-align:center;margin-bottom:10px"><span class="ob-tag2" style="font-size:9px;padding:3px 10px;margin-bottom:0">REAL LIFE · GAME ENGINE ⚡</span></div>
+    <div class="ob-logo-hero" style="font-size:64px;margin-bottom:0"><span class="ok">K</span>ARMA</div>
+    <div class="ob-hero-tagline">Ditt liv · Din stat · Din pet</div>
+    <div style="text-align:center;margin-bottom:8px"><span class="ob-tag2" style="font-size:9px;padding:3px 10px;margin-bottom:0">REAL LIFE · GAME ENGINE ⚡</span></div>
     <div class="ob-prog2" style="margin-bottom:10px"><div class="ob-d2 on"></div><div class="ob-d2"></div><div class="ob-d2"></div><div class="ob-d2"></div></div>
     <div class="ob-h2" id="obWorldTitle" style="margin-bottom:3px">VÄLJ DIN VÄRLD.</div>
     <div class="ob-p2" id="obWorldSub" style="margin-bottom:12px;font-size:12px">Välj miljön din pet ska leva i.</div>
@@ -7928,27 +7947,30 @@ function renderFlashFeed(){
     const liked=G.likedPosts.has(p.id);
     const following=_flashFollowing.has(p.user);
     const comments=Math.max(1,~~(p.likes/7));
-    const saves=Math.max(1,~~(p.likes/12));
+    const isViral=p.likes>=1000,isHot=!isViral&&p.likes>=500,isNew=!isViral&&!isHot&&p.streak<=1&&p.likes<100;
+    const viralBadge=isViral?'<span class="fv-viral-pill viral">💫 VIRAL</span>':isHot?'<span class="fv-viral-pill hot">🔥 HOT</span>':isNew?'<span class="fv-viral-pill new">✨ NY</span>':'';
+    const postNum=`<span class="fv-post-counter">${pi+1}/${feedPosts.length}</span>`;
     return`<div class="fv" id="fv${p.id}">
       <div class="fv-media" style="background:${p.bg||'linear-gradient(160deg,#0d1a2e,#1a0d2e)'}" ondblclick="flashDoubleTapLike('${p.id}',event)" ontouchend="flashTouchLike('${p.id}',event)">
+        <div class="fv-shimmer"></div>
         <!-- big pet bg -->
         <div class="fv-bg" style="opacity:.07;font-size:160px;pointer-events:none">${p.pet}</div>
-        <!-- center pet + info -->
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;padding:0 56px 80px;pointer-events:none">
+        <!-- center pet -->
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;padding:0 56px 80px;pointer-events:none;z-index:2">
           <div style="font-size:86px;filter:drop-shadow(0 0 40px rgba(255,255,255,.25));animation:petBob 2.8s ease-in-out infinite">${p.pet}</div>
         </div>
         <!-- top bar -->
-        <div style="position:absolute;top:10px;left:12px;right:12px;display:flex;align-items:center;justify-content:space-between;z-index:4">
+        <div style="position:absolute;top:0;left:0;right:0;padding:10px 12px;background:linear-gradient(180deg,rgba(0,0,0,.55),transparent);display:flex;align-items:center;justify-content:space-between;z-index:4">
           <div style="display:flex;gap:5px;align-items:center">
             <span class="flash-stamp" style="font-size:9px">⚡ FLASH</span>
+            ${viralBadge}
             ${p.tag?`<span style="background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:2px 8px;font-size:9px;font-weight:900;color:#fff">${p.tag}</span>`:''}
             ${p.live?'<span class="live-pill" style="font-size:9px"><div class="ldot"></div>LIVE</span>':''}
           </div>
-          <span style="background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:2px 7px;font-size:9px;color:rgba(255,255,255,.7);font-family:var(--mono)">${p.sound}</span>
+          ${postNum}
         </div>
         <!-- right action strip (TikTok-style) -->
-        <div class="fv-right" style="bottom:80px">
-          <!-- avatar + follow -->
+        <div class="fv-right" style="bottom:80px;z-index:5">
           <div style="position:relative;margin-bottom:10px">
             <div class="fv-ava" style="width:36px;height:36px;font-size:20px;border:2px solid ${following?'var(--g)':'#fff'}">${p.pet}</div>
             ${!following?`<div onclick="flashFollow('${p.user}')" style="position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:15px;height:15px;background:var(--pk);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;cursor:pointer;border:2px solid #000">+</div>`:''}
@@ -7971,27 +7993,27 @@ function renderFlashFeed(){
           </div>
         </div>
         <!-- bottom info (TikTok style) -->
-        <div style="position:absolute;bottom:0;left:0;right:60px;padding:12px 14px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.75));z-index:4">
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
+        <div style="position:absolute;bottom:0;left:0;right:60px;padding:14px 14px 16px;background:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.55) 40%,rgba(0,0,0,.88) 100%);z-index:4">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px;flex-wrap:wrap">
             <span style="font-size:13px;font-weight:900;color:#fff">@${p.user}</span>
             ${following?`<span style="background:rgba(57,255,20,.25);border:1px solid rgba(57,255,20,.5);border-radius:8px;padding:1px 6px;font-size:9px;font-weight:900;color:var(--g)">✓ Följer</span>`:`<button onclick="flashFollow('${p.user}')" style="background:transparent;border:1px solid rgba(255,255,255,.5);border-radius:10px;color:#fff;font-size:10px;font-weight:900;padding:2px 8px;cursor:pointer;-webkit-tap-highlight-color:transparent">Följ</button>`}
             ${p.streak>=7?`<span style="background:rgba(255,68,85,.2);border:1px solid var(--r);color:var(--r);font-size:9px;font-weight:800;padding:1px 6px;border-radius:10px">🔥${p.streak}d</span>`:''}
             <span style="background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:1px 6px;font-size:9px;color:rgba(255,255,255,.7);font-family:var(--mono)">LV${p.lvl}</span>
           </div>
-          <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.95);line-height:1.35;margin-bottom:6px">${p.cap}</div>
+          <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.95);line-height:1.35;margin-bottom:5px">${p.cap}</div>
           <div style="display:flex;align-items:center;gap:5px">
             <div style="font-size:11px;animation:musicSpin 4s linear infinite">🎵</div>
-            <div style="font-size:10px;color:rgba(255,255,255,.6);overflow:hidden;white-space:nowrap;max-width:160px;text-overflow:ellipsis">${p.sound}</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.55);overflow:hidden;white-space:nowrap;max-width:160px;text-overflow:ellipsis">${p.sound}</div>
           </div>
         </div>
         <!-- double-tap heart anim container -->
         <div id="dth${p.id}" style="position:absolute;inset:0;pointer-events:none;z-index:10;display:flex;align-items:center;justify-content:center"></div>
       </div>
       <!-- Quick react strip -->
-      <div style="padding:6px 12px;background:rgba(8,8,16,.97);border-top:1px solid rgba(255,255,255,.07);display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;align-items:center">
-        ${_REACT_EMOJIS.map(em=>`<button style="font-size:22px;background:none;border:none;cursor:pointer;padding:4px 7px;-webkit-tap-highlight-color:transparent;border-radius:8px;transition:background .1s;flex-shrink:0" onclick="flashReact('${p.id}','${em}')">${em}</button>`).join('')}
-        <div style="flex:1"></div>
-        <span style="font-size:10px;color:var(--t3);font-family:var(--mono)">${p.xp}</span>
+      <div class="fv-react-row">
+        ${_REACT_EMOJIS.map(em=>`<button class="fv-react-btn" onclick="flashReact('${p.id}','${em}')">${em}</button>`).join('')}
+        <div style="flex:1;min-width:6px"></div>
+        <span style="font-size:10px;color:var(--g);font-family:var(--mono);font-weight:900;flex-shrink:0">${p.xp}</span>
       </div>
     </div>`;
   }).join('');
