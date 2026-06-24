@@ -2737,6 +2737,32 @@ body{padding-top:env(safe-area-inset-top,0);}
 .ob-logo-hero{animation:obLogoIn .7s cubic-bezier(.4,0,.2,1) both,obHeroPulse 3s ease-in-out 1s infinite!important;}
 @keyframes obSubFadeIn{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:none}}
 .ob-hero-tagline{font-size:11px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:3px;text-transform:uppercase;font-family:var(--mono);margin-top:-4px;margin-bottom:16px;animation:obSubFadeIn .8s .4s both;}
+/* ── FTU SPOTLIGHT ── */
+.ftu-ovl{position:fixed;inset:0;z-index:9900;pointer-events:all;transition:opacity .4s;}
+.ftu-ovl.ftu-off{opacity:0;pointer-events:none;}
+.ftu-spot{position:fixed;border-radius:50%;box-shadow:0 0 0 9999px rgba(0,0,0,.82);z-index:9901;pointer-events:none;transition:all .4s cubic-bezier(.4,0,.2,1);}
+@keyframes ftuPulse{0%,100%{box-shadow:0 0 0 0 rgba(57,255,20,.7),0 0 0 9999px rgba(0,0,0,.82);}50%{box-shadow:0 0 0 16px rgba(57,255,20,0),0 0 0 9999px rgba(0,0,0,.82);}}
+.ftu-spot.go{animation:ftuPulse 1.4s ease-in-out infinite;}
+.ftu-tip{position:fixed;background:#fff;color:#000;padding:13px 16px;border-radius:16px;max-width:230px;z-index:9902;font-size:13px;font-weight:800;font-family:var(--mono);box-shadow:0 8px 32px rgba(0,0,0,.5);pointer-events:all;line-height:1.5;}
+.ftu-arr-up{position:absolute;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:13px solid #fff;top:-13px;left:50%;transform:translateX(-50%);}
+.ftu-arr-dn{position:absolute;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:13px solid #fff;bottom:-13px;left:50%;transform:translateX(-50%);}
+.ftu-prog{display:flex;gap:4px;margin-top:10px;}
+.ftu-prog-dot{width:7px;height:7px;border-radius:50%;background:rgba(0,0,0,.2);}
+.ftu-prog-dot.on{background:#000;}
+.ftu-next{display:block;width:100%;margin-top:10px;padding:9px;background:#000;color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:900;font-family:var(--mono);cursor:pointer;letter-spacing:1px;}
+.ftu-skip-btn{position:fixed;bottom:24px;right:18px;z-index:9903;background:rgba(0,0,0,.5);border:1.5px solid rgba(255,255,255,.25);border-radius:20px;padding:8px 16px;color:rgba(255,255,255,.7);font-size:11px;font-weight:900;cursor:pointer;font-family:var(--mono);}
+/* ── PET NEEDS INDICATORS ── */
+@keyframes needBlink{0%,100%{opacity:1;box-shadow:3px 3px 0px var(--chb-col);}50%{opacity:.65;box-shadow:0 0 14px var(--chb-col),3px 3px 0px var(--chb-col);}}
+.chb.need-attn{animation:needBlink .7s ease-in-out infinite!important;}
+@keyframes navBadgePop{0%{transform:scale(0)}60%{transform:scale(1.35)}100%{transform:scale(1)}}
+#homeNavBadge{position:absolute;top:3px;right:8px;width:8px;height:8px;background:var(--r,#FF3B30);border-radius:50%;display:none;border:2px solid #000;animation:navBadgePop .3s cubic-bezier(.34,1.56,.64,1);}
+#homeNavBadge.show{display:block;}
+/* ── DAILY WELCOME BACK ── */
+@keyframes wbIn{0%{opacity:0;transform:translateX(-50%) translateY(-20px) scale(.8)}60%{transform:translateX(-50%) translateY(4px) scale(1.04)}100%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
+@keyframes wbOut{0%{opacity:1;transform:translateX(-50%) translateY(0)}100%{opacity:0;transform:translateX(-50%) translateY(-15px)}}
+#dailyWelcome{position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:5000;background:linear-gradient(135deg,rgba(57,255,20,.15),rgba(0,217,255,.1));border:1.5px solid rgba(57,255,20,.4);border-radius:20px;padding:10px 20px;display:none;align-items:center;gap:8px;backdrop-filter:blur(10px);box-shadow:0 8px 32px rgba(57,255,20,.15);}
+#dailyWelcome.show{display:flex;animation:wbIn .5s cubic-bezier(.34,1.56,.64,1) forwards;}
+#dailyWelcome.hide{animation:wbOut .4s ease-in forwards;}
 </style>
 
 </head>
@@ -3519,6 +3545,20 @@ body{padding-top:env(safe-area-inset-top,0);}
 
     <!-- KARMA WORLD -->
     <div class="view" id="view-world">
+      <!-- PET IN WORLD CARD -->
+      <div id="petWorldCard" style="margin:8px 14px 0;background:rgba(57,255,20,.04);border:1.5px solid rgba(57,255,20,.2);border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0" onclick="nav('home')">
+        <div id="pwcEm" style="font-size:36px;filter:drop-shadow(0 0 10px rgba(57,255,20,.5))">🐉</div>
+        <div style="flex:1;min-width:0">
+          <div id="pwcName" style="font-size:12px;font-weight:900;color:var(--g);font-family:var(--mono);line-height:1">–</div>
+          <div id="pwcStatus" style="font-size:10px;color:rgba(255,255,255,.5);margin-top:2px">Laddar...</div>
+          <div style="display:flex;gap:4px;margin-top:4px">
+            <div style="flex:1;height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden"><div id="pwcHunFill" style="height:100%;width:80%;background:var(--o);border-radius:2px;transition:width .5s"></div></div>
+            <div style="flex:1;height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden"><div id="pwcEneFill" style="height:100%;width:100%;background:var(--b);border-radius:2px;transition:width .5s"></div></div>
+            <div style="flex:1;height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden"><div id="pwcMooFill" style="height:100%;width:90%;background:var(--p);border-radius:2px;transition:width .5s"></div></div>
+          </div>
+        </div>
+        <div style="font-size:10px;color:rgba(255,255,255,.3);font-family:var(--mono)">→ HEM</div>
+      </div>
       <div class="world-toggle" id="worldToggle">
         <div class="world-toggle-btn on" id="wtbWorld" onclick="switchWorldTab('world')">🌍 KARMA WORLD</div>
         <div class="world-toggle-btn" id="wtbKarta" onclick="switchWorldTab('karta')">🗺️ LIVE KARTA</div>
@@ -4195,7 +4235,7 @@ body{padding-top:env(safe-area-inset-top,0);}
   <div id="fireAlert">🔥 ON FIRE — STREAK BONUS AKTIV!</div>
 
   <div class="bnav">
-    <button class="nb on" data-v="home"><div class="nb-inner"><div class="ni">🐾</div></div><div class="nl">HEM</div></button>
+    <button class="nb on" id="homeNavBtn" data-v="home" style="position:relative"><div id="homeNavBadge"></div><div class="nb-inner"><div class="ni">🐾</div></div><div class="nl">HEM</div></button>
     <button class="nb" data-v="play"><div class="nb-inner"><div class="ni">🎮</div><div class="nb-notif" id="playNotif"></div></div><div class="nl">SPELA</div></button>
     <button class="nb-create" id="flashBtn"><div class="create-btn">＋</div><div class="create-lbl">SKAPA</div></button>
     <button class="nb" data-v="world"><div class="nb-inner"><div class="ni">🌍</div></div><div class="nl">VÄRLD</div></button>
@@ -5166,6 +5206,7 @@ const G={
   evolHistory:[],gameScores:{},weeklyTournament:{week:'',scores:{}},
   petStories:[],viralUntil:0,petVibe:null,dramaLog:[],
   _notifOn:false,
+  ftudone:false,
 };
 
 const EVOL={
@@ -6317,7 +6358,7 @@ function cp(n){const d=document.createElement('div');d.className='cpop';d.textCo
 function sa(sel,el){document.querySelectorAll(sel+' .topt').forEach(x=>x.className='topt');el.classList.add('on');}
 function dist(la1,lo1,la2,lo2){const R=6371e3,f1=la1*Math.PI/180,f2=la2*Math.PI/180,df=(la2-la1)*Math.PI/180,dl=(lo2-lo1)*Math.PI/180;const a=Math.sin(df/2)**2+Math.cos(f1)*Math.cos(f2)*Math.sin(dl/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
 function fmtD(m){return m<1000?Math.round(m)+'m':+(m/1000).toFixed(1)+'km';}
-function save(){try{const d={n:G.name,p:G.petEmoji,pn:G.petName,l:G.level,c:G.coins,st:G.streak,x:G.exp,as:G.actionStat,cs:G.commerceStat,ss:G.socialStat,g:JSON.stringify(G.gear),eg:G.equippedGear||'',sek:G.totalSEK,ts:G.trustScore,posts:G.postCount,b:G.bountiesDone,hu:G.hunger,en:G.energy,mo:G.mood,brands:JSON.stringify(G.brands),circles:JSON.stringify(G.circles),sw:JSON.stringify(G.streakWeek),petCfg:JSON.stringify(G.petConfig),pm:G.premium?1:0,pt:G.premiumTier,wld:G.world,bond:JSON.stringify(G.todayBond),bdate:G.bondDate,wp:G.worldPoints,bz:JSON.stringify(G.builtZones),wpc:G.wildPetsCaught,wflash:G.wldFlash,wbattle:G.wldBattle,wmarket:G.wldMarket,wstreak:G.wldStreak,wsocial:G.wldSocial,po:G.packsOpened,col:JSON.stringify(G.collectibles),tp:G.talentPoints,tl:JSON.stringify(G.talents),tlvl:JSON.stringify(G.talentLvls||{}),diary:JSON.stringify(G.diaryEntries.slice(-20)),ls:G.lastSpin,ltt:G.lastTalkTime||0,lwb:G.lastWpBoost||0,castle:JSON.stringify(G.castle||{}),ownedZones:JSON.stringify(G.ownedZones||[]),terrLastIncome:JSON.stringify(G.terrLastIncome||{}),dnaMixes:JSON.stringify(G.dnaMixes||[]),lastFortune:G.lastFortune||'',lft:G.lastFlashTime||0,lfd:G.lastFlashDate||'',pdna:JSON.stringify(G.petDNA||{body:'base',element:'none',perk:'none'}),dinv:JSON.stringify(G.dnaInventory||[]),pmem:JSON.stringify(G.petMemory||{}),expd:JSON.stringify(G.expedition||{}),strs:JSON.stringify((G.petStories||[]).slice(0,20)),vrl:G.viralUntil||0,pvb:G.petVibe||'',dlog:JSON.stringify((G.dramaLog||[]).slice(0,20)),pbday:G.petBirthday||0,psick:G.petSick?1:0,ssince:G.sickSince||0,evhist:JSON.stringify((G.evolHistory||[]).slice(0,10)),gscores:JSON.stringify(G.gameScores||{}),wtrn:JSON.stringify(G.weeklyTournament||{}),lfdc:G._lastFeed||0,lsdc:G._lastSleep||0,lpdc:G._lastPlay||0,lbdc:G._lastBath||0,clout:G.clout||0,colst:G._colStreak||0};for(const k in d)localStorage.setItem('kv8_'+k,d[k]);localStorage.setItem('kv8_lastFortune',G.lastFortune||'');}catch(e){}sbQueueSync();}
+function save(){try{const d={n:G.name,p:G.petEmoji,pn:G.petName,l:G.level,c:G.coins,st:G.streak,x:G.exp,as:G.actionStat,cs:G.commerceStat,ss:G.socialStat,g:JSON.stringify(G.gear),eg:G.equippedGear||'',sek:G.totalSEK,ts:G.trustScore,posts:G.postCount,b:G.bountiesDone,hu:G.hunger,en:G.energy,mo:G.mood,brands:JSON.stringify(G.brands),circles:JSON.stringify(G.circles),sw:JSON.stringify(G.streakWeek),petCfg:JSON.stringify(G.petConfig),pm:G.premium?1:0,pt:G.premiumTier,wld:G.world,bond:JSON.stringify(G.todayBond),bdate:G.bondDate,wp:G.worldPoints,bz:JSON.stringify(G.builtZones),wpc:G.wildPetsCaught,wflash:G.wldFlash,wbattle:G.wldBattle,wmarket:G.wldMarket,wstreak:G.wldStreak,wsocial:G.wldSocial,po:G.packsOpened,col:JSON.stringify(G.collectibles),tp:G.talentPoints,tl:JSON.stringify(G.talents),tlvl:JSON.stringify(G.talentLvls||{}),diary:JSON.stringify(G.diaryEntries.slice(-20)),ls:G.lastSpin,ltt:G.lastTalkTime||0,lwb:G.lastWpBoost||0,castle:JSON.stringify(G.castle||{}),ownedZones:JSON.stringify(G.ownedZones||[]),terrLastIncome:JSON.stringify(G.terrLastIncome||{}),dnaMixes:JSON.stringify(G.dnaMixes||[]),lastFortune:G.lastFortune||'',lft:G.lastFlashTime||0,lfd:G.lastFlashDate||'',pdna:JSON.stringify(G.petDNA||{body:'base',element:'none',perk:'none'}),dinv:JSON.stringify(G.dnaInventory||[]),pmem:JSON.stringify(G.petMemory||{}),expd:JSON.stringify(G.expedition||{}),strs:JSON.stringify((G.petStories||[]).slice(0,20)),vrl:G.viralUntil||0,pvb:G.petVibe||'',dlog:JSON.stringify((G.dramaLog||[]).slice(0,20)),pbday:G.petBirthday||0,psick:G.petSick?1:0,ssince:G.sickSince||0,evhist:JSON.stringify((G.evolHistory||[]).slice(0,10)),gscores:JSON.stringify(G.gameScores||{}),wtrn:JSON.stringify(G.weeklyTournament||{}),lfdc:G._lastFeed||0,lsdc:G._lastSleep||0,lpdc:G._lastPlay||0,lbdc:G._lastBath||0,clout:G.clout||0,colst:G._colStreak||0,ftd:G.ftudone?1:0};for(const k in d)localStorage.setItem('kv8_'+k,d[k]);localStorage.setItem('kv8_lastFortune',G.lastFortune||'');}catch(e){}sbQueueSync();}
 
 // ── DNA + MOOD SYSTEM ──
 function getPetDNA(){
@@ -7513,6 +7554,18 @@ function updatePetView(){
     else _st.textContent='✨ '+_pet+' hänger med dig. Vad gör vi nu?';
   }
   renderEvolTree();
+  // Pet world card
+  {const pw=$('pwcEm'),pn=$('pwcName'),ps=$('pwcStatus');
+  const ph=$('pwcHunFill'),pe=$('pwcEneFill'),pm=$('pwcMooFill');
+  if(pw)pw.textContent=s.e+(G.equippedGear||'');
+  if(pn)pn.textContent=(G.petName||G.name||'Din pet')+' · LV'+G.level;
+  const st=G.hunger<30?'😢 Hungrig! Tryck HEM':G.energy<30?'😴 Trött! Behöver sova':G.mood<30?'😔 Ledsen...':G.petSick?'🤒 Sjuk!':'😊 Mår bra i din värld!';
+  if(ps)ps.textContent=st;
+  if(ph)ph.style.width=G.hunger+'%';
+  if(pe)pe.style.width=G.energy+'%';
+  if(pm)pm.style.width=G.mood+'%';}
+  // Pet needs blink indicators
+  if(typeof _updatePetNeeds==='function')_updatePetNeeds();
 }
 
 // ── GEAR ──
@@ -14573,6 +14626,7 @@ function _loadFromLocalStorage(){
     G._lastBath=parseInt(localStorage.getItem('kv8_lbdc')||'0');
     G.clout=parseInt(localStorage.getItem('kv8_clout')||'0');
     G._colStreak=parseInt(localStorage.getItem('kv8_colst')||'0');
+    G.ftudone=localStorage.getItem('kv8_ftd')==='1';
     const _today=new Date().toDateString();const _last=localStorage.getItem('kv8_lastLogin');
     if(_last!==_today){localStorage.setItem('kv8_lastLogin',_today);if(_last){const _b=G.premium?300:75;G.coins+=_b;
       if(G._talentS4b)setTimeout(()=>{gainXP(20,'social');showT('🤝 HYPE BUILDER! +20 XP login bonus','pk');},3200);
@@ -18263,6 +18317,94 @@ setTimeout(()=>{
 // Sick check timer every 90 seconds
 setInterval(checkPetSick,90000);
 
+// ── FTU SPOTLIGHT GUIDE ──
+const _FTU_STEPS=[
+  {sel:'#petAvWrap',msg:'🐾 Det här är din pet! Tryck på den för att interagera och få XP.',arr:'dn'},
+  {sel:'#chbFeed',msg:'🍖 Mata din pet varje dag! Om den är hungrig blir den ledsen.',arr:'up'},
+  {sel:'#chbTrain',msg:'🏋️ Träna din pet för att tjäna XP och levla upp!',arr:'up'},
+  {sel:'.nb[data-v="play"]',msg:'🎮 Här hittar du alla mini-spel — spela för coins och XP!',arr:'up'},
+  {sel:'.nb[data-v="world"]',msg:'🌍 Bygg din värld och låt din pet trivas i ett fint hem!',arr:'up'},
+];
+let _ftuIdx=0;
+function _ftuStart(){
+  const ovl=$('ftuOvl');if(!ovl)return;
+  ovl.classList.remove('ftu-off');
+  _ftuIdx=0;_ftuShow();
+}
+function _ftuShow(){
+  const step=_FTU_STEPS[_ftuIdx];
+  const el=document.querySelector(step.sel);
+  const spot=$('ftuSpot'),tip=$('ftuTip'),msg=$('ftuMsg'),prog=$('ftuProg');
+  if(!el){_ftuNext();return;}
+  const r=el.getBoundingClientRect();
+  const cx=r.left+r.width/2,cy=r.top+r.height/2;
+  const rad=Math.max(r.width,r.height)/2+22;
+  spot.style.left=(cx-rad)+'px';spot.style.top=(cy-rad)+'px';spot.style.width=(rad*2)+'px';spot.style.height=(rad*2)+'px';
+  if(msg)msg.textContent=step.msg;
+  if(prog)prog.innerHTML=_FTU_STEPS.map((_,i)=>'<div class="ftu-prog-dot'+(i===_ftuIdx?' on':'')+'" ></div>').join('');
+  const existArr=tip.querySelector('.ftu-arr-up,.ftu-arr-dn');if(existArr)existArr.remove();
+  const arr=document.createElement('div');arr.className=step.arr==='up'?'ftu-arr-dn':'ftu-arr-up';tip.insertBefore(arr,tip.firstChild);
+  if(step.arr==='up'){tip.style.cssText='left:'+Math.max(10,Math.min(window.innerWidth-240,cx-115))+'px;bottom:'+(window.innerHeight-cy+rad+14)+'px;top:auto;max-width:230px;';}
+  else{tip.style.cssText='left:'+Math.max(10,Math.min(window.innerWidth-240,cx-115))+'px;top:'+(cy+rad+14)+'px;bottom:auto;max-width:230px;';}
+}
+function _ftuNext(){
+  _ftuIdx++;
+  if(_ftuIdx>=_FTU_STEPS.length){_ftuEnd();return;}
+  _ftuShow();
+}
+function _ftuEnd(){
+  const ovl=$('ftuOvl');if(ovl)ovl.classList.add('ftu-off');
+  G.ftudone=true;save();
+}
+setTimeout(()=>{if(!G.ftudone&&G.name&&G.name.length>1)_ftuStart();},2000);
+
+// ── DAILY WELCOME BACK ──
+function _checkDailyWelcome(){
+  const today=new Date().toDateString();
+  const last=localStorage.getItem('kv8_lastVisit');
+  if(last===today)return;
+  localStorage.setItem('kv8_lastVisit',today);
+  if(!G.name)return;
+  const dw=$('dailyWelcome');if(!dw)return;
+  const em=$('dwEm'),tt=$('dwTitle'),sb=$('dwSub');
+  const petS=gS();
+  if(em)em.textContent=petS.e;
+  if(tt)tt.textContent='VÄLKOMMEN TILLBAKA, '+(G.name||'').toUpperCase()+'!';
+  if(sb){const h=G.streak>0?'🔥 '+G.streak+' dagars streak!':'Din pet har väntat hela dagen!';sb.textContent=h;}
+  dw.classList.add('show');
+  setTimeout(()=>{dw.classList.add('hide');setTimeout(()=>{dw.classList.remove('show','hide');},400);},3500);
+}
+setTimeout(_checkDailyWelcome,1000);
+
+// ── PET NEEDS INDICATORS ──
+function _updatePetNeeds(){
+  const hungry=G.hunger<30,tired=G.energy<30,sad=G.mood<30;
+  const cf=$('chbFeed'),cs=$('chbSleep'),cp=$('chbPlay');
+  if(cf)cf.classList.toggle('need-attn',hungry);
+  if(cs)cs.classList.toggle('need-attn',tired);
+  if(cp)cp.classList.toggle('need-attn',sad);
+  const badge=$('homeNavBadge');
+  if(badge)badge.classList.toggle('show',hungry||tired||sad);
+}
+
 </script>
+<!-- FTU SPOTLIGHT GUIDE -->
+<div id="ftuOvl" class="ftu-ovl ftu-off">
+  <div id="ftuSpot" class="ftu-spot go"></div>
+  <div id="ftuTip" class="ftu-tip">
+    <div id="ftuMsg">Välkommen!</div>
+    <div class="ftu-prog" id="ftuProg"></div>
+    <button class="ftu-next" onclick="_ftuNext()">NÄSTA →</button>
+  </div>
+  <button class="ftu-skip-btn" onclick="_ftuEnd()">HOPPA ÖVER ✕</button>
+</div>
+<!-- DAILY WELCOME BACK -->
+<div id="dailyWelcome">
+  <span id="dwEm" style="font-size:24px">🐾</span>
+  <div>
+    <div id="dwTitle" style="font-size:12px;font-weight:900;color:var(--g);font-family:var(--mono)">VÄLKOMMEN TILLBAKA!</div>
+    <div id="dwSub" style="font-size:10px;color:rgba(255,255,255,.6)">Din pet har väntat på dig</div>
+  </div>
+</div>
 </body>
 </html>
