@@ -2763,6 +2763,27 @@ body{padding-top:env(safe-area-inset-top,0);}
 #dailyWelcome{position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:5000;background:linear-gradient(135deg,rgba(57,255,20,.15),rgba(0,217,255,.1));border:1.5px solid rgba(57,255,20,.4);border-radius:20px;padding:10px 20px;display:none;align-items:center;gap:8px;backdrop-filter:blur(10px);box-shadow:0 8px 32px rgba(57,255,20,.15);}
 #dailyWelcome.show{display:flex;animation:wbIn .5s cubic-bezier(.34,1.56,.64,1) forwards;}
 #dailyWelcome.hide{animation:wbOut .4s ease-in forwards;}
+/* ── WORLD + ME NAV BADGES ── */
+#worldNavBtn,#meNavBtn{position:relative;}
+#worldNavBadge,#meNavBadge{position:absolute;top:3px;right:6px;width:8px;height:8px;border-radius:50%;display:none;border:2px solid #000;}
+#worldNavBadge{background:#00D9FF;}
+#meNavBadge{background:var(--p,#BF5FFF);}
+#worldNavBadge.show,#meNavBadge.show{display:block;animation:navBadgePop .3s cubic-bezier(.34,1.56,.64,1);}
+/* ── STREAK RISK BANNER ── */
+@keyframes riskPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.01)}}
+#streakRiskBanner{display:none;margin:6px 14px 0;background:linear-gradient(135deg,rgba(255,45,85,.18),rgba(255,100,50,.12));border:1.5px solid rgba(255,45,85,.5);border-radius:14px;padding:10px 14px;font-size:12px;font-weight:900;font-family:var(--mono);color:#FF3B30;text-align:center;animation:riskPulse 1.2s ease-in-out infinite;cursor:pointer;}
+#streakRiskBanner.show{display:block;}
+/* ── NEAR LEVEL UP PULSE ── */
+@keyframes xpNearPulse{0%,100%{box-shadow:0 0 6px var(--g),0 0 14px rgba(57,255,20,.3);}50%{box-shadow:0 0 28px var(--g),0 0 50px rgba(57,255,20,.5);}}
+#xpBarFill.near-lvl{animation:xpNearPulse .9s ease-in-out infinite!important;}
+/* ── PLAY TAB DAILY MINI STRIP ── */
+.play-daily-mini{display:flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(255,159,10,.05);border-bottom:1px solid rgba(255,159,10,.12);}
+.pdm-icon{font-size:18px;flex-shrink:0;}
+.pdm-info{flex:1;min-width:0;}
+.pdm-label{font-size:10px;font-weight:900;color:var(--o);font-family:var(--mono);}
+.pdm-bar{height:4px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden;margin-top:3px;}
+.pdm-fill{height:100%;background:linear-gradient(90deg,var(--o),var(--y));border-radius:100px;transition:width .6s;}
+.pdm-count{font-size:11px;font-weight:900;color:rgba(255,255,255,.7);font-family:var(--mono);flex-shrink:0;}
 </style>
 
 </head>
@@ -3018,6 +3039,8 @@ body{padding-top:env(safe-area-inset-top,0);}
           </div>
         </div>
       </div>
+      <!-- STREAK RISK WARNING -->
+      <div id="streakRiskBanner" onclick="nav('home')"></div>
       <!-- PET HERO — TAMAGOTCHI FOCUS -->
       <div class="pet-hero" id="sec-pet" style="padding:0;overflow:hidden">
         <div class="pet-hero-bg"></div>
@@ -3952,6 +3975,15 @@ body{padding-top:env(safe-area-inset-top,0);}
           </div>
         </div>
       </div>
+      <!-- DAILY QUEST MINI STRIP -->
+      <div class="play-daily-mini">
+        <div class="pdm-icon">🎯</div>
+        <div class="pdm-info">
+          <div class="pdm-label" id="pdmLabel">DAGLIGA UPPDRAG</div>
+          <div class="pdm-bar"><div class="pdm-fill" id="pdmFill" style="width:0%"></div></div>
+        </div>
+        <div class="pdm-count"><span id="pdmDone">0</span>/<span id="pdmTotal">3</span></div>
+      </div>
       <!-- FEATURED game banner -->
       <div style="margin:12px 14px 8px;position:relative;cursor:pointer;border-radius:14px;overflow:hidden;border:2px solid rgba(255,159,10,.5)" class="featured-gcard" onclick="openGacha()" ontouchstart="this.style.transform='scale(.98)'" ontouchend="this.style.transform=''">
         <div style="background:linear-gradient(135deg,#1a0800,#2a1000,#1a0500);padding:16px;display:flex;align-items:center;gap:14px;min-height:90px;position:relative;overflow:hidden">
@@ -4238,8 +4270,8 @@ body{padding-top:env(safe-area-inset-top,0);}
     <button class="nb on" id="homeNavBtn" data-v="home" style="position:relative"><div id="homeNavBadge"></div><div class="nb-inner"><div class="ni">🐾</div></div><div class="nl">HEM</div></button>
     <button class="nb" data-v="play"><div class="nb-inner"><div class="ni">🎮</div><div class="nb-notif" id="playNotif"></div></div><div class="nl">SPELA</div></button>
     <button class="nb-create" id="flashBtn"><div class="create-btn">＋</div><div class="create-lbl">SKAPA</div></button>
-    <button class="nb" data-v="world"><div class="nb-inner"><div class="ni">🌍</div></div><div class="nl">VÄRLD</div></button>
-    <button class="nb" data-v="me"><div class="nb-inner"><div class="ni">👤</div></div><div class="nl">JAG</div></button>
+    <button class="nb" id="worldNavBtn" data-v="world"><div id="worldNavBadge"></div><div class="nb-inner"><div class="ni">🌍</div></div><div class="nl">VÄRLD</div></button>
+    <button class="nb" id="meNavBtn" data-v="me"><div id="meNavBadge"></div><div class="nb-inner"><div class="ni">👤</div></div><div class="nl">JAG</div></button>
   </div>
 
   <!-- LEFT DRAWER OVERLAY + DRAWER -->
@@ -5031,8 +5063,8 @@ body{padding-top:env(safe-area-inset-top,0);}
 </div>
 <!-- LIVE EVENT -->
 <div class="live-event" id="liveEvent">⚡ EVENT</div>
-<!-- COMBO METER -->
-<div class="combo-meter" id="comboMeter"><div style="font-size:10px;color:var(--t2);font-weight:900">x</div><div class="combo-n" id="comboCnt">5</div><div style="font-size:10px;color:var(--y);font-weight:900">COMBO 🔥</div></div>
+<!-- COMBO METER (battle) -->
+<div class="combo-meter" id="comboMeterBattle"><div style="font-size:10px;color:var(--t2);font-weight:900">x</div><div class="combo-n" id="comboCnt">5</div><div style="font-size:10px;color:var(--y);font-weight:900">COMBO 🔥</div></div>
 <!-- BATTLE ARENA -->
 <div class="battle-arena" id="battleArena">
   <!-- Header -->
@@ -5721,7 +5753,7 @@ function _schedulePetEvent(){
 
 // ── COMBO METER ──
 function updateComboMeter(n){
-  const m=$('comboMeter'),c=$('comboCnt');if(!m||!c)return;
+  const m=$('comboMeterBattle'),c=$('comboCnt');if(!m||!c)return;
   if(n>=3){m.classList.add('show');c.textContent=n;c.classList.remove('pop');void c.offsetWidth;c.classList.add('pop');}
   else m.classList.remove('show');
 }
@@ -7437,6 +7469,7 @@ function updateHUD(){
   const pmBadge=$('premiumBadge');if(pmBadge)pmBadge.style.display=G.premium?'inline-flex':'none';
   const sickBadge=$('hudSickBadge');if(sickBadge)sickBadge.style.display=G.petSick?'flex':'none';
   if(typeof renderGameScores==='function')renderGameScores();
+  if(typeof _updateNavBadges==='function')_updateNavBadges();
   const tl=G.trustScore>=90?'GOLD':G.trustScore>=70?'SILVER':'BRONZE';
   $('profTrustTag').textContent=tl;$('trustBig').textContent=G.trustScore;$('trustLvl').textContent=tl;
   $('tr1').style.width=Math.min(100,G.bountiesDone*3)+'%';$('tv1').textContent=G.bountiesDone;
@@ -7566,6 +7599,10 @@ function updatePetView(){
   if(pm)pm.style.width=G.mood+'%';}
   // Pet needs blink indicators
   if(typeof _updatePetNeeds==='function')_updatePetNeeds();
+  // Near level-up XP bar pulse
+  {const xpf=$('xpBarFill');if(xpf){const need=xpN(G.level);const pct=(G.exp/need)*100;xpf.classList.toggle('near-lvl',pct>=80);}}
+  // Streak risk banner
+  {const rb=$('streakRiskBanner');if(rb){const crit=G.hunger<20||G.energy<15||G.mood<20;if(crit){const who=G.hunger<20?'😢 HUNGRIG!':G.energy<15?'😴 TRÖTT!':'😔 LEDSEN!';rb.textContent='⚠️ '+G.petName+' är '+who+' — Mata / Vila din pet NU för att hålla streaken!';rb.classList.add('show');}else{rb.classList.remove('show');}}}
 }
 
 // ── GEAR ──
@@ -11259,6 +11296,8 @@ $('flashBtn').addEventListener('click',()=>openModal('flashModal'));
 function renderPlayView(){
   if(!_quests.length)initQuests();
   const sl=$('spinPlayLabel');if(sl)sl.textContent=G.lastSpin===new Date().toDateString()?'✅ Spinnat idag — kom tillbaka imorgon!':'🎰 Gratis spin tillgängligt nu!';
+  // Daily quest mini strip
+  {const doneCount=_quests.filter(q=>q.done).length;const totalCount=_quests.length||3;const pct=Math.round((doneCount/totalCount)*100);const fill=$('pdmFill');const done=$('pdmDone');const total=$('pdmTotal');const lbl=$('pdmLabel');if(fill)fill.style.width=pct+'%';if(done)done.textContent=doneCount;if(total)total.textContent=totalCount;if(lbl)lbl.textContent=doneCount>=totalCount?'✅ ALLA UPPDRAG KLARA!':doneCount>0?'DAGLIGA UPPDRAG — '+pct+'% KLAR':'DAGLIGA UPPDRAG — SPELA & VINN XP';}
   const pbt=$('pbBestTag');if(pbt)pbt.textContent='Best: '+(localStorage.getItem('kv8_pbBest')||0)+'pts';
   // Runner best score + level world name
   const prbt=$('prBestTag');if(prbt)prbt.textContent='Best: '+(localStorage.getItem('kv8_prBest')||0)+'m';
@@ -13709,7 +13748,7 @@ function renderDNASpliceLab(){
     </div>`}
     <div id="dnaSpliceResult" style="min-height:20px;margin-bottom:10px"></div>
     <div style="display:flex;gap:6px">
-      <button id="dnaSpliceBtn" style="background:var(--p);color:#fff;border:4px solid #000;border-radius:6px;box-shadow:5px 5px 0px #000;padding:14px 40px;font-size:16px;font-weight:900;font-family:var(--mono);cursor:pointer;text-transform:uppercase;width:100%" ontouchstart="this.style.transform='translate(5px,5px)';this.style.boxShadow='0px 0px 0px #000'" ontouchend="this.style.transform='';this.style.boxShadow='5px 5px 0px #000'" onclick="executeDNASplice()" ${invFrags.length===0||!_dnaSelectedFrag?'disabled':''}>🧬 SPLICE DNA!</button>
+      <button id="dnaSpliceBtnMixer" style="background:var(--p);color:#fff;border:4px solid #000;border-radius:6px;box-shadow:5px 5px 0px #000;padding:14px 40px;font-size:16px;font-weight:900;font-family:var(--mono);cursor:pointer;text-transform:uppercase;width:100%" ontouchstart="this.style.transform='translate(5px,5px)';this.style.boxShadow='0px 0px 0px #000'" ontouchend="this.style.transform='';this.style.boxShadow='5px 5px 0px #000'" onclick="executeDNASplice()" ${invFrags.length===0||!_dnaSelectedFrag?'disabled':''}>🧬 SPLICE DNA!</button>
     </div>`;
 }
 
@@ -13729,7 +13768,7 @@ function _dnaSelectFrag(id){
       <span style="color:var(--g);font-family:var(--mono);font-size:9px;margin-left:6px">${f.bonus}</span>
     </div>`;
   }
-  const sb=$('dnaSpliceBtn');if(sb)sb.disabled=false;
+  const sb=$('dnaSpliceBtnMixer');if(sb)sb.disabled=false;
   renderDNASpliceLab();
 }
 
@@ -18316,6 +18355,28 @@ setTimeout(()=>{
 },2000);
 // Sick check timer every 90 seconds
 setInterval(checkPetSick,90000);
+
+// ── NAV BADGE SYSTEM ──
+let _navBadgeTimer=null;
+function _updateNavBadges(){
+  // World badge: show when worldPoints available or has unclaimed territory
+  const wb=$('worldNavBadge');
+  if(wb){const showWorld=(G.worldPoints>0&&G.builtZones.length<3)||(G.wildPetsCaught<3);wb.classList.toggle('show',showWorld);}
+  // Me badge: show when new gear, level-up rewards, or shop has unread items
+  const mb=$('meNavBadge');
+  if(mb){const showMe=G.gear.length>0&&!G._meTabVisited||G.talentPoints>0;mb.classList.toggle('show',showMe);}
+}
+// Periodically pulse world+me badges to draw attention (every ~45s)
+setInterval(()=>{
+  const wb=$('worldNavBadge'),mb=$('meNavBadge');
+  if(wb){wb.classList.remove('show');void wb.offsetWidth;if(G.worldPoints>0||G.wildPetsCaught<3){setTimeout(()=>wb.classList.add('show'),80);}}
+  if(mb){mb.classList.remove('show');void mb.offsetWidth;if(G.talentPoints>0||G.gear.length>0){setTimeout(()=>mb.classList.add('show'),160);}}
+},45000);
+
+// Mark me tab visited when user opens it
+const _origSwitchMeTab=typeof switchMeTab==='function'?switchMeTab:null;
+function _onMeNavOpen(){G._meTabVisited=true;const mb=$('meNavBadge');if(mb)mb.classList.remove('show');}
+document.addEventListener('DOMContentLoaded',()=>{const meBtn=$('meNavBtn');if(meBtn)meBtn.addEventListener('click',_onMeNavOpen,{passive:true});});
 
 // ── FTU SPOTLIGHT GUIDE ──
 const _FTU_STEPS=[
