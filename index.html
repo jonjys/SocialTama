@@ -2784,6 +2784,98 @@ body{padding-top:env(safe-area-inset-top,0);}
 .pdm-bar{height:4px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden;margin-top:3px;}
 .pdm-fill{height:100%;background:linear-gradient(90deg,var(--o),var(--y));border-radius:100px;transition:width .6s;}
 .pdm-count{font-size:11px;font-weight:900;color:rgba(255,255,255,.7);font-family:var(--mono);flex-shrink:0;}
+
+/* ══════════════════════════════════════
+   CAMERA MODAL — Snapchat/TikTok style
+══════════════════════════════════════ */
+#cameraModal{position:fixed;inset:0;z-index:2000;background:#000;display:none;flex-direction:column;overflow:hidden;}
+#cameraModal.open{display:flex;}
+.cam-viewfinder{flex:1;position:relative;overflow:hidden;background:#000;}
+#camVideo{width:100%;height:100%;object-fit:cover;display:block;}
+.cam-top{position:absolute;top:0;left:0;right:0;padding:calc(14px + env(safe-area-inset-top,0px)) 16px 16px;display:flex;justify-content:space-between;align-items:center;z-index:10;background:linear-gradient(180deg,rgba(0,0,0,.7) 0%,transparent 100%);}
+.cam-bottom{height:130px;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:space-evenly;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px));flex-shrink:0;}
+.cam-shutter{width:72px;height:72px;border-radius:50%;border:4px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative;transition:transform .1s;}
+.cam-shutter:active{transform:scale(.92);}
+.cam-shutter-inner{width:56px;height:56px;border-radius:50%;background:#fff;transition:all .2s cubic-bezier(.34,1.56,.64,1);}
+.cam-shutter.recording .cam-shutter-inner{border-radius:10px;background:#FF3B30;width:28px;height:28px;}
+.cam-shutter.video-mode .cam-shutter-inner{background:linear-gradient(135deg,#FF3B30,#FF007F);}
+.cam-icon-btn{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.45);border:1.5px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;-webkit-tap-highlight-color:transparent;backdrop-filter:blur(8px);color:#fff;font-family:var(--ff);}
+.cam-icon-btn:active{background:rgba(255,255,255,.2);}
+.cam-filters{position:absolute;bottom:138px;left:0;right:0;display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:6px 16px 8px;z-index:10;background:linear-gradient(0deg,rgba(0,0,0,.4),transparent);}
+.cam-filters::-webkit-scrollbar{display:none;}
+.cam-filter-item{flex-shrink:0;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.cam-filter-preview{width:52px;height:52px;border-radius:10px;overflow:hidden;border:2.5px solid transparent;transition:border-color .15s,box-shadow .15s;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.cam-filter-item.on .cam-filter-preview{border-color:#fff;box-shadow:0 0 12px rgba(255,255,255,.5);}
+.cam-filter-nm{font-size:9px;font-weight:700;color:rgba(255,255,255,.65);margin-top:4px;font-family:var(--mono);text-align:center;}
+.cam-mode-strip{position:absolute;bottom:136px;left:50%;transform:translateX(-50%);display:flex;gap:0;background:rgba(0,0,0,.6);border:1.5px solid rgba(255,255,255,.2);border-radius:20px;overflow:hidden;z-index:12;backdrop-filter:blur(6px);}
+.cam-mode-opt{padding:7px 18px;font-size:10px;font-weight:900;font-family:var(--mono);color:rgba(255,255,255,.5);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .15s;letter-spacing:.5px;}
+.cam-mode-opt.on{background:rgba(255,255,255,.22);color:#fff;}
+.cam-text-editor{position:absolute;inset:0;z-index:15;background:rgba(0,0,0,.7);display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
+.cam-text-editor.show{display:flex;}
+.cam-text-input{background:transparent;border:none;outline:none;font-size:26px;font-weight:900;color:#fff;text-align:center;font-family:var(--ff);text-shadow:2px 2px 8px rgba(0,0,0,.9);width:100%;max-width:320px;min-height:60px;}
+.cam-preview{position:absolute;inset:0;background:#000;display:none;flex-direction:column;}
+.cam-preview.show{display:flex;}
+.cam-preview-media{flex:1;position:relative;overflow:hidden;}
+.cam-preview-media img,.cam-preview-media video{width:100%;height:100%;object-fit:cover;}
+.cam-preview-actions{height:95px;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:space-evenly;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px));gap:8px;padding:0 16px calc(8px + env(safe-area-inset-bottom,0px));}
+.cam-rec-dot{position:absolute;top:16px;left:50%;transform:translateX(-50%);background:#FF3B30;width:10px;height:10px;border-radius:50%;box-shadow:0 0 10px #FF3B30;animation:camRecPulse .7s ease-in-out infinite;display:none;z-index:20;}
+.cam-rec-dot.show{display:block;}
+@keyframes camRecPulse{0%,100%{opacity:1;transform:translateX(-50%) scale(1);}50%{opacity:.5;transform:translateX(-50%) scale(1.3);}}
+@keyframes camFlashBlink{0%{opacity:.9;}100%{opacity:0;}}
+/* Notification Bell + Inbox */
+.tb-bell{position:relative;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.tb-bell-ico{font-size:20px;transition:transform .15s;}
+.tb-bell:active .tb-bell-ico{transform:scale(.85);}
+.notif-dot-tb{position:absolute;top:1px;right:1px;width:8px;height:8px;background:var(--r);border-radius:50%;border:1.5px solid #000;display:none;}
+.notif-dot-tb.show{display:block;}
+.notif-count-tb{position:absolute;top:-2px;right:-4px;min-width:16px;height:16px;background:var(--r);border-radius:8px;border:1.5px solid #000;font-size:8px;font-weight:900;color:#fff;display:none;align-items:center;justify-content:center;font-family:var(--mono);padding:0 3px;}
+.notif-count-tb.show{display:flex;}
+/* Inbox slide panel */
+.inbox-panel{position:fixed;top:0;right:-110%;width:min(340px,100%);height:100%;background:#060609;border-left:2px solid rgba(57,255,20,.2);z-index:1800;transition:right .3s cubic-bezier(.4,0,.2,1);overflow-y:auto;box-shadow:-8px 0 40px rgba(0,0,0,.9);scrollbar-width:none;}
+.inbox-panel::-webkit-scrollbar{display:none;}
+.inbox-panel.open{right:0;}
+.inbox-hdr{padding:calc(14px + env(safe-area-inset-top,0px)) 16px 14px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;background:#060609;position:sticky;top:0;z-index:5;}
+.inbox-item{display:flex;gap:10px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .1s;align-items:flex-start;}
+.inbox-item:active{background:rgba(255,255,255,.04);}
+.inbox-item.unread{background:rgba(57,255,20,.03);}
+.inbox-ico{font-size:26px;width:42px;height:42px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(255,255,255,.06);border-radius:12px;}
+.inbox-body{flex:1;min-width:0;}
+.inbox-title{font-size:12px;font-weight:900;color:#fff;margin-bottom:3px;line-height:1.2;}
+.inbox-sub{font-size:10px;color:var(--t3);line-height:1.3;}
+.inbox-time{font-size:9px;color:var(--t3);font-family:var(--mono);flex-shrink:0;}
+.inbox-unread-dot{width:7px;height:7px;background:var(--g);border-radius:50%;flex-shrink:0;margin-top:5px;}
+/* Camera-in-flash button */
+.flash-cam-btn{width:100%;padding:16px;background:linear-gradient(135deg,rgba(255,45,85,.15),rgba(255,0,127,.08));border:2px solid rgba(255,45,85,.45);border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .12s;margin-bottom:12px;}
+.flash-cam-btn:active{transform:scale(.97);}
+.flash-cam-icon{font-size:38px;filter:drop-shadow(0 0 16px rgba(255,45,85,.8));animation:petBob 2s ease-in-out infinite;}
+.flash-cam-label{font-size:13px;font-weight:900;color:#FF2D55;font-family:var(--mono);letter-spacing:1px;}
+.flash-cam-sub{font-size:10px;color:rgba(255,255,255,.4);}
+/* Media preview in flash modal */
+.flash-media-preview{position:relative;width:100%;aspect-ratio:9/14;border-radius:12px;overflow:hidden;margin-bottom:12px;display:none;}
+.flash-media-preview.show{display:block;}
+.flash-media-preview img,.flash-media-preview video{width:100%;height:100%;object-fit:cover;}
+.flash-media-remove{position:absolute;top:8px;right:8px;width:28px;height:28px;background:rgba(0,0,0,.7);border:none;border-radius:50%;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+/* Gallery row */
+.flash-gallery-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px;}
+.flash-gallery-row::-webkit-scrollbar{display:none;}
+.flash-gallery-item{flex-shrink:0;width:64px;height:64px;border-radius:8px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:24px;}
+.flash-gallery-item:active{border-color:var(--pk);}
+/* Emoji rain animation */
+@keyframes emojiRain{from{opacity:1;transform:translateY(0) scale(1) rotate(0deg);}to{opacity:0;transform:translateY(-140px) scale(.4) rotate(20deg);}}
+.emoji-rain{position:fixed;pointer-events:none;font-size:28px;z-index:9999;animation:emojiRain 1s ease-out forwards;}
+/* Quick share bar under posts */
+.post-quick-share{display:flex;gap:8px;padding:4px 14px 12px;overflow-x:auto;scrollbar-width:none;}
+.post-quick-share::-webkit-scrollbar{display:none;}
+.pqs-btn{flex-shrink:0;padding:6px 12px;border-radius:20px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-size:10px;font-weight:900;color:rgba(255,255,255,.6);cursor:pointer;font-family:var(--mono);-webkit-tap-highlight-color:transparent;display:flex;align-items:center;gap:4px;}
+.pqs-btn:active{background:rgba(255,255,255,.1);}
+/* DM / Chat button on profiles */
+.dm-btn{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;background:rgba(0,217,255,.1);border:1.5px solid rgba(0,217,255,.35);color:var(--b);font-size:10px;font-weight:900;cursor:pointer;-webkit-tap-highlight-color:transparent;font-family:var(--mono);}
+.dm-btn:active{background:rgba(0,217,255,.2);}
+/* Floating create button pulse */
+@keyframes createPulse{0%,100%{box-shadow:0 4px 20px rgba(255,0,127,.45),0 0 0 0 rgba(255,0,127,.25);}50%{box-shadow:0 4px 30px rgba(255,0,127,.7),0 0 0 6px rgba(255,0,127,0);}}
+.create-btn{width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,var(--pk),#ff5555);border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:#fff;margin-top:-20px;animation:createPulse 2.5s ease-in-out infinite;transition:transform .1s;}
+.nb-create:active .create-btn{transform:scale(.88);}
+.create-lbl{font-size:9px;font-weight:700;color:var(--pk);text-transform:uppercase;letter-spacing:.3px;margin-top:2px;}
 </style>
 
 </head>
@@ -2979,6 +3071,10 @@ body{padding-top:env(safe-area-inset-top,0);}
       <div id="hudCloutBadge" class="clout-pill" style="display:none" onclick="openColosseum()">⚡<span id="hudCloutVal">0</span></div>
       <div class="pill" id="premiumBadge" style="display:none;background:linear-gradient(135deg,#FFE600,#FF9F0A);color:#000;font-weight:900;cursor:pointer;border:none" onclick="openModal('premiumModal')">👑</div>
       <button onclick="openSettings()" style="background:var(--c2);border:1px solid var(--line);border-radius:9px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent;">⚙️</button>
+      <div class="tb-bell" onclick="openInbox()" title="Notiser">
+        <span class="tb-bell-ico">🔔</span>
+        <span class="notif-count-tb show" id="topbarNotifBadge">3</span>
+      </div>
     </div>
     <div class="mw" style="display:none">
       <div class="ham" id="hamBtn"><span></span><span></span><span></span></div>
@@ -4575,26 +4671,45 @@ body{padding-top:env(safe-area-inset-top,0);}
 </div>
 <!-- MODALS -->
 <div class="modal" id="flashModal">
-  <div class="ms">
+  <div class="ms" style="padding-bottom:24px">
     <div class="mh"></div>
-    <div class="mt">⚡ Skapa Flash <div class="mx" onclick="closeModal('flashModal')">✕</div></div>
-    <div style="background:#0d0d0d;border:2px solid var(--pk);border-radius:6px;box-shadow:3px 3px 0px var(--pk);padding:12px;margin-bottom:14px">
-      <div style="font-size:14px;font-weight:800;color:var(--pk);margin-bottom:4px">⚡ Flash = 1–5 sekunders video</div>
-      <div style="font-size:12px;color:var(--t2);line-height:1.6">Posta varje dag för att hålla streaken!</div>
+    <div class="mt" style="margin-bottom:14px">⚡ Skapa Flash <div class="mx" onclick="closeModal('flashModal')">✕</div></div>
+    <!-- Camera / Media preview -->
+    <div id="flashMediaPreview" class="flash-media-preview">
+      <img id="flashPrev" style="width:100%;height:100%;object-fit:cover;display:none">
+      <video id="flashPrevVid" style="width:100%;height:100%;object-fit:cover;display:none" loop muted playsinline></video>
+      <button class="flash-media-remove" onclick="clearFlashMedia()">✕</button>
     </div>
-    <div id="flashUpArea" style="height:140px;border:2px dashed var(--line);border-radius:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;cursor:pointer;margin-bottom:12px;position:relative;overflow:hidden" onclick="$('flashFileIn').click()">
-      <img id="flashPrev" style="position:absolute;inset:0;object-fit:cover;width:100%;height:100%;display:none;border-radius:11px">
-      <div id="flashPH" style="text-align:center"><div style="font-size:34px;opacity:.2;margin-bottom:6px">🎬</div><div style="font-size:13px;font-weight:700;color:var(--t3)">Tryck för VIDEO (1–5 sek)</div></div>
+    <!-- Camera capture button (shown when no media) -->
+    <div id="flashCamArea">
+      <div class="flash-cam-btn" onclick="openCameraForFlash()">
+        <div class="flash-cam-icon">📸</div>
+        <div class="flash-cam-label">ÖPPNA KAMERA</div>
+        <div class="flash-cam-sub">Foto eller video 1–5 sek · Snapchat-stil</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <button onclick="setCamModeAndOpen('photo')" style="flex:1;padding:10px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.12);border-radius:12px;color:rgba(255,255,255,.6);font-size:11px;font-weight:900;cursor:pointer;font-family:var(--mono)">📷 FOTO</button>
+        <button onclick="setCamModeAndOpen('video')" style="flex:1;padding:10px;background:rgba(255,45,85,.06);border:1.5px solid rgba(255,45,85,.25);border-radius:12px;color:#FF2D55;font-size:11px;font-weight:900;cursor:pointer;font-family:var(--mono)">🎬 VIDEO 5s</button>
+        <button onclick="pickFromGallery()" style="flex:1;padding:10px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.12);border-radius:12px;color:rgba(255,255,255,.6);font-size:11px;font-weight:900;cursor:pointer;font-family:var(--mono)">🖼️ GALLERI</button>
+      </div>
     </div>
     <input type="file" id="flashFileIn" accept="image/*,video/*" style="display:none" onchange="handleFlashUpload(this)">
     <label class="lbl">DELA MED</label>
     <div class="trow" id="flashShareRow">
       <div class="topt on" onclick="G.flashShare='circles';sa('#flashShareRow',this)">⭕ Circles</div>
+      <div class="topt" onclick="G.flashShare='friends';sa('#flashShareRow',this)">👥 Vänner</div>
       <div class="topt" onclick="G.flashShare='all';sa('#flashShareRow',this)">🌍 Alla</div>
     </div>
-    <label class="lbl">CAPTION</label>
-    <input class="inp" id="flashCaption" placeholder="Vad gör du? #tag">
-    <button class="btn btn-pk btn-lg btn-full" onclick="submitFlash()">⚡ POSTA FLASH</button>
+    <label class="lbl" style="margin-top:10px">CAPTION</label>
+    <textarea class="inp" id="flashCaption" placeholder="Vad händer? Tagga #karma 🔥" rows="2" style="resize:none"></textarea>
+    <div style="display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px">
+      <span onclick="appendCaption('#viral')" style="flex-shrink:0;padding:4px 10px;border-radius:20px;background:rgba(255,45,85,.1);border:1px solid rgba(255,45,85,.3);font-size:11px;font-weight:900;color:#FF2D55;cursor:pointer">#viral</span>
+      <span onclick="appendCaption('#karma')" style="flex-shrink:0;padding:4px 10px;border-radius:20px;background:rgba(57,255,20,.08);border:1px solid rgba(57,255,20,.25);font-size:11px;font-weight:900;color:var(--g);cursor:pointer">#karma</span>
+      <span onclick="appendCaption('#pets')" style="flex-shrink:0;padding:4px 10px;border-radius:20px;background:rgba(191,95,255,.08);border:1px solid rgba(191,95,255,.25);font-size:11px;font-weight:900;color:var(--p);cursor:pointer">#pets</span>
+      <span onclick="appendCaption('#gaming')" style="flex-shrink:0;padding:4px 10px;border-radius:20px;background:rgba(255,159,10,.08);border:1px solid rgba(255,159,10,.25);font-size:11px;font-weight:900;color:var(--o);cursor:pointer">#gaming</span>
+      <span onclick="appendCaption('#fyp')" style="flex-shrink:0;padding:4px 10px;border-radius:20px;background:rgba(0,217,255,.08);border:1px solid rgba(0,217,255,.25);font-size:11px;font-weight:900;color:var(--b);cursor:pointer">#fyp</span>
+    </div>
+    <button class="btn btn-pk btn-lg btn-full" onclick="submitFlash()" style="box-shadow:0 0 24px rgba(255,0,127,.4)">⚡ POSTA FLASH</button>
   </div>
 </div>
 
@@ -5321,6 +5436,84 @@ body{padding-top:env(safe-area-inset-top,0);}
     </div>
   </div>
 </div>
+
+<!-- ═══════════════════════════════════════════
+     CAMERA MODAL — TikTok/Snapchat style
+═══════════════════════════════════════════ -->
+<div id="cameraModal">
+  <div class="cam-viewfinder">
+    <video id="camVideo" autoplay muted playsinline></video>
+    <!-- Top controls -->
+    <div class="cam-top">
+      <button class="cam-icon-btn" onclick="closeCameraModal()" style="font-size:18px;font-weight:700">✕</button>
+      <div style="font-size:11px;font-weight:900;color:#fff;font-family:var(--mono);background:rgba(0,0,0,.4);padding:4px 12px;border-radius:20px;letter-spacing:1px" id="camModeLabel">FOTO</div>
+      <button class="cam-icon-btn" id="camFlashBtn" onclick="toggleCamTorch()">⚡</button>
+    </div>
+    <!-- Recording dot -->
+    <div class="cam-rec-dot" id="camRecDot"></div>
+    <!-- Mode strip -->
+    <div class="cam-mode-strip">
+      <div class="cam-mode-opt on" onclick="setCamMode('photo',this)">FOTO</div>
+      <div class="cam-mode-opt" onclick="setCamMode('video',this)">VIDEO</div>
+    </div>
+    <!-- Filter strip -->
+    <div class="cam-filters" id="camFilters"></div>
+    <!-- Text overlay editor -->
+    <div class="cam-text-editor" id="camTextEditor">
+      <div style="font-size:10px;font-weight:900;color:rgba(255,255,255,.5);letter-spacing:2px;font-family:var(--mono);margin-bottom:10px">LÄGG TILL TEXT</div>
+      <input class="cam-text-input" id="camTextInput" placeholder="Skriv något fett..." maxlength="60">
+      <div style="display:flex;gap:12px;margin-top:16px">
+        <button onclick="applyCamText()" style="background:rgba(57,255,20,.2);border:1.5px solid var(--g);border-radius:12px;padding:10px 24px;color:var(--g);font-size:13px;font-weight:900;cursor:pointer;font-family:var(--mono)">✓ KLAR</button>
+        <button onclick="cancelCamText()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 24px;color:rgba(255,255,255,.5);font-size:13px;cursor:pointer">✕</button>
+      </div>
+    </div>
+    <!-- Text overlay shown on viewfinder -->
+    <div id="camTextOverlay" style="position:absolute;top:38%;left:0;right:0;text-align:center;font-size:26px;font-weight:900;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.9),-1px -1px 0 rgba(0,0,0,.5),1px -1px 0 rgba(0,0,0,.5);padding:0 24px;pointer-events:none;z-index:8;display:none;word-break:break-word"></div>
+    <!-- Preview overlay after capture -->
+    <div class="cam-preview" id="camPreview">
+      <div class="cam-preview-media">
+        <img id="camPreviewImg" style="display:none;width:100%;height:100%;object-fit:cover">
+        <video id="camPreviewVid" loop muted playsinline style="display:none;width:100%;height:100%;object-fit:cover"></video>
+        <div id="camPreviewTextOv" style="position:absolute;top:38%;left:0;right:0;text-align:center;font-size:26px;font-weight:900;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.9);padding:0 24px;pointer-events:none;z-index:8;word-break:break-word"></div>
+      </div>
+      <div class="cam-preview-actions">
+        <button onclick="retakeCamera()" style="background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.25);border-radius:14px;padding:12px 18px;color:#fff;font-size:12px;font-weight:900;cursor:pointer;font-family:var(--mono)">↩ TA OM</button>
+        <button onclick="addCamTextOverlay()" style="background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:14px;padding:12px 14px;font-size:20px;cursor:pointer;color:#fff" title="Lägg till text">✏️</button>
+        <button onclick="useCameraCapture()" style="background:linear-gradient(135deg,#FF007F,#FF5555);border:none;border-radius:14px;padding:12px 20px;color:#fff;font-size:13px;font-weight:900;cursor:pointer;font-family:var(--mono);letter-spacing:.5px;box-shadow:0 4px 20px rgba(255,0,127,.55)">⚡ ANVÄND</button>
+      </div>
+    </div>
+  </div>
+  <!-- Shutter controls -->
+  <div class="cam-bottom">
+    <button class="cam-icon-btn" onclick="pickFromGallery()" style="font-size:22px" title="Galleri">🖼️</button>
+    <div class="cam-shutter" id="camShutter" onclick="camShutterTap()" ontouchstart="camShutterTouchStart(event)" ontouchend="camShutterTouchEnd(event)">
+      <svg style="position:absolute;inset:0;width:72px;height:72px;display:none" id="camRecRing" viewBox="0 0 72 72">
+        <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="4"/>
+        <circle id="camRecArc" cx="36" cy="36" r="30" fill="none" stroke="#FF3B30" stroke-width="4"
+          stroke-dasharray="188" stroke-dashoffset="188" stroke-linecap="round"
+          transform="rotate(-90 36 36)" style="transition:stroke-dashoffset .08s linear"/>
+      </svg>
+      <div class="cam-shutter-inner"></div>
+    </div>
+    <button class="cam-icon-btn" onclick="flipCamera()" style="font-size:22px" title="Byt kamera">🔄</button>
+  </div>
+</div>
+<!-- Gallery file input -->
+<input type="file" id="galleryInput" accept="image/*,video/*" capture style="display:none" onchange="handleGalleryPick(this)">
+
+<!-- ═══════════════════════════════════════════
+     NOTIFICATION INBOX PANEL
+═══════════════════════════════════════════ -->
+<div class="inbox-panel" id="inboxPanel">
+  <div class="inbox-hdr">
+    <button onclick="closeInbox()" style="background:none;border:none;color:var(--t2);font-size:22px;cursor:pointer;padding:4px;line-height:1">←</button>
+    <div style="font-size:16px;font-weight:900;font-family:var(--mono);flex:1">📬 NOTISER</div>
+    <button onclick="clearInbox()" style="background:none;border:none;color:var(--g);font-size:10px;font-weight:900;cursor:pointer;font-family:var(--mono);letter-spacing:.5px">RENSA ALLA</button>
+  </div>
+  <div id="inboxList"></div>
+</div>
+<div id="inboxOv" onclick="closeInbox()" style="display:none;position:fixed;inset:0;z-index:1799;background:rgba(0,0,0,.55);backdrop-filter:blur(3px)"></div>
+
 <script>
 const G={
   name:'',petEmoji:'🐉',petName:'Eldraken',
@@ -18758,6 +18951,344 @@ function _updatePetNeeds(){
   const badge=$('homeNavBadge');
   if(badge)badge.classList.toggle('show',hungry||tired||sad);
 }
+
+// ════════════════════════════════════════════════════════
+// ── CAMERA SYSTEM ──────────────────────────────────────
+// ════════════════════════════════════════════════════════
+let _cam={
+  stream:null,mode:'photo',facingMode:'environment',torch:false,
+  filter:'none',recording:false,mediaRecorder:null,chunks:[],
+  recTimer:null,textOverlay:'',capturedBlob:null,capturedType:null,
+  flashTarget:false
+};
+const CAM_FILTERS=[
+  {id:'none',nm:'Normal',css:'none',bg:'linear-gradient(135deg,#1a1a2e,#16213e)'},
+  {id:'vivid',nm:'VIVID',css:'saturate(1.8) contrast(1.15)',bg:'linear-gradient(135deg,#1a0020,#000d3d)'},
+  {id:'warm',nm:'WARM',css:'sepia(.35) saturate(1.4) hue-rotate(-10deg)',bg:'linear-gradient(135deg,#2a1a00,#1a0800)'},
+  {id:'cool',nm:'COOL',css:'hue-rotate(20deg) saturate(1.2) brightness(1.05)',bg:'linear-gradient(135deg,#001a2e,#000a1a)'},
+  {id:'noir',nm:'NOIR',css:'grayscale(1) contrast(1.3)',bg:'linear-gradient(135deg,#111,#000)'},
+  {id:'neon',nm:'NEON',css:'saturate(3) contrast(1.25) brightness(1.1) hue-rotate(30deg)',bg:'linear-gradient(135deg,#000,#0a001a)'},
+  {id:'golden',nm:'GOLD',css:'sepia(.6) hue-rotate(-20deg) saturate(1.6)',bg:'linear-gradient(135deg,#1a1000,#0a0800)'},
+];
+
+function openCameraModal(forFlash){
+  _cam.flashTarget=!!forFlash;
+  _cam.capturedBlob=null;_cam.capturedType=null;
+  _cam.filter='none';_cam.textOverlay='';
+  const m=$('cameraModal');if(!m)return;
+  m.style.display='flex';
+  document.body.style.overflow='hidden';
+  _buildCamFilters();
+  setCamMode(_cam.mode);
+  _startCamStream();
+}
+function closeCameraModal(){
+  _stopCamStream();
+  const m=$('cameraModal');if(m)m.style.display='none';
+  document.body.style.overflow='';
+  const prev=$('camPreview');if(prev)prev.style.display='none';
+  const vid=$('camVideo');if(vid){vid.srcObject=null;}
+}
+async function _startCamStream(){
+  _stopCamStream();
+  const vid=$('camVideo');if(!vid)return;
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:_cam.facingMode,width:{ideal:1280},height:{ideal:720}},
+      audio:true
+    });
+    _cam.stream=stream;
+    vid.srcObject=stream;
+    vid.play();
+    _applyFilter(CAM_FILTERS.find(f=>f.id===_cam.filter)||CAM_FILTERS[0]);
+    const lbl=$('camModeLabel');if(lbl)lbl.textContent=_cam.mode==='photo'?'📷 FOTO':'🎬 VIDEO';
+  }catch(e){
+    _showNoCameraFallback();
+  }
+}
+function _stopCamStream(){
+  if(_cam.stream){_cam.stream.getTracks().forEach(t=>t.stop());_cam.stream=null;}
+  if(_cam.recTimer){clearTimeout(_cam.recTimer);_cam.recTimer=null;}
+  if(_cam.mediaRecorder&&_cam.recording){try{_cam.mediaRecorder.stop();}catch(e){}_cam.recording=false;}
+}
+function _showNoCameraFallback(){
+  const vid=$('camVideo');
+  if(vid){vid.style.background='#111';vid.style.display='flex';}
+  const lbl=$('camModeLabel');if(lbl)lbl.textContent='⚠️ Ingen kamera';
+  // Allow gallery pick instead
+  const gal=$('galleryInput');if(gal)gal.click();
+}
+function _buildCamFilters(){
+  const strip=$('camFilters');if(!strip)return;
+  strip.innerHTML='';
+  CAM_FILTERS.forEach(f=>{
+    const el=document.createElement('div');
+    el.className='cam-filter-item'+(f.id===_cam.filter?' active':'');
+    el.innerHTML=`<div class="cam-filter-preview" style="background:${f.bg};filter:${f.css}"></div><div>${f.nm}</div>`;
+    el.onclick=()=>applyCamFilter(f.id);
+    strip.appendChild(el);
+  });
+}
+function applyCamFilter(id){
+  _cam.filter=id;
+  const f=CAM_FILTERS.find(x=>x.id===id)||CAM_FILTERS[0];
+  _applyFilter(f);
+  document.querySelectorAll('.cam-filter-item').forEach((el,i)=>{
+    el.classList.toggle('active',CAM_FILTERS[i].id===id);
+  });
+}
+function _applyFilter(f){
+  const vid=$('camVideo');if(vid)vid.style.filter=f.css;
+}
+function flipCamera(){
+  _cam.facingMode=_cam.facingMode==='environment'?'user':'environment';
+  _startCamStream();
+}
+function toggleCamTorch(){
+  _cam.torch=!_cam.torch;
+  if(_cam.stream){
+    const track=_cam.stream.getVideoTracks()[0];
+    if(track&&track.getCapabilities&&track.getCapabilities().torch){
+      track.applyConstraints({advanced:[{torch:_cam.torch}]}).catch(()=>{});
+    }
+  }
+  const btn=$('camTorchBtn');if(btn)btn.textContent=_cam.torch?'🔦':'💡';
+}
+function setCamMode(mode){
+  _cam.mode=mode;
+  document.querySelectorAll('.cam-mode-opt').forEach(el=>{
+    el.classList.toggle('active',el.dataset.mode===mode);
+  });
+  const sh=$('camShutter');
+  if(sh)sh.className='cam-shutter'+(mode==='video'?' video-mode':'');
+  const lbl=$('camModeLabel');if(lbl)lbl.textContent=mode==='photo'?'📷 FOTO':'🎬 VIDEO';
+}
+function camShutterTap(){
+  if(_cam.mode==='photo')capturePhoto();
+  else if(!_cam.recording)_startVideoRecord();
+  else _stopVideoRecord();
+}
+function camShutterTouchStart(e){
+  e.preventDefault();
+  if(_cam.mode==='video')_startVideoRecord();
+}
+function camShutterTouchEnd(e){
+  e.preventDefault();
+  if(_cam.mode==='video'&&_cam.recording)_stopVideoRecord();
+}
+function capturePhoto(){
+  const vid=$('camVideo');if(!vid||!_cam.stream)return;
+  const canvas=document.createElement('canvas');
+  canvas.width=vid.videoWidth||640;canvas.height=vid.videoHeight||480;
+  const ctx=canvas.getContext('2d');
+  const f=CAM_FILTERS.find(x=>x.id===_cam.filter)||CAM_FILTERS[0];
+  ctx.filter=f.css;
+  ctx.drawImage(vid,0,0,canvas.width,canvas.height);
+  canvas.toBlob(blob=>{
+    _cam.capturedBlob=blob;_cam.capturedType='photo';
+    _showPreview(blob,'photo');
+  },'image/jpeg',0.92);
+}
+function _startVideoRecord(){
+  if(!_cam.stream)return;
+  _cam.chunks=[];_cam.recording=true;
+  const sh=$('camShutter');if(sh)sh.classList.add('recording');
+  const rd=$('camRecDot');if(rd)rd.style.display='flex';
+  const arc=$('camRecArc');
+  if(arc){arc.style.display='block';arc.style.animation='camRecPulse 5s linear forwards';}
+  try{
+    _cam.mediaRecorder=new MediaRecorder(_cam.stream,{mimeType:'video/webm;codecs=vp8,opus'});
+  }catch(e){
+    _cam.mediaRecorder=new MediaRecorder(_cam.stream);
+  }
+  _cam.mediaRecorder.ondataavailable=e=>{if(e.data&&e.data.size>0)_cam.chunks.push(e.data);};
+  _cam.mediaRecorder.onstop=()=>{
+    const blob=new Blob(_cam.chunks,{type:'video/webm'});
+    _cam.capturedBlob=blob;_cam.capturedType='video';
+    _showPreview(blob,'video');
+  };
+  _cam.mediaRecorder.start();
+  _cam.recTimer=setTimeout(()=>_stopVideoRecord(),5000);
+}
+function _stopVideoRecord(){
+  if(!_cam.recording)return;
+  _cam.recording=false;
+  if(_cam.recTimer){clearTimeout(_cam.recTimer);_cam.recTimer=null;}
+  const sh=$('camShutter');if(sh)sh.classList.remove('recording');
+  const rd=$('camRecDot');if(rd)rd.style.display='none';
+  const arc=$('camRecArc');if(arc){arc.style.display='none';arc.style.animation='';}
+  if(_cam.mediaRecorder&&_cam.mediaRecorder.state!=='inactive')_cam.mediaRecorder.stop();
+}
+function _showPreview(blob,type){
+  _stopCamStream();
+  const prev=$('camPreview');if(prev)prev.style.display='flex';
+  const url=URL.createObjectURL(blob);
+  if(type==='photo'){
+    const img=$('camPreviewImg');if(img){img.src=url;img.style.display='block';}
+    const vid=$('camPreviewVid');if(vid)vid.style.display='none';
+  }else{
+    const vid=$('camPreviewVid');
+    if(vid){vid.src=url;vid.style.display='block';vid.loop=true;vid.muted=true;vid.play();}
+    const img=$('camPreviewImg');if(img)img.style.display='none';
+  }
+  if(_cam.textOverlay){
+    const ov=$('camTextOverlay');if(ov){ov.textContent=_cam.textOverlay;ov.style.display='block';}
+  }
+}
+function retakeCamera(){
+  _cam.capturedBlob=null;_cam.capturedType=null;_cam.textOverlay='';
+  const prev=$('camPreview');if(prev)prev.style.display='none';
+  const ov=$('camTextOverlay');if(ov){ov.textContent='';ov.style.display='none';}
+  _startCamStream();
+}
+function addCamTextOverlay(){
+  const te=$('camTextEditor');if(te)te.style.display='flex';
+  const ti=$('camTextInput');if(ti){ti.value=_cam.textOverlay||'';ti.focus();}
+}
+function applyCamText(){
+  const ti=$('camTextInput');if(!ti)return;
+  _cam.textOverlay=ti.value.trim();
+  const ov=$('camTextOverlay');
+  if(ov){ov.textContent=_cam.textOverlay;ov.style.display=_cam.textOverlay?'block':'none';}
+  const te=$('camTextEditor');if(te)te.style.display='none';
+}
+function cancelCamText(){
+  const te=$('camTextEditor');if(te)te.style.display='none';
+}
+function useCameraCapture(){
+  if(!_cam.capturedBlob)return;
+  if(_cam.flashTarget){
+    // Attach to flash modal
+    const url=URL.createObjectURL(_cam.capturedBlob);
+    if(_cam.capturedType==='photo'){
+      const img=$('flashPrev');if(img){img.src=url;img.style.display='block';}
+      const vid=$('flashPrevVid');if(vid)vid.style.display='none';
+    }else{
+      const vid=$('flashPrevVid');if(vid){vid.src=url;vid.style.display='block';vid.play();}
+      const img=$('flashPrev');if(img)img.style.display='none';
+    }
+    const area=$('flashCamArea');if(area)area.style.display='none';
+    const fprev=$('flashMediaPreview');if(fprev)fprev.style.display='block';
+    closeCameraModal();
+    openModal('flashModal');
+  }else{
+    // Direct post — open flash modal with capture
+    closeCameraModal();
+    const url=URL.createObjectURL(_cam.capturedBlob);
+    if(_cam.capturedType==='photo'){
+      const img=$('flashPrev');if(img){img.src=url;img.style.display='block';}
+      const vid=$('flashPrevVid');if(vid)vid.style.display='none';
+    }else{
+      const vid=$('flashPrevVid');if(vid){vid.src=url;vid.style.display='block';vid.play();}
+      const img=$('flashPrev');if(img)img.style.display='none';
+    }
+    const area=$('flashCamArea');if(area)area.style.display='none';
+    const fprev=$('flashMediaPreview');if(fprev)fprev.style.display='block';
+    openModal('flashModal');
+  }
+}
+function openCameraForFlash(){openCameraModal(true);}
+function setCamModeAndOpen(mode){_cam.mode=mode;openCameraModal(true);}
+function clearFlashMedia(){
+  const img=$('flashPrev');if(img){img.src='';img.style.display='none';}
+  const vid=$('flashPrevVid');if(vid){vid.src='';vid.style.display='none';}
+  const area=$('flashCamArea');if(area)area.style.display='block';
+  const fprev=$('flashMediaPreview');if(fprev)fprev.style.display='none';
+  _cam.capturedBlob=null;_cam.capturedType=null;
+}
+function pickFromGallery(){
+  const gi=$('galleryInput');if(gi)gi.click();
+}
+function handleGalleryPick(input){
+  const file=input.files&&input.files[0];if(!file)return;
+  const url=URL.createObjectURL(file);
+  _cam.capturedBlob=file;
+  if(file.type.startsWith('video/')){
+    _cam.capturedType='video';
+    _showPreview(file,'video');
+  }else{
+    _cam.capturedType='photo';
+    _showPreview(file,'photo');
+  }
+}
+function handleFlashUpload(input){
+  const file=input.files&&input.files[0];if(!file)return;
+  const url=URL.createObjectURL(file);
+  if(file.type.startsWith('video/')){
+    const vid=$('flashPrevVid');if(vid){vid.src=url;vid.style.display='block';vid.play();}
+    const img=$('flashPrev');if(img)img.style.display='none';
+  }else{
+    const img=$('flashPrev');if(img){img.src=url;img.style.display='block';}
+    const vid=$('flashPrevVid');if(vid)vid.style.display='none';
+  }
+  const area=$('flashCamArea');if(area)area.style.display='none';
+  const fprev=$('flashMediaPreview');if(fprev)fprev.style.display='block';
+}
+function appendCaption(tag){
+  const ta=$('flashCaption');if(!ta)return;
+  ta.value=(ta.value+' '+tag).trim()+' ';
+  ta.focus();
+}
+
+// ════════════════════════════════════════════════════════
+// ── INBOX / NOTIFICATION SYSTEM ────────────────────────
+// ════════════════════════════════════════════════════════
+const _INBOX_ITEMS=[
+  {id:'n1',icon:'⚡',title:'Flash gillade!',sub:'@LunaStarr gillade din senaste flash',time:'2m',read:false,action:()=>showView('view-flash')},
+  {id:'n2',icon:'🐾',title:'Din pet är hungrig!',sub:'Mata Kawa innan hen tappar karma',time:'15m',read:false,action:()=>showView('view-home')},
+  {id:'n3',icon:'🏆',title:'Ny utmaning!',sub:'Veckans turnering startar nu – delta & vinn',time:'1h',read:true,action:()=>{showView('view-play');openTab('tabWorld','worldEvents');}},
+  {id:'n4',icon:'👥',title:'Ny vän request',sub:'@NovaBeats vill följa dig',time:'3h',read:true,action:()=>showView('view-me')},
+  {id:'n5',icon:'🌍',title:'Trending nära dig',sub:'#karma toppar din stad just nu 🔥',time:'5h',read:true,action:()=>showView('view-world')},
+];
+let _inbox=[..._INBOX_ITEMS];
+function openInbox(){
+  const p=$('inboxPanel'),ov=$('inboxOv');
+  if(p)p.classList.add('open');
+  if(ov)ov.style.display='block';
+  renderInbox();
+}
+function closeInbox(){
+  const p=$('inboxPanel'),ov=$('inboxOv');
+  if(p)p.classList.remove('open');
+  if(ov)ov.style.display='none';
+}
+function renderInbox(){
+  const list=$('inboxList');if(!list)return;
+  if(!_inbox.length){
+    list.innerHTML='<div style="text-align:center;padding:40px 20px;color:rgba(255,255,255,.4);font-size:13px">Inga notiser<br><span style="font-size:32px">🎉</span></div>';
+    return;
+  }
+  list.innerHTML=_inbox.map((n,i)=>`
+    <div class="inbox-item${n.read?'':' unread'}" onclick="tapInboxItem(${i})">
+      <div class="inbox-ico">${n.icon}</div>
+      <div class="inbox-body">
+        <div class="inbox-title">${n.title}</div>
+        <div class="inbox-sub">${n.sub}</div>
+        <div class="inbox-time">${n.time} sedan</div>
+      </div>
+      ${n.read?'':'<div class="inbox-unread-dot"></div>'}
+    </div>
+  `).join('');
+}
+function tapInboxItem(i){
+  if(!_inbox[i])return;
+  _inbox[i].read=true;
+  _updateInboxBadge();
+  closeInbox();
+  if(_inbox[i].action)_inbox[i].action();
+}
+function clearInbox(){
+  _inbox=[];
+  _updateInboxBadge();
+  renderInbox();
+}
+function _updateInboxBadge(){
+  const unread=_inbox.filter(n=>!n.read).length;
+  const badge=$('topbarNotifBadge');
+  if(badge){badge.textContent=unread>0?unread:'';badge.classList.toggle('show',unread>0);}
+}
+// Initial badge update
+setTimeout(_updateInboxBadge,500);
 
 </script>
 <!-- FTU SPOTLIGHT GUIDE -->
